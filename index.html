@@ -2,15 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5" />
     <meta name="theme-color" content="#000000" />
-    <link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
-    <title>Solid App</title>
+    <meta name="description" content="{{PROJECT_NAME}} - {{PROJECT_DESCRIPTION}}" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="{{PROJECT_NAME}}" />
+    <meta property="og:description" content="{{PROJECT_DESCRIPTION}}" />
+    <meta property="og:image" content="{{ASSET_PATH}}og-image.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{PROJECT_URL}}" />
+
+    <!-- Favicon and icons for various devices -->
+    <link rel="shortcut icon" href="{{ASSET_PATH}}favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ASSET_PATH}}favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ASSET_PATH}}favicon-16x16.png" />
+
+    <!-- Preconnects for better performance -->
+    <!--
+{{PROJECT_PRECONNECTS}}
+-->
+
+    <!-- SEO-friendly title -->
+    <title>{{PROJECT_NAME}} | {{PROJECT_DESCRIPTION}}</title>
+
+    <!-- CSP for security -->
+    <!--
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{PROJECT_URL}};{{PROJECT_CSP}}" />
+    -->
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <strong>You need to enable JavaScript to run this app.</strong>
+    </noscript>
     <div id="root"></div>
 
-    <script src="/src/index.tsx" type="module"></script>
+    <!-- Defer scripts for better loading performance -->
+    <script src="/src/index.tsx" type="module" defer></script>
+
+    <!-- Service worker registration for PWA features -->
+    <!--
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+            console.error('Service Worker registration failed:', error);
+          });
+        });
+      }
+    </script>
+  -->
   </body>
 </html>

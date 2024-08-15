@@ -28,6 +28,10 @@
   },
   "dependencies": {
     "@suid/material": "^0.16.0",
-    "solid-js": "^1.8.11"
+    "dotenv": "^16.4.5",
+    "solid-js": "^1.8.11",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-inspect": "^0.8.5",
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

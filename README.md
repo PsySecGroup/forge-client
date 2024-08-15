@@ -53,6 +53,8 @@ A Page contains components.
 
 TBD
 
+You can check out file sizes and load times of individual files in dev by visiting [http://localhost:3000/__inspect](http://localhost:3000/__inspect)
+
 ## Usage
 
 * `npm run dev`: 
@@ -68,3 +70,9 @@ TBD
   * Look into `import { HardenedFetch } from 'hardened-fetch'`
 * [`src/state/localStore.ts`](src/state/localStore.ts)
   * Turn on `localStorage`
+* [`index.html`](index.html)
+  * Figure out `service-worker`
+  * Figure out `manifest.json`
+  * Populate `apple-touch-icon.png`
+  * Populate `favicon-32x32.png`
+  * Populate `favicon-16x16.png`

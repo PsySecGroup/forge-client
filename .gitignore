@@ -3,7 +3,8 @@ node_modules/
  
 # Output directory for build artifacts
 dist/
- 
+dev-dist/
+
 # Vite cache
 .vite/
 .vite_cache/
