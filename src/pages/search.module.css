@@ -1,8 +1,0 @@
-.pageContainer {
-  min-height: calc(100vh - 2em - 1px);
-}
-
-.pageSection {
-  min-height: calc(100vh - 2em - 1px);
-  padding: 1em;
-}

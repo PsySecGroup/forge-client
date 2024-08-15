@@ -1,22 +1,11 @@
-import { hydrate as hydrateSpace, type Space } from '../types/space'
+import { NOOP } from '../constants'
 import { hydrate as hydrateUi } from '../types/ui'
-import { hydrate as hydrateValues, type Values } from '../types/values'
-import { type GraphMessage } from '../types/graphMessage'
+import { hydrate as hydrateValues } from '../types/values'
 
 export const defaults = {
+  // Add data domains here
   ui: hydrateUi({}),
-  setUi: () => undefined,
-  spaces: [hydrateSpace({})],
-  setSpaces: () => undefined,
-  sources: [],
-  setSources: () => undefined,
-  updateFocusedSpace: (newValue: Partial<Space>) => undefined,
-  getFocusedSpace: () => hydrateSpace({}),
-  getFocusedSpaceIndex: () => -1,
-  graphViews: [],
-  registerGraphView: (spaceId: number, iframe: HTMLIFrameElement) => undefined,
-  graphMessages: [],
-  sendGraphMessage: (graphMessage: GraphMessage) => undefined,
+  setUi: NOOP,
   values: hydrateValues({}),
-  setValues: (values: Partial<Values>) => undefined
+  setValues: NOOP
 }

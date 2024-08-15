@@ -15,8 +15,8 @@
   "license": "None",
   "devDependencies": {
     "@eslint/js": "^9.4.0",
-    "eslint": "9.x",
     "esbuild-register": "^3.5.0",
+    "eslint": "9.x",
     "globals": "^15.3.0",
     "solid-devtools": "^0.29.2",
     "typescript": "^5.3.3",
@@ -27,6 +27,7 @@
     "vite-plugin-solid": "^2.10.2"
   },
   "dependencies": {
+    "@suid/material": "^0.16.0",
     "solid-js": "^1.8.11"
   }
 }

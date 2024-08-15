@@ -1,1 +1,52 @@
-node_modules
+# Node.js dependencies
+node_modules/
+ 
+# Output directory for build artifacts
+dist/
+ 
+# Vite cache
+.vite/
+.vite_cache/
+ 
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+ 
+# Environment variable files
+.env
+.env.local
+.env.*.local
+ 
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+ 
+# OS-specific files
+.DS_Store
+Thumbs.db
+ 
+# TypeScript cache
+*.tsbuildinfo
+ 
+# IDE specific
+*.iml
+*.hprof
+*.pyc
+
+# Coverage directory used by testing frameworks like Jest or Vitest
+coverage/
+
+# Static analysis tool results (e.g., ESLint, TSLint)
+.eslintcache
+.stylelintcache
+
+# Lock files
+#package-lock.json
+#yarn.lock
+#pnpm-lock.yaml
