@@ -1,0 +1,61 @@
+.searchQuery {
+  border: 1px solid black;
+  display: flex;
+  padding: 0.25em;
+}
+
+.searchQueryInputContainer {
+  width: 100%;
+}
+
+.searchQueryInput {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 1em;
+  border: none;
+  outline: none;
+  align-self: center;
+  background: transparent;
+}
+
+.progressBar {
+  height: 145%;
+  background-color: #4CAF5080;
+  transition: width 0.3s ease-in-out;
+  position: relative;
+  top: -23px;
+  left: -5px;
+}
+
+.searchQueryIcon {
+  cursor: pointer;
+  align-self: center;
+  user-select: none;
+}
+
+.searchQueryBackground {
+  background: linear-gradient(to right, #fefdfe, #656565);
+  animation: sweepGradient 2s linear infinite alternate;
+  background-size: 200% auto;
+}
+
+@keyframes sweepGradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  100% {
+      background-position: 100% 50%;
+  }
+}
+
+.loader {
+  width: 10px;
+  height: 10px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 4px solid;
+  border-color: #000 #0000;
+  animation: l1 1s infinite;
+  color: transparent
+}
+@keyframes l1 {to{transform: rotate(.5turn)}}

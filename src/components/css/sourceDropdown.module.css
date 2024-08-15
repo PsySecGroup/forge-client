@@ -1,0 +1,82 @@
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdown {
+  cursor: pointer;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  border-top-left-radius: 1em;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 0;
+ 
+  padding: 0.25em;
+}
+
+.dropdownSelection {
+  display: inline-flex;
+  margin-left: 0.5em;
+  flex-grow: 1;
+}
+
+.dropdownIcon {
+  text-align: center;
+  margin-right: 0.5em;
+  line-height: 0;
+}
+
+.dropdownOptions {
+  cursor: pointer;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 2px solid black;
+  width: 99.5%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.dropdownOption {
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.dropdownOptionCheck {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropdownOptionValue {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 0.5em;
+}
+
+.dropdownCreateNew {
+  font-style: italic;
+  color: gray;
+  font-size: 0.75em;
+}
+
+/* Styling for even rows */
+.dropdownOption:nth-child(even) {
+  background-color: lightgray;
+}
+
+/* Styling for odd rows */
+.dropdownOption:nth-child(odd) {
+  background-color: white;
+}
+
+/* Hover effect */
+.dropdownOption:hover {
+  background-color: lightblue;
+}

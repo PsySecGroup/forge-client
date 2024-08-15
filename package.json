@@ -1,0 +1,32 @@
+{
+  "name": "hypercrowd-client",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "lint": "npx tsc --noEmit && npx eslint src/index.tsx",
+    "test": "npx uvu -r esbuild-register tests/",
+    "build": "vite build",
+    "compile": "npm run lint && npm run test && npm run build",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "author": "HyperCrowd",
+  "license": "None",
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "eslint": "9.x",
+    "esbuild-register": "^3.5.0",
+    "globals": "^15.3.0",
+    "solid-devtools": "^0.29.2",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^7.12.0",
+    "uvu": "^0.5.6",
+    "vite": "^5.0.11",
+    "vite-plugin-singlefile": "^2.0.1",
+    "vite-plugin-solid": "^2.10.2"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.11"
+  }
+}
