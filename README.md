@@ -72,6 +72,7 @@ You can check out file sizes and load times of individual files in dev by visiti
 
 ## Research
 
+* [Setup testing](https://docs.solidjs.com/guides/testing)
 * [`src/utils/fetch.ts`](src/utils/fetch.ts)
   * Change `testResult` in `fetch()` to an `axios` mock instead
   * Look into `import { HardenedFetch } from 'hardened-fetch'`

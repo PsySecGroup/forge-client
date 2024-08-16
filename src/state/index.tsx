@@ -9,6 +9,9 @@ const storeContext = createContext<StoreState>(defaults)
 
 export const useStoreContext = (): StoreState => useContext(storeContext)
 
+/**
+ *
+ */
 export const StoreProvider = (props: { children: any }): JSX.Element => {
   const stores = getStores()
 
