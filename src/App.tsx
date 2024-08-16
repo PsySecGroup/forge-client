@@ -7,13 +7,7 @@ import logo from './assets/logo.svg'
 import styles from './App.module.css'
 
 const App: Component = () => {
-  const { setValues } = useStoreContext()
-
-  const closeEverything = (): void => {
-    setValues({
-      closeEverything: true
-    })
-  }
+  const { values, closeEverything } = useStoreContext()
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
@@ -36,7 +30,7 @@ const App: Component = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Welcome to the Forge Client
+            Welcome to the Forge Client {values.closeEverything ? 'yes' : 'no'}
           </a>
         </header>
       </div>

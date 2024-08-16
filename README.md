@@ -27,6 +27,15 @@ We centralize state as much as possible.  We also track it automatically and reh
 
 * [`src/types/values.ts`](src/types/values.ts): This contains a list of simple primitives that are part of the temporary centralized state.
 
+### Actions
+
+Actions allow you to easily modify states from any component.  All actions are automatically attached to the result of `useStoreContext()`.  For sanity reasons, it is best to name your action after the store value you are modifying.
+
+* [`src/actions`](src/actions): Directory where Action domains go
+  * [`src/actions/ui.ts`](src/actions/ui.ts): Example of UI actions.  Each action takes `stores` as a parameter
+* [`src/state/index.ts`](src/state/index.ts): Where actions are automatically attached to the Store Context
+* [`src/actions/index.ts`](src/actions/index.ts): Action domains are attached to the Action cluster here
+
 ### Themes
 
 All themes are in the [`src/themes`](src/themes) folder
@@ -50,8 +59,6 @@ A Page contains components.
 * [`src/App.tsx`](App.tsx): Pages should be added to the App component's as a child of ThemesProvider/Box
 
 ## Testing
-
-TBD
 
 You can check out file sizes and load times of individual files in dev by visiting [http://localhost:3000/__inspect](http://localhost:3000/__inspect)
 
