@@ -10,6 +10,8 @@ npm install # or pnpm install or yarn install
 
 ## Development
 
+Search for instances of `(-->)` to understand where to insert code
+
 ### State
 
 We centralize state as much as possible.  We also track it automatically and rehydrate it from `localStorage`  To benefit from all of this, do the following:
@@ -72,6 +74,8 @@ You can check out file sizes and load times of individual files in dev by visiti
 
 ## Research
 
+* [Nifty array tricks](https://www.youtube.com/watch?v=hdUwDmprSmg)
+* [State flexibility](https://www.youtube.com/watch?v=8cAEk4mH3pk)
 * [Setup testing](https://docs.solidjs.com/guides/testing)
 * [`src/utils/fetch.ts`](src/utils/fetch.ts)
   * Change `testResult` in `fetch()` to an `axios` mock instead

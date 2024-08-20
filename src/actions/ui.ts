@@ -2,8 +2,8 @@ export default {
   /**
    *
    */
-  closeEverything: (stores) => {
-    return stores.setValues({
+  closeEverything: ({ setValues }) => {
+    return setValues({
       closeEverything: true
     })
   }

@@ -32,42 +32,44 @@ export type Space = {
 
 type Concept = Space
 
+const defaults: Concept = {
+  palette: [],
+  backgroundColor: '#000000',
+  graphDepth: 5,
+  coverage: 67,
+  sort: 'relevance',
+  sortDir: 'asc',
+  range: 1000,
+  count: 50,
+  position: 'all',
+  view: 'graph',
+  clustering: 'concepts',
+  persisting: {
+    concepts: [],
+    relations: [],
+    tokens: []
+  },
+  selected: {
+    concepts: [],
+    relations: [],
+    tokens: []
+  },
+  cameraX: 0,
+  cameraY: 0,
+  cameraZ: 0,
+  name: '',
+  id: 1,
+  isFocused: true,
+  documentStores: [],
+  query: '',
+  parentSpaces: []
+}
+
 /**
  *
  */
 export function hydrate (json: string | Concept | Json): Concept {
-  const result = hydrateJson<Concept>(json, {
-    palette: [],
-    backgroundColor: '#000000',
-    graphDepth: 5,
-    coverage: 67,
-    sort: 'relevance',
-    sortDir: 'asc',
-    range: 1000,
-    count: 50,
-    position: 'all',
-    view: 'graph',
-    clustering: 'concepts',
-    persisting: {
-      concepts: [],
-      relations: [],
-      tokens: []
-    },
-    selected: {
-      concepts: [],
-      relations: [],
-      tokens: []
-    },
-    cameraX: 0,
-    cameraY: 0,
-    cameraZ: 0,
-    name: '',
-    id: 1,
-    isFocused: true,
-    documentStores: [],
-    query: '',
-    parentSpaces: []
-  })
+  const result = hydrateJson<Concept>(json, defaults)
 
   result.createdAt = hydrateDate(result, 'createdAt')
   result.parentSpaces = hydrateCollection<Concept>(result.parentSpaces, hydrate)

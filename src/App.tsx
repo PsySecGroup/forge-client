@@ -38,7 +38,7 @@ const App: Component = () => {
         class={styles.App}
         onClick={closeEverything}
        >
-        { /* Add pages here */ }
+        { /* (-->) Add pages here */ }
 
         { /*
           <Button onClick={() => { setUi('theme', 'mainDark') }}>

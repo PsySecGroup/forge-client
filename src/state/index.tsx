@@ -1,9 +1,9 @@
 import type { Optional } from '../types/common' 
+import type { StoreState } from './types/register'
 import { type JSX, createContext, useContext } from 'solid-js'
-import { type StoreState } from './types'
 import { defaults } from './defaults'
 import { getStores } from './stores'
-import Actions from '../actions/index'
+import Actions from '../actions/register'
 
 const storeContext = createContext<StoreState>(defaults)
 
@@ -21,13 +21,10 @@ export const StoreProvider = (props: { children: any }): JSX.Element => {
     actions[action] = () => Actions[action](stores)
   })
 
-  // Define methods that allow modification of state from context
-
   return (
     <storeContext.Provider value={{
       ...stores,
       ...actions
-      // Add method names above here to attach them to context
     }}>
       {props.children}
     </storeContext.Provider>

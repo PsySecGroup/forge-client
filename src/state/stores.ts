@@ -1,33 +1,36 @@
-import { type Ui } from '../types/ui'
-import { createLocalStore } from './localStore'
-import { createStore, type SetStoreFunction } from 'solid-js/store'
-import { type Values } from '../types/values'
-import { defaults } from './defaults'
+// import type { Ui } from '../types/ui'
+// import type { Values } from '../types/values'
+import { type StoreState, stores } from './register'
+// import { createStore } from 'solid-js/store'
+// import { createLocalStore } from './localStore'
+// import { defaults } from './defaults'
 
-type Stores = {
-  // Add persisting data here
-  ui: Ui
-  setUi: SetStoreFunction<Ui>
+export function getStores (): StoreState {
+  let result = {}
 
-  // Add temporary data here
-  values: Values
-  setValues: SetStoreFunction<Values>
-}
+  for (const store of stores) {
+    result = {
+      ...result,
+      ...store()
+    }
+  }
 
-export function getStores (): Stores {
-  // Add persisting data here
+  return result
+
+  /*
+  // (-->) Add persisting data here
   const [ui, setUi] = createLocalStore<Ui>('ui', defaults.ui)
 
-  // Add temporary data here
   const [values, setValues] = createStore<Values>(defaults.values)
 
   return {
-    // Add persisting data here
+    // (-->) Add persisting data here
     ui,
     setUi,
 
-    // Add temporary data here
+    // (-->) Add temporary data here
     values,
     setValues
   }
+  */
 }

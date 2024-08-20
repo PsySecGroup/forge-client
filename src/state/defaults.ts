@@ -1,11 +1,9 @@
 import { NOOP } from '../constants'
-import { hydrate as hydrateUi } from '../types/ui'
 import { hydrate as hydrateValues } from '../types/values'
+import Types from '../types/register'
 
 export const defaults = {
-  // Add data domains here
-  ui: hydrateUi({}),
-  setUi: NOOP,
   values: hydrateValues({}),
-  setValues: NOOP
+  setValues: NOOP,
+  ...Types
 }
