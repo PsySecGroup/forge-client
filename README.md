@@ -86,8 +86,8 @@ export const getStore = (): StoreState => {
 
 Concepts must be registered.  Registration cues look like `// (-->)` and tell you where to perform the registration.  Concepts must be registered in the following places:
 
-* [Concept registration](src/concepts/register.ts): 
-* [State registration](src/state/register.ts): 
+* [Concept registration](src/concepts/register.ts)
+* [State registration](src/state/register.ts)
 
 #### Values Concept
 
@@ -110,7 +110,7 @@ A Page contains components.
 
 * [`src/pages`](src/pages): Pages should be added here
 * [`src/pages/template.tsx`](src/pages/template.tsx): This is an example of a Page
-* [`src/App.tsx`](App.tsx:42): Pages should be added to the App component's as a child of `ThemesProvider/Box`
+* [`src/App.tsx`](src/App.tsx:42): Pages should be added to the App component's as a child of `ThemesProvider/Box`
 
 ### Components
 
