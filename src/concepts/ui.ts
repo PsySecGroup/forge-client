@@ -1,9 +1,8 @@
 import type { SetStoreFunction } from 'solid-js/store'
 import type { Themes } from '../themes'
 import type { Json } from '../core/types'
-import { persistingStore } from '../core'
 import { NOOP } from '../constants'
-import { hydrateJson } from '../core'
+import { persistingStore, hydrateJson } from '../core'
 
 export type Ui = {
   theme: Themes

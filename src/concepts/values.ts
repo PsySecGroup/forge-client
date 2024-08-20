@@ -1,8 +1,7 @@
 import type { SetStoreFunction } from 'solid-js/store'
 import type { Json } from '../core/types'
-import { temporaryStore } from '../core'
 import { NOOP } from '../constants'
-import { hydrateJson } from '../core'
+import { temporaryStore, hydrateJson } from '../core'
 
 export type Values = {
   // (-->) Add simple primitives here

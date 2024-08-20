@@ -39,9 +39,8 @@ Example for a `Ui` concept that is persistently stored:
 import type { SetStoreFunction } from 'solid-js/store'
 import type { Themes } from '../themes'
 import type { Json } from '../core/types'
-import { persistingStore } from '../core'
 import { NOOP } from '../constants'
-import { hydrateJson } from '../core'
+import { persistingStore, hydrateJson } from '../core'
 
 // Unique Name
 export type Ui = {
