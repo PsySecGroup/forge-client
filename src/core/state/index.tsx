@@ -1,9 +1,9 @@
 import type { Optional } from '../types/common' 
-import type { StoreState } from './types/register'
+import type { StoreState } from '../../types/register'
 import { type JSX, createContext, useContext } from 'solid-js'
 import { defaults } from './defaults'
 import { getStores } from './stores'
-import Actions from '../actions/register'
+import Actions from '../../actions/register'
 
 const storeContext = createContext<StoreState>(defaults)
 

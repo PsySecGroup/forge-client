@@ -1,8 +1,8 @@
-import type { type SetStoreFunction } from 'solid-js/store'
-import type { Json } from './common'
-import { createStore } from 'solid-js/store'
+import type { SetStoreFunction } from 'solid-js/store'
+import type { Json } from '../core/types'
+import { temporaryStore } from '../core'
 import { NOOP } from '../constants'
-import { hydrateJson } from './json'
+import { hydrateJson } from '../core'
 
 export type Values = {
   // (-->) Add simple primitives here
@@ -37,7 +37,7 @@ export const defaultState: StoreState = {
 }
 
 export const getStore = (): StoreState => {
-  const [values, setValues] = createStore<Concept>(defaultValues)
+  const [values, setValues] = temporaryStore<Concept>(defaultValues)
 
   return {
     values,

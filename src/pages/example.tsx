@@ -1,6 +1,6 @@
 import { Box } from '@suid/material'
 import { type ParentProps, type JSX } from 'solid-js'
-// import { useStoreContext } from '../state'
+// import { useStoreContext } from '../core'
 
 import styles from './example.module.css'
 

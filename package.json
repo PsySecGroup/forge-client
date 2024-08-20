@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@suid/material": "^0.16.0",
+    "axios": "^1.7.4",
     "dotenv": "^16.4.5",
     "solid-js": "^1.8.11",
     "vite-plugin-compression": "^0.5.1",

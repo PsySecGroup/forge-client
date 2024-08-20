@@ -1,5 +1,5 @@
 import type { Dynamic, Json, HttpMethods } from '../types/common'
-import { BASE_URL } from '../constants'
+import { BASE_URL } from '../../constants'
 import axios from 'axios'
 // TODO import { HardenedFetch } from 'hardened-fetch'
 

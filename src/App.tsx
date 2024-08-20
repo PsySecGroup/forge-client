@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 import { Box } from '@suid/material'
-import { useStoreContext } from './state'
+import { useStoreContext } from './core'
 import ThemesProvider from './themes'
 import logo from './assets/logo.svg'
 

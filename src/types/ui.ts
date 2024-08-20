@@ -1,9 +1,9 @@
-import type { type SetStoreFunction } from 'solid-js/store'
+import type { SetStoreFunction } from 'solid-js/store'
 import type { Themes } from '../themes'
-import type { Json } from './common'
-import { createLocalStore } from '../state/localStore'
+import type { Json } from '../core/types'
+import { persistingStore } from '../core'
 import { NOOP } from '../constants'
-import { hydrateJson } from './json'
+import { hydrateJson } from '../core'
 
 export type Ui = {
   theme: Themes
@@ -30,7 +30,7 @@ export const defaultState: StoreState = {
 }
 
 export const getStore = (): StoreState => {
-  const [ui, setUi] = createLocalStore<Concept>('ui', defaultValues)
+  const [ui, setUi] = persistingStore<Concept>('ui', defaultValues)
 
   return {
     ui,

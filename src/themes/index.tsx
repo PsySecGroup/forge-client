@@ -1,10 +1,11 @@
 import type { JSX, ParentProps } from 'solid-js'
-import ThemeProvider from '@suid/system/ThemeProvider'
 import { createMemo } from 'solid-js'
+import ThemeProvider from '@suid/system/ThemeProvider'
+import createTheme from '@suid/system/createTheme'
 import { mainLight } from './light'
 import { mainDark } from './dark'
-import { useStoreContext } from '../state'
-import createTheme from '@suid/system/createTheme'
+import { useStoreContext } from '../core'
+
 
 interface Props extends ParentProps {}
 

@@ -1,5 +1,5 @@
-import type { Float, HexColor, GUID, Integer, Json, ID } from './common'
-import { hydrateCollection, hydrateDate, hydrateJson } from './json'
+import type { Float, HexColor, GUID, Integer, Json, ID } from './core/types'
+import { hydrateCollection, hydrateDate, hydrateJson } from './core'
 
 type ClusterTypes = 'concepts' | 'relations' | 'tokens'
 
@@ -76,3 +76,39 @@ export function hydrate (json: string | Concept | Json): Concept {
   
   return result
 }
+
+
+/*
+export type Ui = {
+  theme: Themes
+}
+
+type Concept = Ui
+
+export type StoreState = {
+  ui: Concept
+  setUi: SetStoreFunction<Concept>
+}
+
+const defaultValues: Concept = {
+  theme: 'mainLight'
+}
+
+export const hydrate = (json: string | Concept | Json = {}): Concept => {
+  return hydrateJson<Concept>(json, defaultValues)
+}
+
+export const defaultState: StoreState = {
+  ui: hydrate(),
+  setUi: NOOP
+}
+
+export const getStore = (): StoreState => {
+  const [ui, setUi] = persistingStore<Concept>('ui', defaultValues)
+
+  return {
+    ui,
+    setUi
+  }
+}
+*/

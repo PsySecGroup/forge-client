@@ -1,6 +1,6 @@
 import { render } from 'solid-js/web'
 import App from './App'
-import { StoreProvider } from './state'
+import { StoreProvider } from './core'
 import './index.css'
 
 const root = document.getElementById('root')
