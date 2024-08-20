@@ -3,18 +3,17 @@
 This is a frontend project template using [SolidJS](https://solidjs.com).  We offer:
 
 * Simple state management for both persisting (via `localStorage`) and temporary stores
+* Simple state management for both persistent (via 1localStorage1) and temporary stores
   * [Concepts](src/concepts) as units of state
   * [Actions](src/actions) as state mutators
   * A simple way to [register concepts](src/state/register.ts) with state management
 * Simple [Material-UI integration](https://suid.io/) and [theme management](src/themes)
-* Environment variable controls over common HTML needs (OpenGraph, meta tags, etc)
-* [Pages](src/pages)/[Component](src/components) breakdowns
+* Environment variable controls over common HTML needs (OpenGraph, meta tags, etc.)
+* [Pages](src/pages)/[Component](src/components) code organization for reusable visual elements
 
 ## Installation
 
-```bash
-npm install # or pnpm install or yarn install
-```
+Instructions pending!
 
 ## Development
 
@@ -22,17 +21,17 @@ This is an opinionated framework designed to use the benefits of SolidJs with mi
 
 ### Concepts
 
-* Concepts are units of state.  They are composed into the overall application state management.
-* Concepts are assumed to be JSON-first, meaning, we assume type-less JSON is the default transport methodology for API interaction.  This allows us to simplify reasoning about state because we only need to use `.toJSON` to prepare state for API requests and `hydrate` when dealing qwith API responses.
-* They are _always_ plain objects.
-* Concepts are either persisting (The values are restored upon application restart) or temporary (The values are reset to their default values upon application restart)
-* Concepts are mutated through Actions
+* Concepts are units of state. They are composed into the overall application state management.
+* Concepts are assumed to be JSON-first, meaning we assume typeless JSON is the default transport methodology for API interaction. This allows us to simplify reasoning about state because we only need to use `.toJSON` to prepare state for API requests and `hydrate` when dealing with API responses.
+* Concepts are _always_ plain objects.
+* Concepts are either persistent (the values are restored upon application restart) or temporary (the values are reset to their default values upon application restart).
+* Concepts are mutated through Actions.
 * Concepts have a **unique name**.
-* Concepts have a **store state**: a type signature for how their getter and setter is represented in state management.
+* Concepts have a **store state**: a type signature for how their getter and setter are represented in state management.
 * Concepts have a **default value**: the value the state will be in when the application starts.
-* Concepts have a **hydration method**: a method that converts the state from JSON to a Concept state management can handle.  Complex concepts (like arrays and objects) that have other Concepts within them will utilize that Concept's hydration method as well.
+* Concepts have a **hydration method**: a method that converts the state from JSON to a Concept state management can handle. Complex concepts (like arrays and objects) that have other Concepts within them will utilize that Concept's hydration method as well.
 * Concepts have a **default state**: a shape for how their getter and setter are initially defined.
-* Concept have a **store retreival**: a method that pulls the state from either a persisting store or a temporary store and returns a composable unit of state for state management.
+* Concepts have a **store retrieval**: a method that pulls the state from either a persistent store or a temporary store and returns a composable unit of state for state management.
 
 Example for a `Ui` concept that is persistently stored:
 
@@ -94,9 +93,9 @@ Concepts must be registered.  Registration cues look like `// (-->)` and tell yo
 
 The Values concept is a default Concept that comes with each project.  It is a dedicated temporary store.  You can add new primitives to track in the Values concept in the following places:
 
-* [Type](src/concepts/values.ts:8)
+* [Values Type](src/concepts/values.ts:8)
 * [Default Values](src/concepts/values.ts:20)
-* [Hydration](src/concepts/values.ts:30)
+* [Values Hydration](src/concepts/values.ts:30)
 
 ### Actions
 
@@ -110,8 +109,8 @@ Actions allow you to easily modify states from any component.  All actions are a
 A Page contains components.
 
 * [`src/pages`](src/pages): Pages should be added here
-  * [`src/pages/template.tsx`](src/pages/template.tsx): This is an example of a Page
-* [`src/App.tsx`](App.tsx:42): Pages should be added to the App component's as a child of ThemesProvider/Box
+* [`src/pages/template.tsx`](src/pages/template.tsx): This is an example of a Page
+* [`src/App.tsx`](App.tsx:42): Pages should be added to the App component's as a child of `ThemesProvider/Box`
 
 ### Components
 
