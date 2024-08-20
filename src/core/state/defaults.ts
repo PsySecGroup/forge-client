@@ -1,6 +1,6 @@
 import { NOOP } from '../../constants'
-import { hydrate as hydrateValues } from '../../types/values'
-import Types from '../../types/register'
+import { hydrate as hydrateValues } from '../../concepts/values'
+import Types from '../../concepts/register'
 
 export const defaults = {
   values: hydrateValues({}),

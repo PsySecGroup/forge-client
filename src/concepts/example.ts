@@ -1,5 +1,8 @@
-import type { Float, HexColor, GUID, Integer, Json, ID } from './core/types'
-import { hydrateCollection, hydrateDate, hydrateJson } from './core'
+import { NOOP } from '../constants'
+import type { SetStoreFunction } from 'solid-js/store'
+import type { Float, HexColor, GUID, Integer, Json, ID } from '../core/types'
+import { hydrateCollection, hydrateDate, hydrateJson } from '../core'
+import { persistingStore } from '../core'
 
 type ClusterTypes = 'concepts' | 'relations' | 'tokens'
 
@@ -32,7 +35,12 @@ export type Space = {
 
 type Concept = Space
 
-const defaults: Concept = {
+export type StoreState = {
+  space: Concept
+  setSpace: SetStoreFunction<Concept>
+}
+
+const defaultValues: Concept = {
   palette: [],
   backgroundColor: '#000000',
   graphDepth: 5,
@@ -68,8 +76,8 @@ const defaults: Concept = {
 /**
  *
  */
-export function hydrate (json: string | Concept | Json): Concept {
-  const result = hydrateJson<Concept>(json, defaults)
+export function hydrate (json: string | Concept | Json = {}): Concept {
+  const result = hydrateJson<Concept>(json, defaultValues)
 
   result.createdAt = hydrateDate(result, 'createdAt')
   result.parentSpaces = hydrateCollection<Concept>(result.parentSpaces, hydrate)
@@ -77,38 +85,16 @@ export function hydrate (json: string | Concept | Json): Concept {
   return result
 }
 
-
-/*
-export type Ui = {
-  theme: Themes
-}
-
-type Concept = Ui
-
-export type StoreState = {
-  ui: Concept
-  setUi: SetStoreFunction<Concept>
-}
-
-const defaultValues: Concept = {
-  theme: 'mainLight'
-}
-
-export const hydrate = (json: string | Concept | Json = {}): Concept => {
-  return hydrateJson<Concept>(json, defaultValues)
-}
-
 export const defaultState: StoreState = {
-  ui: hydrate(),
-  setUi: NOOP
+  space: hydrate(),
+  setSpace: NOOP
 }
 
 export const getStore = (): StoreState => {
-  const [ui, setUi] = persistingStore<Concept>('ui', defaultValues)
+  const [space, setSpace] = persistingStore<Concept>('space', defaultValues)
 
   return {
-    ui,
-    setUi
+    space,
+    setSpace
   }
 }
-*/

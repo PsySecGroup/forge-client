@@ -1,6 +1,14 @@
 # Forge Client
 
-This is a frontend project template using [SolidJS](https://solidjs.com).
+This is a frontend project template using [SolidJS](https://solidjs.com).  We offer:
+
+* Simple state management for both persisting (via `localStorage`) and temporary stores
+  * [Concepts](src/concepts) as units of state
+  * [Actions](src/actions) as state mutators
+  * A simple way to [register concepts](src/state/register.ts) with state management
+* Simple [Material-UI integration](https://suid.io/) and [theme management](src/themes)
+* Environment variable controls over common HTML needs (OpenGraph, meta tags, etc)
+* [Pages](src/pages)/[Component](src/components) breakdowns
 
 ## Installation
 
@@ -10,47 +18,92 @@ npm install # or pnpm install or yarn install
 
 ## Development
 
-Search for instances of `(-->)` to understand where to insert code
+This is an opinionated framework designed to use the benefits of SolidJs with minimal complexity.
 
-### State
+### Concepts
 
-We centralize state as much as possible.  We also track it automatically and rehydrate it from `localStorage`  To benefit from all of this, do the following:
+* Concepts are units of state.  They are composed into the overall application state management.
+* Concepts are assumed to be JSON-first, meaning, we assume type-less JSON is the default transport methodology for API interaction.  This allows us to simplify reasoning about state because we only need to use `.toJSON` to prepare state for API requests and `hydrate` when dealing qwith API responses.
+* They are _always_ plain objects.
+* Concepts are either persisting (The values are restored upon application restart) or temporary (The values are reset to their default values upon application restart)
+* Concepts are mutated through Actions
+* Concepts have a **unique name**.
+* Concepts have a **store state**: a type signature for how their getter and setter is represented in state management.
+* Concepts have a **default value**: the value the state will be in when the application starts.
+* Concepts have a **hydration method**: a method that converts the state from JSON to a Concept state management can handle.  Complex concepts (like arrays and objects) that have other Concepts within them will utilize that Concept's hydration method as well.
+* Concepts have a **default state**: a shape for how their getter and setter are initially defined.
+* Concept have a **store retreival**: a method that pulls the state from either a persisting store or a temporary store and returns a composable unit of state for state management.
 
-#### Adding A Data Domain
+Example for a `Ui` concept that is persistently stored:
 
-* [`src/state/types.ts`](src/state/types.ts): This is the type signature of the centralized state shape.
-* [`src/state/defaults.ts`](src/state/defaults.ts): This contains the shape of the centralized state.
-* [`src/state/stores.ts`](src/state/stores.ts): This contains how centralized data breaks down into persisting data and temporary data.
-* [`src/types`](src/types): This directory contains types that reflect data domains
-  * [`src/types/example.ts`](src/types/example.ts): This is a large eaxmple of a data domain.  Take note of the usage of the hydration featuers made possible by `src/types/json.ts`
-* [`src/state/index.tsx`](src/state/index.tsx): This allows you to add centralized state modifiers to the store context, allowing application-wide access to centralized state modification
+```ts
+import type { SetStoreFunction } from 'solid-js/store'
+import type { Themes } from '../themes'
+import type { Json } from '../core/types'
+import { persistingStore } from '../core'
+import { NOOP } from '../constants'
+import { hydrateJson } from '../core'
 
-#### Adding A Simple Primitive
+// Unique Name
+export type Ui = {
+  theme: Themes
+}
 
-* [`src/types/values.ts`](src/types/values.ts): This contains a list of simple primitives that are part of the temporary centralized state.
+// Boilerplate helper
+type Concept = Ui
+
+// Store State
+export type StoreState = {
+  ui: Concept
+  setUi: SetStoreFunction<Concept>
+}
+
+// Default Values
+const defaultValues: Concept = {
+  theme: 'mainLight'
+}
+
+// Hydration Method
+export const hydrate = (json: string | Concept | Json = {}): Concept => {
+  return hydrateJson<Concept>(json, defaultValues)
+}
+
+// Default State
+export const defaultState: StoreState = {
+  ui: hydrate(),
+  setUi: NOOP
+}
+
+// Store Retreival
+export const getStore = (): StoreState => {
+  const [ui, setUi] = persistingStore<Concept>('ui', defaultValues)
+
+  return {
+    ui,
+    setUi
+  }
+}
+````
+
+Concepts must be registered.  Registration cues look like `// (-->)` and tell you where to perform the registration.  Concepts must be registered in the following places:
+
+* [Concept registration](src/concepts/register.ts): 
+* [State registration](src/state/register.ts): 
+
+#### Values Concept
+
+The Values concept is a default Concept that comes with each project.  It is a dedicated temporary store.  You can add new primitives to track in the Values concept in the following places:
+
+* [Type](src/concepts/values.ts:8)
+* [Default Values](src/concepts/values.ts:20)
+* [Hydration](src/concepts/values.ts:30)
 
 ### Actions
 
-Actions allow you to easily modify states from any component.  All actions are automatically attached to the result of `useStoreContext()`.  For sanity reasons, it is best to name your action after the store value you are modifying.
+Actions allow you to easily modify states from any component.  All actions are automatically attached to the result of `useStoreContext()`.  For sanity reasons, it is best to name your action file after the Concept you are modifying.
 
 * [`src/actions`](src/actions): Directory where Action domains go
-  * [`src/actions/ui.ts`](src/actions/ui.ts): Example of UI actions.  Each action takes `stores` as a parameter
-* [`src/state/index.ts`](src/state/index.ts): Where actions are automatically attached to the Store Context
-* [`src/actions/index.ts`](src/actions/index.ts): Action domains are attached to the Action cluster here
-
-### Themes
-
-All themes are in the [`src/themes`](src/themes) folder
-
-### Assets
-
-Static assets are in the [`src/assets`](src/assets) folder
-
-### Components
-
-* [`src/components/base`](src/components/base): This contains common components that are used to extend more complex components.  Typically, these accept props.
-* [`src/components`](src/components): Thos contains complex components that often extend from base components.  Typically, these rely on store context.
-* [`src/components/css`](src/components/css): These contain the CSS files for complex components
+* [`src/actions/ui.ts`](src/actions/ui.ts): Example of UI actions.  Each action takes the complete application state as a parameter, which will contain the getters and setters from each Concept's `getStore`.
 
 ### Pages
 
@@ -58,7 +111,20 @@ A Page contains components.
 
 * [`src/pages`](src/pages): Pages should be added here
   * [`src/pages/template.tsx`](src/pages/template.tsx): This is an example of a Page
-* [`src/App.tsx`](App.tsx): Pages should be added to the App component's as a child of ThemesProvider/Box
+* [`src/App.tsx`](App.tsx:42): Pages should be added to the App component's as a child of ThemesProvider/Box
+
+### Components
+
+* [`src/components`](src/components): Thos contains complex components that often extend from core components.  These rely on `getStoreContext` when you want to incorporate state.
+* [`src/components/css`](src/components/css): These contain the CSS files for complex components
+
+### Themes
+
+All themes are in the [`src/themes`](src/themes) folder.
+
+### Assets
+
+Static assets are in the [`src/assets`](src/assets) folder.
 
 ## Testing
 
@@ -66,11 +132,11 @@ You can check out file sizes and load times of individual files in dev by visiti
 
 ## Usage
 
-* `npm run dev`: 
-* `npm run build`: 
-* `npm run compile`: 
-* `npm run lint`: 
-* `npm run preview`: 
+* `npm run dev`: Starts development mode
+* `npm run build`: Builds a standalone application
+* `npm run compile`: Performs a test, lint, and a build
+* `npm run lint`: Checks for sytnax errors
+* `npm run preview`: TBD
 
 ## Research
 

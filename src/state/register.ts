@@ -1,12 +1,13 @@
-import { type StoreState as UiStoreState, getStore as getUiStore } from '../types/ui'
-import { type StoreState as ValuesStoreState, getStore as getValuesStore } from '../types/values'
+// (-->) Import the StoreState and getStore for Concepts here
+import { type StoreState as UiStoreState, getStore as getUiStore } from '../concepts/ui'
+import { type StoreState as ValuesStoreState, getStore as getValuesStore } from '../concepts/values'
 
 export type StoreState = ValuesStoreState
-  // (-->) Register store types here
+  // (-->) Register StoreStates here
   & UiStoreState
 
 export const stores = [
-  // (-->) Register stores here
+  // (-->) Register getStores here
   getValuesStore,
   getUiStore
 ]

@@ -25,8 +25,9 @@ const defaultValues: Concept = {
  *
  */
 export function hydrate (json: string | Concept | Json = {}): Concept {
-  // (-->) Add the default values of simple primitives here
   const result = hydrateJson<Concept>(json, defaultValues)
+
+  // (-->) If complex hydration is needed for arrays or dates, it is done here
 
   return result
 }
