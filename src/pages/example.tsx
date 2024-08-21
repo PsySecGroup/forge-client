@@ -2,7 +2,7 @@ import { Box } from '@suid/material'
 import { type ParentProps, type JSX } from 'solid-js'
 // import { useStoreContext } from '../core'
 
-import styles from './example.module.css'
+import styles from './css/example.module.css'
 
 interface Props extends ParentProps {}
 

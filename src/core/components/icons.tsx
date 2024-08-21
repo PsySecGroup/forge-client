@@ -1,7 +1,7 @@
 import CheckIcon from "@suid/icons-material/Check";
-import HomeIcon from "@suid/icons-material/Home";
-import RefreshIcon from "@suid/icons-material/Refresh";
-import SearchIcon from "@suid/icons-material/Search";
+import HomeIcon from "@suid/icons-material/Home"
+import RefreshIcon from "@suid/icons-material/Refresh"
+import SearchIcon from "@suid/icons-material/Search"
 import { Link, Stack } from "@suid/material";
 
 export default function Example() {

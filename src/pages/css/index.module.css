@@ -2,12 +2,6 @@
   text-align: center;
 }
 
-.logo {
-  animation: logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .header {
   background-color: #282c34;
   min-height: 100vh;
@@ -19,9 +13,20 @@
   color: white;
 }
 
+.logo {
+  animation: logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
 .link {
   color: #b318f0;
 }
+
+.cell {
+  border: 1px black solid;
+}
+
 
 @keyframes logo-spin {
   from {

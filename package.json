@@ -15,6 +15,7 @@
   "license": "None",
   "devDependencies": {
     "@eslint/js": "^9.4.0",
+    "dotenv": "^16.4.5",
     "esbuild-register": "^3.5.0",
     "eslint": "9.x",
     "globals": "^15.3.0",
@@ -23,16 +24,15 @@
     "typescript-eslint": "^7.12.0",
     "uvu": "^0.5.6",
     "vite": "^5.0.11",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-inspect": "^0.8.5",
     "vite-plugin-singlefile": "^2.0.1",
-    "vite-plugin-solid": "^2.10.2"
+    "vite-plugin-solid": "^2.10.2",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "dependencies": {
     "@suid/material": "^0.16.0",
     "axios": "^1.7.4",
-    "dotenv": "^16.4.5",
-    "solid-js": "^1.8.11",
-    "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-inspect": "^0.8.5",
-    "vite-plugin-svgr": "^4.2.0"
+    "solid-js": "^1.8.11"
   }
 }

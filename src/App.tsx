@@ -1,4 +1,5 @@
-import type { Component } from 'solid-js'
+import { type Component, onCleanup } from 'solid-js'
+import { addGlobalEvent } from './core/utils/events'
 import { Box } from '@suid/material'
 import { useStoreContext } from './core'
 import ThemesProvider from './themes'
@@ -9,18 +10,21 @@ import styles from './App.module.css'
 import MainPage from './pages/index'
 
 const App: Component = () => {
-  const { values, navigation, changeLocation } = useStoreContext()
+  const { closeEverything } = useStoreContext()
+
+  onCleanup(addGlobalEvent('keydown', e => {
+    if (e.key === '`') {
+      closeEverything()
+    }
+  }))
+
   return (
     <ThemesProvider>
       <Box>
         <Navigation routes={{
           // (-->) Add pages here
-          main: <MainPage />
+          '': <MainPage />
         }} />
-        <button onClick={() => changeLocation('main')}>
-          Go to Index
-        </button>
-
       </Box>
     </ThemesProvider>
   )

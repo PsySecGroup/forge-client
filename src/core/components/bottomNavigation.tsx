@@ -1,23 +1,53 @@
-import { Favorite, LocationOn, Restore } from "@suid/icons-material";
-import { BottomNavigation, BottomNavigationAction, Box } from "@suid/material";
-import { createSignal } from "solid-js";
+import { BottomNavigation, BottomNavigationAction, Box } from '@suid/material'
+import { type ParentProps, type JSX, createSignal, batch } from 'solid-js'
 
-export default function BasicBottomNavigationExample() {
-  const [value, setValue] = createSignal(0);
+import styles from './css/BottomNavigation.module.css'
+
+interface Props extends ParentProps {
+  highlight: boolean
+  actions: {
+    [key: string]: {
+      icons: JSX.Element
+      onClick: () => void
+      label?: string
+    }
+  }
+}
+
+export default function BottomNav({ actions, highlight }): JSX.Element {
+  const [icon, setIcon] = createSignal<string>('')
+  const options = []
+  for (const key of Object.keys(actions)) {
+    const action = actions[key]
+
+    const iconDiv = action.icon === undefined
+      ? <></>
+      : <div>{action.icon}</div>
+
+    const labelDiv = action.label === undefined
+      ? <></>
+      : <div>{action.label}</div>
+
+    options.push(<div
+      onClick={() => {
+        batch(() => {
+          action.onClick(key)
+          setIcon(key)
+        })
+      }}
+      classList={{
+        [styles.bottomNavItem]: true,
+        [styles.bottomNavItemSelected]: highlight && key === icon()
+      }}
+    >
+      {iconDiv}
+      {labelDiv}
+    </div>)
+  }
 
   return (
-    <Box sx={{ width: 500 }}>
-      <BottomNavigation
-        showLabels
-        value={value()}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        <BottomNavigationAction label="Recents" icon={<Restore />} />
-        <BottomNavigationAction label="Favorites" icon={<Favorite />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOn />} />
-      </BottomNavigation>
-    </Box>
-  );
+    <div class={styles.bottomNavContainer}>
+      {options}
+    </div>
+  )
 }
