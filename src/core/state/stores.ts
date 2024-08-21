@@ -11,5 +11,4 @@ export function getStores (): StoreState {
   }
 
   return result
-
 }

@@ -2,9 +2,9 @@ export default {
   /**
    *
    */
-  closeEverything: ({ setValues }) => {
+  closeEverything: ({ values, setValues }) => {
     return setValues({
-      closeEverything: true
+      closeEverything: !values.closeEverything
     })
   }
 }

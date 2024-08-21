@@ -2,54 +2,25 @@ import type { Component } from 'solid-js'
 import { Box } from '@suid/material'
 import { useStoreContext } from './core'
 import ThemesProvider from './themes'
-import logo from './assets/logo.svg'
-
+import Navigation from './components/navigation'
 import styles from './App.module.css'
 
+// (-->) Import pages here
+import MainPage from './pages/index'
+
 const App: Component = () => {
-  const { values, closeEverything } = useStoreContext()
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      closeEverything()
-    }
-  })
-
+  const { values, navigation, changeLocation } = useStoreContext()
   return (
     <ThemesProvider>
-      { /* Feel free to remove this */ }
-      <div class={styles.App}>
-        <header class={styles.header}>
-          <img src={logo} class={styles.logo} alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            class={styles.link}
-            href="https://github.com/solidjs/solid"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Welcome to the Forge Client {values.closeEverything ? 'yes' : 'no'}
-          </a>
-        </header>
-      </div>
-      <Box
-        class={styles.App}
-        onClick={closeEverything}
-       >
-        { /* (-->) Add pages here */ }
+      <Box>
+        <Navigation routes={{
+          // (-->) Add pages here
+          main: <MainPage />
+        }} />
+        <button onClick={() => changeLocation('main')}>
+          Go to Index
+        </button>
 
-        { /*
-          <Button onClick={() => { setUi('theme', 'mainDark') }}>
-            <span>Dark</span>
-          </Button>
-          <Button onClick={() => {
-            setUi({ ...ui, theme: 'mainLight' })
-          }}>
-            <span>Light</span>
-          </Button>
-        */ }
       </Box>
     </ThemesProvider>
   )

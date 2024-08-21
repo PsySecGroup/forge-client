@@ -4,7 +4,6 @@ import { type JSX, createContext, useContext } from 'solid-js'
 import { defaults } from './defaults'
 import { getStores } from './stores'
 import Actions from '../../actions/register'
-
 const storeContext = createContext<StoreState>(defaults)
 
 export const useStoreContext = (): StoreState => useContext(storeContext)
@@ -14,11 +13,10 @@ export const useStoreContext = (): StoreState => useContext(storeContext)
  */
 export const StoreProvider = (props: { children: any }): JSX.Element => {
   const stores = getStores()
-
   const actions = {}
 
   Object.keys(Actions).map(action => {
-    actions[action] = () => Actions[action](stores)
+    actions[action] = (...args) => Actions[action](...args, stores)
   })
 
   return (

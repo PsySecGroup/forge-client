@@ -19,6 +19,15 @@ Instructions pending!
 
 This is an opinionated framework designed to use the benefits of SolidJs with minimal complexity.
 
+### State
+
+State management is the most important part of a decent reactive frontend framework.  Application state is a composed object of the following contituents:
+
+* [Concepts `getStore()` method](src/concepts)
+* [Actions exports](src/actions)
+
+Application state is accessible via the [`getStoreContext`](src/pages/index.tsx:10) method within a Page/Component and it will contain all Actions and all Getters/Setters returned from a Concept's `getStore()`
+
 ### Concepts
 
 * Concepts are units of state. They are composed into the overall application state management.
@@ -85,8 +94,8 @@ export const getStore = (): StoreState => {
 
 Concepts must be registered.  Registration cues look like `// (-->)` and tell you where to perform the registration.  Concepts must be registered in the following places:
 
-* [Concept registration](src/concepts/register.ts)
-* [State registration](src/state/register.ts)
+* [Concept Registration](src/concepts/register.ts)
+* [State Registration](src/state/register.ts)
 
 #### Values Concept
 
