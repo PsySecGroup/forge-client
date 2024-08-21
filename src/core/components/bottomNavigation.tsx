@@ -1,7 +1,7 @@
 import { BottomNavigation, BottomNavigationAction, Box } from '@suid/material'
 import { type ParentProps, type JSX, createSignal, batch } from 'solid-js'
 
-import styles from './css/BottomNavigation.module.css'
+import styles from './css/bottomNavigation.module.css'
 
 interface Props extends ParentProps {
   highlight: boolean

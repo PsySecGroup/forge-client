@@ -1,33 +1,15 @@
-import MenuIcon from "@suid/icons-material/Menu";
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@suid/material";
+import { type ParentProps, type JSX } from 'solid-js'
 
-export default function BasicAppBar() {
+import styles from './css/appBar.module.css'
+
+interface Props extends ParentProps {
+  children: JSX.Element[]
+}
+
+export default function AppBar ({ children }): JSX.Element {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
-  );
+    <div class={styles.appBar}>
+      {children}
+    </div>
+  )
 }
