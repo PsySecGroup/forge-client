@@ -8,6 +8,7 @@ import logo from '../assets/logo.svg'
 import styles from './css/index.module.css'
 import BottomNavigation from '../core/components/bottomNavigation'
 import AppBar from '../core/components/AppBar'
+import CandlestartChart from '../core/components/candlestickChart'
 
 interface Props extends ParentProps {}
 
@@ -24,19 +25,7 @@ export default function MainPage (props: Props): JSX.Element {
         <Grid item xs={6} md={8} lg={9}>
           <div class={styles.App}>
             <header class={styles.header}>
-              <img src={logo} class={styles.logo} alt="logo" />
-              <p>
-                Edit <code>src/pages/index.tsx</code> and save to reload.
-              </p>
-              <a
-                class={styles.link}
-                href="https://github.com/solidjs/solid"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Welcome to the Forge Client<br />
-                Admin mode? ({values.closeEverything ? 'yes' : 'no'})
-              </a>
+              <CandlestartChart />
             </header>
           </div>
         </Grid>
@@ -60,8 +49,5 @@ export default function MainPage (props: Props): JSX.Element {
         }
       }} />
     </Box>
-    /*
-    
-    */
   )
 }
