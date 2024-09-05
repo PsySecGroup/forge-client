@@ -1,5 +1,6 @@
 import { BottomNavigation, BottomNavigationAction, Box } from '@suid/material'
 import { type ParentProps, type JSX, createSignal, batch } from 'solid-js'
+import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/bottomNavigation.module.css'
 
@@ -15,6 +16,8 @@ interface Props extends ParentProps {
 }
 
 export default function BottomNav({ actions, highlight }): JSX.Element {
+  const theme = useTheme()
+
   const [icon, setIcon] = createSignal<string>('')
   const options = []
   for (const key of Object.keys(actions)) {
@@ -46,7 +49,13 @@ export default function BottomNav({ actions, highlight }): JSX.Element {
   }
 
   return (
-    <div class={styles.bottomNavContainer}>
+    <div
+      class={styles.bottomNavContainer}
+      style={{
+        background: theme.palette.primary.dark, 
+        color: theme.palette.primary.contrastText
+      }}
+    >
       {options}
     </div>
   )

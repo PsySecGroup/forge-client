@@ -9,6 +9,7 @@ import styles from './css/index.module.css'
 import BottomNavigation from '../core/components/bottomNavigation'
 import AppBar from '../core/components/AppBar'
 import CandlestartChart from '../core/components/candlestickChart'
+import Tools from './tools'
 
 interface Props extends ParentProps {}
 
@@ -30,7 +31,9 @@ export default function MainPage (props: Props): JSX.Element {
           </div>
         </Grid>
         <Grid item xs={6} md={4} lg={3}>
-          <div class={styles.cell}>xs=6 md=4</div>
+          <header class={styles.header}>
+            <Tools />
+          </header>
         </Grid>
       </Grid>
 

@@ -1,4 +1,5 @@
 import type { Component, ParentProps } from 'solid-js'
+import useTheme from '@suid/material/styles/useTheme'
 import styles from './css/button.module.css'
 
 interface Props extends ParentProps {
@@ -8,6 +9,8 @@ interface Props extends ParentProps {
 }
 
 const Button: Component<Props> = (props) => {
+  const theme = useTheme()
+
   return (
     <button
       onClick={props.onClick}
