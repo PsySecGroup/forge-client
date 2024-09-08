@@ -1,11 +1,11 @@
 import { type ParentProps, type JSX, createEffect, batch } from 'solid-js'
 
-import styles from '../css/modal.module.css'
+import styles from './css/modal.module.css'
 import { useStoreContext } from '../../core'
 import { type ClickEvent } from '../../core/types'
 
 interface Props extends ParentProps {
-  close: () => void
+  close?: () => void
 }
 
 export default function Modal (props: Props): JSX.Element {
@@ -25,7 +25,10 @@ export default function Modal (props: Props): JSX.Element {
    */
   const closeModal = (e: ClickEvent): void => {
     e.stopPropagation()
-    props.close()
+
+    if (props.close) {
+      props.close()
+    }
   }
 
   createEffect(async () => {

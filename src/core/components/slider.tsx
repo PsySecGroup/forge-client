@@ -2,13 +2,11 @@ import { Box } from '@suid/material'
 import { batch, type JSX } from 'solid-js'
 import { useStoreContext } from '../../core'
 
-import styles from '../css/slider.module.css'
-import { type Space } from '../../core/types'
+import styles from './css/slider.module.css'
 
 interface Props {
   min: number
   max: number
-  spaceProperty: keyof Space
   name: string
   suffix?: string
   leftLabel?: string
@@ -18,17 +16,15 @@ interface Props {
 }
 
 export default function Slider (props: Props): JSX.Element {
-  const { updateFocusedSpace, getFocusedSpace } = useStoreContext()
-
   const updateSlide = (e: any): void => {
     batch(() => {
-      updateFocusedSpace({
-        [props.spaceProperty]: e.target.value
-      })
+      // updateFocusedSpace({
+      //   [props.spaceProperty]: e.target.value
+      // })
 
-      if (props.onUpdate !== undefined) {
-        props.onUpdate()
-      }
+      // if (props.onUpdate !== undefined) {
+      //   props.onUpdate()
+      // }
     })
   }
 
@@ -41,14 +37,14 @@ export default function Slider (props: Props): JSX.Element {
     <Box class={props.styles?.sliderComponent ?? styles.sliderComponent}>
       <div class={props.styles?.sliderHeader ?? styles.sliderHeader}>
         <span><b>{props.name}</b></span>
-        <span>{getFocusedSpace()[props.spaceProperty] as number}{props.suffix ?? ''}</span>
+        <span>{0}{props.suffix ?? ''}</span>
       </div>
       <div class={props.styles?.sliderContainer ?? styles.sliderContainer}>
         <input
           type="range"
           min={props.min}
           max={props.max}
-          value={getFocusedSpace()[props.spaceProperty] as number}
+          value={0}
           class={props.styles?.slider ?? styles.slider}
           onInput={updateSlide}
           id={`slider.${props.name}`}
