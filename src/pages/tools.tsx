@@ -7,18 +7,12 @@ import Slider from '../core/components/slider'
 import Modal from '../core/components/modal'
 import Input from '../core/components/input'
 import Select from '../core/components/select'
+import DatePicker from '../core/components/datePicker'
 
 interface Props extends ParentProps {}
 
 export default function ToolsPage (props: Props): JSX.Element {
-  const { values } = useStoreContext()
-
-  const options = [
-    { value: "apple", label: "Apple" },
-    { value: "banana", label: "Banana" },
-    { value: "orange", label: "Orange" },
-    "Pineapple", // string shorthand
-  ]
+  const { values, setValues } = useStoreContext()
 
   const handleSelectChange = (selectedValue) => {
     console.log("Selected:", selectedValue);
@@ -27,6 +21,14 @@ export default function ToolsPage (props: Props): JSX.Element {
   return (
     <div>
       Tools<br />
+      <DatePicker
+        value={values.date}
+        onChange={date => setValues({
+          date
+        })}
+        minDate={new Date(2020, 0, 1)}
+        maxDate={new Date(2030, 11, 31)}
+      />
       <Button>yo</Button>
       <Slider 
         min={0}
@@ -38,20 +40,18 @@ export default function ToolsPage (props: Props): JSX.Element {
       <Input />
       <Select
         label="Favorite Fruit"
-        options={options}
+        options={[
+          { value: "apple", label: "Apple" },
+          { value: "banana", label: "Banana" },
+          { value: "orange", label: "Orange" },
+          "Pineapple", // string shorthand
+        ]}
         placeholder="Select a fruit"
         onChange={handleSelectChange}
         error="Please select a fruit"
         helperText="Choose your favorite from the options."
         selectStyle={{ borderColor: "green" }}
         attributes={{ required: true }}
-      />
-      <Select
-        label="Select Multiple Fruits"
-        options={options}
-        multiple
-        onChange={handleSelectChange}
-        helperText="You can select multiple fruits."
       />
     </div>
   )

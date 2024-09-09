@@ -4,7 +4,6 @@ interface Props extends ParentProps {
   id: string
   label?: string
   value?: string
-  multiple?: string[]
   onChange?: () => void
   disabled?: boolean
   style?: CSSModuleClasses
@@ -25,9 +24,7 @@ export default function Select(props: Props) {
   const [selectedValue, setSelectedValue] = createSignal(props.value || (props.multiple ? [] : ""));
 
   const handleChange = (e) => {
-    const value = props.multiple
-      ? Array.from(e.target.selectedOptions, (option) => option.value)
-      : e.target.value;
+    const value = e.target.value;
 
     setSelectedValue(value);
     
@@ -43,7 +40,6 @@ export default function Select(props: Props) {
         id={props.id || "select-input"}
         value={selectedValue()}
         onChange={handleChange}
-        multiple={props.multiple || false}
         disabled={props.disabled || false}
         style={{
           padding: "0.5rem",
@@ -55,7 +51,7 @@ export default function Select(props: Props) {
         }}
         {...props.selectProps} // Spread additional select props
       >
-        {props.placeholder && !props.multiple && (
+        {props.placeholder && (
           <option value="" disabled hidden>
             {props.placeholder}
           </option>

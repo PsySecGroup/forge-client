@@ -1,0 +1,85 @@
+.datepicker {
+  width: 280px;
+  position: relative;
+}
+
+.datepickerInput {
+  padding: 5px;
+  font-size: 14px;
+  width: 150px;
+}
+
+.datepickerCalendar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 10;
+}
+
+.datepickerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.navButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.datepickerBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.dayNames {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.dayName {
+  width: calc(100% / 7);
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.monthDays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dayButton {
+  width: calc(100% / 7 - 5px);
+  height: 30px;
+  text-align: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.dayButton.active:hover {
+  background-color: #e0f7fa;
+  border-radius: 50%;
+}
+
+.dayButton.inactive {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.dayButton.active {
+  border-radius: 50%;
+}
