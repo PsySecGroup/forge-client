@@ -11,8 +11,9 @@ import DatePicker from '../core/components/datePicker'
 import Switch from '../core/components/switch'
 import Checkbox from '../core/components/checkbox'
 import RadioGroup from '../core/components/radioGroup'
-import ArrowUpZA from '../core/components/icons/arrowUpZA'
-import Cabin from '../core/components/icons/cabin'
+import ArrowUpZAIcon from '../core/components/icons/arrowUpZA'
+import CabinIcon from '../core/components/icons/cabin'
+import Divider from '../core/components/divider'
 interface Props extends ParentProps {}
 
 export default function ToolsPage (props: Props): JSX.Element {
@@ -25,8 +26,9 @@ export default function ToolsPage (props: Props): JSX.Element {
   return (
     <div>
       Tools<br />
-      <ArrowUpZA />
-      <Cabin />
+      <ArrowUpZAIcon />
+      <CabinIcon />
+      <Divider />
       <DatePicker
         value={values.date}
         onChange={date => setValues({
