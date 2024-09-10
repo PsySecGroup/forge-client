@@ -125,6 +125,24 @@ A Page contains components.
 * [`src/components`](src/components): Thos contains complex components that often extend from core components.  These rely on `getStoreContext` when you want to incorporate state.
 * [`src/components/css`](src/components/css): These contain the CSS files for complex components
 
+To generate components easily, you can use the following prompt in ChatGPT:
+
+```js
+I need a SolidJS component of a _______ which respects the following constraints:
+- The state should be managed externally via injected props 
+- All CSS rules should be saved at css/component.module.css
+- The component should be a function that is exported as default inline with the function definition
+- The component code should not contain any semi-colons
+- Generate an example of the code being used
+- Cover as many use cases and edge cases as possible
+- The first two lines of the file should be:  
+import useTheme from '@suid/material/styles/useTheme'
+import styles from './css/component.module.css' 
+- Do not use any other features from the @suid package
+- The first line of the component function should be:  
+const theme = useTheme()
+```
+
 ### Themes
 
 All themes are in the [`src/themes`](src/themes) folder.

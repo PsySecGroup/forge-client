@@ -10,6 +10,7 @@ import Select from '../core/components/select'
 import DatePicker from '../core/components/datePicker'
 import Switch from '../core/components/switch'
 import Checkbox from '../core/components/checkbox'
+import RadioGroup from '../core/components/radioGroup'
 
 interface Props extends ParentProps {}
 
@@ -30,6 +31,22 @@ export default function ToolsPage (props: Props): JSX.Element {
         })}
         minDate={new Date(2020, 0, 1)}
         maxDate={new Date(2030, 11, 31)}
+      />
+      <RadioGroup
+        options={[
+          {
+            label: 'Yes',
+            value: 'yes'
+          },
+          {
+            label: 'No',
+            value: 'no'
+          },
+        ]}
+        selectedValue={values.radio}
+        onChange={(radio) => setValues({
+          radio
+        })}
       />
       <Switch 
         checked={values.checked}
