@@ -143,6 +143,13 @@ import styles from './css/component.module.css'
 const theme = useTheme()
 ```
 
+### Icons
+
+We use [Lucide](https://lucide.dev/icons/) for all of our icons:
+
+* [ArrowUpZA](./src/core/components/icons/arrowUpZA.tsx) shows how to use the default icons
+* [Cabin](./src/core/components/icons/cabin.tsx) shows how to use the extended icons
+
 ### Themes
 
 All themes are in the [`src/themes`](src/themes) folder.
