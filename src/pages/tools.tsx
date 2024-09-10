@@ -8,6 +8,8 @@ import Modal from '../core/components/modal'
 import Input from '../core/components/input'
 import Select from '../core/components/select'
 import DatePicker from '../core/components/datePicker'
+import Switch from '../core/components/switch'
+import Checkbox from '../core/components/checkbox'
 
 interface Props extends ParentProps {}
 
@@ -28,6 +30,18 @@ export default function ToolsPage (props: Props): JSX.Element {
         })}
         minDate={new Date(2020, 0, 1)}
         maxDate={new Date(2030, 11, 31)}
+      />
+      <Switch 
+        checked={values.checked}
+        onChange={checked => setValues({
+          checked
+        })}
+      />
+      <Checkbox
+        checked={values.checked}
+        onChange={checked => setValues({
+          checked
+        })}
       />
       <Button>yo</Button>
       <Slider 
