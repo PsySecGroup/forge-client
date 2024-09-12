@@ -1,0 +1,16 @@
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+}
+
+.listItem {
+  padding: 8px;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.emptyState {
+  font-style: italic;
+}

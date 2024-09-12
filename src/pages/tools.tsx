@@ -15,6 +15,7 @@ import ArrowUpZAIcon from '../core/components/icons/arrowUpZA'
 import CabinIcon from '../core/components/icons/cabin'
 import Divider from '../core/components/divider'
 import Table from '../core/components/table'
+import List from '../core/components/list'
 
 interface Props extends ParentProps {}
 
@@ -39,6 +40,12 @@ export default function ToolsPage (props: Props): JSX.Element {
       <ArrowUpZAIcon />
       <CabinIcon />
       <Divider />
+      <List
+        items={['Apple', 'Banana', 'Orange']}
+        renderItem={(item, index) => <span>{index + 1}. {item}</span>}
+        emptyState={<div>No fruits available</div>}
+        className="customClass"
+      />
       <Table
         headers={headers}
         rows={rows}
