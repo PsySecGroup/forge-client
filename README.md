@@ -134,6 +134,7 @@ I need a SolidJS component of a _______ which respects the following constraints
 - The component should be a function that is exported as default inline with the function definition
 - The component code should not contain any semi-colons
 - Generate an example of the code being used
+- The code should be in TypeScript, with the props type defined
 - Cover as many use cases and edge cases as possible
 - The first two lines of the file should be:  
 import useTheme from '@suid/material/styles/useTheme'

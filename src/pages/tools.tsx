@@ -14,6 +14,8 @@ import RadioGroup from '../core/components/radioGroup'
 import ArrowUpZAIcon from '../core/components/icons/arrowUpZA'
 import CabinIcon from '../core/components/icons/cabin'
 import Divider from '../core/components/divider'
+import Table from '../core/components/table'
+
 interface Props extends ParentProps {}
 
 export default function ToolsPage (props: Props): JSX.Element {
@@ -23,12 +25,30 @@ export default function ToolsPage (props: Props): JSX.Element {
     console.log("Selected:", selectedValue);
   }
 
+  const headers = ['Name', 'Age', 'Occupation']
+  const rows = [
+    ['John Doe', 28, 'Engineer'],
+    ['Jane Smith', 34, 'Designer'],
+    ['Mike Johnson', 45, 'Developer'],
+    ['Sara Lee', null, '']
+  ]
+
   return (
     <div>
       Tools<br />
       <ArrowUpZAIcon />
       <CabinIcon />
       <Divider />
+      <Table
+        headers={headers}
+        rows={rows}
+        onSearch={searchTerm => rows.filter(row => row.some(cell => String(cell)
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+        ))}
+        onNext={() => rows}
+        onPrev={() => rows}
+      />
       <DatePicker
         value={values.date}
         onChange={date => setValues({
