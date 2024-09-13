@@ -17,6 +17,7 @@ import Divider from '../core/components/divider'
 import Table from '../core/components/table'
 import List from '../core/components/list'
 import Badge from '../core/components/badge'
+import ButtonGroup from '../core/components/buttonGroup'
 
 interface Props extends ParentProps {}
 
@@ -46,6 +47,13 @@ export default function ToolsPage (props: Props): JSX.Element {
         renderItem={(item, index) => <span>{index + 1}. {item}</span>}
         emptyState={<div>No fruits available</div>}
         className="customClass"
+      />
+      <ButtonGroup 
+        buttons={['Option 1', 'Option 2', 'Option 3']}
+        activeIndex={values.activeIndex}
+        onButtonClick={activeIndex => setValues({
+          activeIndex
+        })}
       />
       <Badge 
         label="Upper Right" 
