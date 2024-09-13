@@ -18,6 +18,7 @@ import Table from '../core/components/table'
 import List from '../core/components/list'
 import Badge from '../core/components/badge'
 import ButtonGroup from '../core/components/buttonGroup'
+import BreadCrumbs from '../core/components/breadcrumbs'
 
 interface Props extends ParentProps {}
 
@@ -54,6 +55,14 @@ export default function ToolsPage (props: Props): JSX.Element {
         onButtonClick={activeIndex => setValues({
           activeIndex
         })}
+      />
+      <BreadCrumbs 
+        links={[
+          { name: 'Home', href: '/' },
+          { name: 'Products', href: '/products' },
+          { name: 'Shoes', href: '/products/shoes' }
+        ]}
+        onLinkClick={console.log}
       />
       <Badge 
         label="Upper Right" 
