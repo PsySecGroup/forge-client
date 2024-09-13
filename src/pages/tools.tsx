@@ -16,6 +16,7 @@ import CabinIcon from '../core/components/icons/cabin'
 import Divider from '../core/components/divider'
 import Table from '../core/components/table'
 import List from '../core/components/list'
+import Badge from '../core/components/badge'
 
 interface Props extends ParentProps {}
 
@@ -45,6 +46,35 @@ export default function ToolsPage (props: Props): JSX.Element {
         renderItem={(item, index) => <span>{index + 1}. {item}</span>}
         emptyState={<div>No fruits available</div>}
         className="customClass"
+      />
+      <Badge 
+        label="Upper Right" 
+        color="primary" 
+        size="medium" 
+        onClick={() => console.log('click')} 
+        count={5} 
+        position="upper-right" 
+      />
+      <Badge 
+        label="Lower Left" 
+        color="secondary" 
+        size="small" 
+        disabled 
+        count={10} 
+        position="lower-left" 
+      />
+      <Badge 
+        label="Upper Left" 
+        color="danger" 
+        size="large" 
+        count={3} 
+        position="upper-left" 
+      />
+      <Badge 
+        label="Lower Right" 
+        className="myCustomClass" 
+        count={1} 
+        position="lower-right" 
       />
       <Table
         headers={headers}
