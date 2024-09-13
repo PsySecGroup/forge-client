@@ -42,8 +42,8 @@ const theme = {
     },
     divider: alpha(gray[600], 0.3),
     background: {
-      default: gray[900],
-      paper: gray[800]
+      primary: gray[900],
+      secondary: gray[100]
     },
     text: {
       primary: '#fff',

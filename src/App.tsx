@@ -1,9 +1,9 @@
 import { type Component, onCleanup } from 'solid-js'
 import { addGlobalEvent } from './core/utils/events'
-import { Box } from '@suid/material'
 import { useStoreContext } from './core'
 import ThemesProvider from './themes'
 import Navigation from './components/navigation'
+
 import styles from './App.module.css'
 
 // (-->) Import pages here
@@ -20,12 +20,10 @@ const App: Component = () => {
 
   return (
     <ThemesProvider>
-      <Box>
-        <Navigation routes={{
-          // (-->) Add pages here
-          '': <MainPage />
-        }} />
-      </Box>
+      <Navigation routes={{
+        // (-->) Add pages here
+        '': <MainPage />
+      }} />
     </ThemesProvider>
   )
 }
