@@ -48,7 +48,6 @@ export default function BottomNavigation (props: Props): JSX.Element {
 
     if (isOption) {
       fireOnce(() => {
-        console.log('here')
         action.onClick(key)
       })
     }
