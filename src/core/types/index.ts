@@ -57,3 +57,6 @@ export type DateRange = {
 
 export type KeyDownEvent = KeyboardEvent & { currentTarget: HTMLInputElement, target: Element }
 export type ClickEvent = MouseEvent & { currentTarget: HTMLDivElement, target: Element }
+
+type Style = JSX.CSSProperties
+type Class = string | { [key: string]: boolean }

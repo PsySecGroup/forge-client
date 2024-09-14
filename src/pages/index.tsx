@@ -25,32 +25,33 @@ export default function MainPage (props: Props): JSX.Element {
       header={<div
         class={styles.header}
         style={{
-          background: theme.palette.primary.dark,
-          color: theme.palette.primary.contrastText
+          background: theme.palette.secondary.background,
+          color: theme.palette.secondary.text
         }}>
           Application Bar
         </div>}
       footer={<BottomNavigation
         highlight
+        option="refresh"
         actions={{
           home: {
             label: "Home",
-            onClick: (key) => key
+            onClick: console.log
           },
           refresh: {
             label: "Refresh",
-            onClick: (key) => key
+            onClick: console.log
           },
           search: {
             label: "Search",
-            onClick: (key) => key
+            onClick: console.log
           }
         }}
       />}
     >
       <Grid container spacing={0} style={{
-          background: theme.palette.background.primary,
-          color: theme.palette.grey['50']
+          background: theme.palette.primary.background,
+          color: theme.palette.primary.text
         }}>
         <Grid item xs={6} md={8} lg={9}>
           <div class={styles.section}>

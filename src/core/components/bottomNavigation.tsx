@@ -1,6 +1,8 @@
-import { BottomNavigation, BottomNavigationAction, Box } from '@suid/material'
-import { type ParentProps, type JSX, createSignal, batch } from 'solid-js'
+import type { Style, Class } from '../types/index'
+import { type ParentProps, type JSX, createSignal, batch, onMount } from 'solid-js'
 import useTheme from '@suid/material/styles/useTheme'
+import { mergeStyle } from '../utils/style'
+import { fireOnce } from '../utils/events'
 
 import styles from './css/bottomNavigation.module.css'
 
@@ -13,48 +15,65 @@ interface Props extends ParentProps {
       label?: string
     }
   }
+  option?: string
+
+  style?: Style
+  class?: Class
 }
+  let hasLoaded = false
 
-export default function BottomNav({ actions, highlight }): JSX.Element {
+/**
+ *
+ */
+export default function BottomNavigation (props: Props): JSX.Element {
+  // Styling
   const theme = useTheme()
+  const { style, classes } = mergeStyle(
+    props,
+    styles.bottomNavContainer,
+    {
+      background: theme.palette.secondary.background,
+      color: theme.palette.secondary.text
+    }
+  )
 
-  const [icon, setIcon] = createSignal<string>('')
+  // State
+  const [option, setOption] = createSignal<string>(props.option ?? '')
   const options = []
-  for (const key of Object.keys(actions)) {
-    const action = actions[key]
 
-    const iconDiv = action.icon === undefined
-      ? <></>
-      : <div>{action.icon}</div>
+  // Rendering
+  for (const key of Object.keys(props.actions)) {
+    const action = props.actions[key]
+    const isOption = key === option()
 
-    const labelDiv = action.label === undefined
-      ? <></>
-      : <div>{action.label}</div>
+    if (isOption) {
+      fireOnce(() => {
+        console.log('here')
+        action.onClick(key)
+      })
+    }
 
     options.push(<div
       onClick={() => {
         batch(() => {
           action.onClick(key)
-          setIcon(key)
+          setOption(key)
         })
       }}
       classList={{
         [styles.bottomNavItem]: true,
-        [styles.bottomNavItemSelected]: highlight && key === icon()
+        [styles.bottomNavItemSelected]: props.highlight && isOption
       }}
     >
-      {iconDiv}
-      {labelDiv}
+      {action.icon && (<div>{action.icon}</div>)}
+      {action.label && (<div>{action.label}</div>)}
     </div>)
   }
 
   return (
     <div
-      class={styles.bottomNavContainer}
-      style={{
-        background: theme.palette.primary.dark, 
-        color: theme.palette.primary.contrastText
-      }}
+      class={classes}
+      style={style}
     >
       {options}
     </div>

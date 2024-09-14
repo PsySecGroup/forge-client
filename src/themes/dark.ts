@@ -4,15 +4,18 @@ import { Typography } from './typography'
 const theme = {
   palette: {
     primary: {
-      contrastText: brand[100],
+      text: '#fff',
       light: brand[300],
       main: brand[400],
-      dark: brand[800]
+      dark: brand[800],
+      background: gray[900],
     },
     secondary: {
+      text: gray[100],
       light: secondary[400],
       main: secondary[500],
-      dark: secondary[900]
+      dark: secondary[900],
+      background: gray[400]
     },
     warning: {
       main: '#F7B538',
@@ -41,14 +44,6 @@ const theme = {
       900: gray[900]
     },
     divider: alpha(gray[600], 0.3),
-    background: {
-      primary: gray[900],
-      secondary: gray[100]
-    },
-    text: {
-      primary: '#fff',
-      secondary: gray[400]
-    },
     action: {
       selected: alpha(brand[800], 0.2)
     }
