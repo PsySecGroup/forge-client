@@ -39,7 +39,7 @@ interface Props extends ParentProps {
   classes?: Class
 }
 
-function CandlestickChart(props: Props) {
+function CandlestickChart(props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(

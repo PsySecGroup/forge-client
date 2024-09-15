@@ -47,7 +47,7 @@ export default function ToolsPage (props: Props): JSX.Element {
         items={['Apple', 'Banana', 'Orange']}
         renderItem={(item, index) => <span>{index + 1}. {item}</span>}
         emptyState={<div>No fruits available</div>}
-        className="customClass"
+        classes="customClass"
       />
       <ButtonGroup 
         buttons={['Option 1', 'Option 2', 'Option 3']}

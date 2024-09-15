@@ -14,7 +14,7 @@ type DatePickerProps = {
   locale?: Locale
 };
 
-export default function DatePicker (props: DatePickerProps) {
+export default function DatePicker (props: DatePickerProps = {}) {
   const theme = useTheme()
   const [isOpen, setIsOpen] = createSignal(false)
   const [selectedDate, setSelectedDate] = createSignal<Date | null>(null)

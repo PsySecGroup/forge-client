@@ -1,14 +1,13 @@
 import {
   Divider
 } from '@suid/material'
-// import useTheme from '@suid/material/styles/useTheme'
 
-export default function ListDividers() {
-  // const theme = useTheme()
+interface Props extends ParentProps {
+  light?: boolean
+}
 
+export default function ListDividers(props: Props = {}) {
   return (
-    <div>
-      <Divider />
-    </div>
+    <Divider {...props}/>
   )
 }

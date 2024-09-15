@@ -1,7 +1,7 @@
 import type { Style, Class } from '../types/index'
+import { mergeStyle } from '../utils/style'
 import { type ParentProps, type JSX, createSignal, batch, onMount } from 'solid-js'
 import useTheme from '@suid/material/styles/useTheme'
-import { mergeStyle } from '../utils/style'
 import { fireOnce } from '../utils/events'
 
 import styles from './css/bottomNavigation.module.css'
