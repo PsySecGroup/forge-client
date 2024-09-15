@@ -59,4 +59,4 @@ export type KeyDownEvent = KeyboardEvent & { currentTarget: HTMLInputElement, ta
 export type ClickEvent = MouseEvent & { currentTarget: HTMLDivElement, target: Element }
 
 type Style = JSX.CSSProperties
-type Class = string | { [key: string]: boolean }
+type Class = string | string[] | { [key: string]: boolean }

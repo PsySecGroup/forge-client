@@ -28,7 +28,7 @@ export default function List<T> (props: ListProps<T> = {}) {
       color: theme.palette.primary.text
     }
   )
-  
+
   const { classes: itemClasses  } = mergeStyle({
       classes: props.itemClasses
     }, 
