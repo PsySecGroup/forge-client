@@ -7,7 +7,6 @@ import { fireOnce } from '../utils/events'
 import styles from './css/bottomNavigation.module.css'
 
 interface Props extends ParentProps {
-  highlight: boolean
   actions: {
     [key: string]: {
       icons: JSX.Element
@@ -15,12 +14,11 @@ interface Props extends ParentProps {
       label?: string
     }
   }
+  highlight?: boolean
   option?: string
-
   style?: Style
-  class?: Class
+  classes?: Class
 }
-  let hasLoaded = false
 
 /**
  *

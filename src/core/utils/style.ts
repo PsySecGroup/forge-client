@@ -29,8 +29,8 @@ export function mergeStyle (
     return ''
   }
 
-  // Merge defaultClass and props.class
-  const mergedClass = `${processClassList(defaultClass)} ${processClassList(props.class)}`.trim()
+  // Merge defaultClass and props.classes
+  const mergedClass = `${processClassList(defaultClass)} ${processClassList(props.classes)}`.trim()
 
   return {
     style: { ...defaultStyle, ...props.style },

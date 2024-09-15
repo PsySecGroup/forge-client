@@ -11,7 +11,7 @@ import CandlestartChart from '../core/components/candlestickChart'
 import Tools from './tools'
 import Viewport from '../core/components/viewport'
 import useTheme from '@suid/material/styles/useTheme'
-
+import { candlestickSimulator } from '../core/utils/candlestickSimulator' // TODO move this
 import styles from './css/index.module.css'
 
 interface Props extends ParentProps {}
@@ -19,6 +19,7 @@ interface Props extends ParentProps {}
 export default function MainPage (props: Props): JSX.Element {
   const { values } = useStoreContext()
   const theme = useTheme()
+  const prices = candlestickSimulator(50, 6, 25)
 
   return (
     <Viewport
@@ -55,7 +56,13 @@ export default function MainPage (props: Props): JSX.Element {
         }}>
         <Grid item xs={6} md={8} lg={9}>
           <div class={styles.section}>
-            <CandlestartChart />
+            <CandlestartChart
+              backgroundColor={'lightgray'}
+              xAxisLabel={'Time (50 minute blocks'}
+              yAxisLabel={'Price (USD)'}
+              xData={prices.line}
+              yData={prices.bars}
+            />
           </div>
         </Grid>
         <Grid item xs={6} md={4} lg={3}>
