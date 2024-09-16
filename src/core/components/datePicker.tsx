@@ -252,7 +252,10 @@ export default function DatePicker (props: DatePickerProps = {}) {
   onCleanup(() => window.removeEventListener('keydown', handleKeyDown))
 
   return (
-    <div class={classes}>
+    <div
+      class={classes}
+      style={style}
+    >
       <input
         class={datepickerInputClasses}
         type='text'
