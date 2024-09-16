@@ -1,0 +1,20 @@
+.container {
+  margin-bottom: 1rem;
+}
+
+.select {
+  padding: 0.5rem;
+  borderRadius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  boxSizing: border-box;
+}
+
+.error {
+  color: red;
+  marginTop: 0.25rem;
+}
+
+.helper {
+  marginTop: 0.25rem;
+}

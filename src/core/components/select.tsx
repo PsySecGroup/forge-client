@@ -1,13 +1,16 @@
-import { createSignal } from "solid-js";
+import type { Style, Class } from '../types/index'
+import { mergeStyle } from '../utils/style'
+import useTheme from '@suid/material/styles/useTheme'
+import { createSignal } from "solid-js"
+
+import styles from './css/select.module.css'
 
 interface Props extends ParentProps {
   id: string
+  value: string
+  onChange: () => void
   label?: string
-  value?: string
-  onChange?: () => void
   disabled?: boolean
-  style?: CSSModuleClasses
-  selectStyle?: CSSModuleClasses
   placeholder?: string
   attributes?: { [key: string]: string | boolean }
   error?: string
@@ -16,39 +19,53 @@ interface Props extends ParentProps {
     label: string
     value: string
   }[]
+  style?: Style
+  classes?: Class
+  selectClasses?: Class
+  errorClass?: Class
+  helperClass?: Class
 }
 
 
 export default function Select(props: Props) {
-  // Local state to manage selected value(s)
-  const [selectedValue, setSelectedValue] = createSignal(props.value || (props.multiple ? [] : ""));
+  // Styling
+  const theme = useTheme()
+  const { style, classes } = mergeStyle(
+    props,
+    styles.container
+  )
 
-  const handleChange = (e) => {
-    const value = e.target.value;
+  const { classes: selectClasses  } = mergeStyle({
+      classes: props.selectClasses
+    }, 
+    styles.select
+  )
 
-    setSelectedValue(value);
-    
-    if (props.onChange) {
-      props.onChange(value);
-    }
-  };
+  const { classes: errorClass } = mergeStyle({
+      classes: props.errorClass
+    }, 
+    styles.error
+  )
 
+  const { classes: helperClass } = mergeStyle({
+      classes: props.helperClass
+    }, 
+    styles.helper
+  )
+
+  // State
   return (
-    <div style={{ marginBottom: "1rem", ...props.style }}>
+    <div
+      class={classes}
+      style={style}
+    >
       {props.label && <label for={props.id || "select-input"}>{props.label}</label>}
       <select
         id={props.id || "select-input"}
-        value={selectedValue()}
-        onChange={handleChange}
+        value={props.value}
+        onChange={e => props.onChange(e.target.value)}
         disabled={props.disabled || false}
-        style={{
-          padding: "0.5rem",
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-          width: "100%",
-          boxSizing: "border-box",
-          ...props.selectStyle,
-        }}
+        class={selectClasses}
         {...props.selectProps} // Spread additional select props
       >
         {props.placeholder && (
@@ -58,18 +75,26 @@ export default function Select(props: Props) {
         )}
         {props.options.map((option) =>
           typeof option === "string" ? (
-            <option value={option} key={option}>
+            <option
+              value={option}
+              key={option}
+              selected={option === props.value}
+            >
               {option}
             </option>
           ) : (
-            <option value={option.value} key={option.value}>
+            <option
+              value={option.value}
+              key={option.value}
+              selected={option === props.value}
+            >
               {option.label}
             </option>
           )
         )}
       </select>
-      {props.error && <p style={{ color: "red", marginTop: "0.25rem" }}>{props.error}</p>}
-      {props.helperText && <p style={{ marginTop: "0.25rem" }}>{props.helperText}</p>}
+      {props.error && <p class={errorClass}>{props.error}</p>}
+      {props.helperText && <p class={helperClass}>{props.helperText}</p>}
     </div>
   );
 }

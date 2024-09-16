@@ -25,10 +25,6 @@ interface Props extends ParentProps {}
 export default function ToolsPage (props: Props): JSX.Element {
   const { values, setValues } = useStoreContext()
 
-  const handleSelectChange = (selectedValue) => {
-    console.log("Selected:", selectedValue);
-  }
-
   const headers = ['Name', 'Age', 'Occupation']
   const rows = [
     ['John Doe', 28, 'Engineer'],
@@ -144,12 +140,23 @@ export default function ToolsPage (props: Props): JSX.Element {
         min={0}
         max={20}
         name={'Slide Me'}
-        onUpdate={() => {}}
+        value={values.slider}
+        onUpdate={slider => setValues({
+          slider
+        })}
       />
-      {/* <Modal /> */}
-      <Input />
+      <Input
+        value={values.input}
+        onChange={input => setValues({
+          input
+        })}
+      />
       <Select
         label="Favorite Fruit"
+        value={values.select}
+        onChange={select => { console.log(select); setValues({
+          select
+        })} }
         options={[
           { value: "apple", label: "Apple" },
           { value: "banana", label: "Banana" },
@@ -157,12 +164,12 @@ export default function ToolsPage (props: Props): JSX.Element {
           "Pineapple", // string shorthand
         ]}
         placeholder="Select a fruit"
-        onChange={handleSelectChange}
         error="Please select a fruit"
         helperText="Choose your favorite from the options."
         selectStyle={{ borderColor: "green" }}
         attributes={{ required: true }}
       />
+      {/* TODO <Modal /> */}
     </div>
   )
 }
