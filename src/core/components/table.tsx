@@ -1,6 +1,9 @@
+import type { Style, Class } from '../types/index'
+import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
-import styles from './css/table.module.css'
 import { createSignal, createMemo } from 'solid-js'
+
+import styles from './css/table.module.css'
 
 type Row = Array<Array<string | number | null>>
 
@@ -12,17 +15,90 @@ type TableProps = {
   onNext?: () => Row
   onPrev?: () => Row
   rowsPerPage?: number
+  style?: Style
+  classes?: Class
+  searchBarClasses?: Class
+  theadClasses?: Class
+  thClasses?: Class
+  sortButtonClasses?: Class
+  tbodyClasses?: Class
+  tdClasses?: Class
+  trClasses?: Class
+  tdClasses?: Class
+  paginationClasses?: Class
 }
 
 export default function Table (props: TableProps) {
+  // Styling
   const theme = useTheme()
+  const { style, classes } = mergeStyle(
+    props,
+    styles.listContainer,
+    {
+      background: theme.palette.primary.background,
+      color: theme.palette.primary.text
+    }
+  )
 
-  // Internal state for sorting, searching, and pagination
+  const { classes: searchBarClasses  } = mergeStyle({
+      classes: props.searchBarClasses
+    }, 
+    styles.searchBar
+  )
+
+  const { classes: theadClasses  } = mergeStyle({
+      classes: props.theadClasses
+    }, 
+    styles.thead
+  )
+
+  const { classes: thClasses  } = mergeStyle({
+      classes: props.thClasses
+    }, 
+    styles.th
+  )
+
+  const { classes: sortButtonClasses  } = mergeStyle({
+      classes: props.sortButtonClasses
+    }, 
+    styles.sortButton
+  )
+
+  const { classes: tbodyClasses  } = mergeStyle({
+      classes: props.tbodyClasses
+    }, 
+    styles.tbody
+  )
+
+  const { classes: tdClasses  } = mergeStyle({
+      classes: props.tdClasses
+    }, 
+    styles.td
+  )
+
+  const { classes: trClasses  } = mergeStyle({
+      classes: props.trClasses
+    }, 
+    styles.tr
+  )
+
+  const { classes: paginationClasses  } = mergeStyle({
+      classes: props.paginationClasses
+    }, 
+    styles.pagination
+  )
+
+
+  // States
   const [sortConfig, setSortConfig] = createSignal({ column: -1, ascending: true })
   const [searchTerm, setSearchTerm] = createSignal('')
   const [currentPage, setCurrentPage] = createSignal(1)
 
-  // Sorting functionality
+  const rowsPerPage = props.rowsPerPage ?? 10
+
+  /**
+   * Sorting functionality
+   */
   const sortedRows = createMemo(() => {
     const { column, ascending } = sortConfig()
     if (props.onSort) {
@@ -55,7 +131,9 @@ export default function Table (props: TableProps) {
     return sorted
   })
 
-  // Search functionality
+  /**
+   * Search functionality
+   */
   const filteredRows = createMemo(() => {
     if (props.onSearch) {
       return props.onSearch(searchTerm())
@@ -72,16 +150,18 @@ export default function Table (props: TableProps) {
     )
   })
 
-  // Pagination (assume 10 rows per page)
-  const rowsPerPage = props.rowsPerPage ?? 10
-
+  /**
+   *
+   */
   const paginatedRows = createMemo(() => {
     const start = (currentPage() - 1) * rowsPerPage
     const end = start + rowsPerPage
     return filteredRows().slice(start, end)
   })
 
-  // Handlers
+  /**
+   *
+   */
   const handleSort = (columnIndex: number) => {
     const { column, ascending } = sortConfig()
     const isSameColumn = column === columnIndex
@@ -94,11 +174,17 @@ export default function Table (props: TableProps) {
       })
   }
 
+  /**
+   *
+   */
   const handleSearch = (event: Event) => {
     const target = event.target as HTMLInputElement
     setSearchTerm(target.value)
   }
 
+  /**
+   *
+   */
   const handleNext = () => {
     if (props.onNext) {
       props.onNext()
@@ -107,6 +193,9 @@ export default function Table (props: TableProps) {
     }
   }
 
+  /**
+   *
+   */
   const handlePrev = () => {
     if (props.onPrev) {
       props.onPrev()
@@ -115,30 +204,34 @@ export default function Table (props: TableProps) {
     }
   }
 
+  // Rendering
   return (
-    <div>
+    <div class={styles.container}>
       {props.onSearch && (
         <input
           type="text"
-          class={styles.searchBar}
+          class={searchBarClasses}
           placeholder="Search..."
           value={searchTerm()}
           onInput={handleSearch}
         />
       )}
-      <table class={styles.table}>
-        <thead class={styles.thead}>
+      <table
+        class={classes}
+        style={styles}
+      >
+        <thead class={theadClasses}>
           <tr>
             {props.headers.map((header, index) => (
               <th
-                class={styles.th}
+                class={thClasses}
                 style={{ color: theme.palette.primary.main }}
               >
                 <span>{header}</span>
                 {props.onSort && (
                   <button
                     onClick={() => handleSort(index)}
-                    class={styles.sortButton}
+                    class={sortButtonClasses}
                   >
                     {sortConfig().column === index
                       ? sortConfig().ascending ? '▲' : '▼'
@@ -149,11 +242,11 @@ export default function Table (props: TableProps) {
             ))}
           </tr>
         </thead>
-        <tbody class={styles.tbody}>
+        <tbody class={tbodyClasses}>
           {paginatedRows().length === 0 ? (
             <tr>
               <td
-                class={styles.td}
+                class={tdClasses}
                 colspan={props.headers.length}
               >
                 No data available
@@ -161,9 +254,9 @@ export default function Table (props: TableProps) {
             </tr>
           ) : (
             paginatedRows().map((row, rowIndex) => (
-              <tr key={rowIndex} class={styles.tr}>
+              <tr key={rowIndex} class={trClasses}>
                 {props.headers.map((_, colIndex) => (
-                  <td class={styles.td}>
+                  <td class={tdClasses}>
                     {
                       row[colIndex] !== undefined && row[colIndex] !== null
                         ? row[colIndex]
@@ -177,7 +270,7 @@ export default function Table (props: TableProps) {
         </tbody>
       </table>
       {(props.onNext || props.onPrev) && (
-        <div class={styles.pagination}>
+        <div class={paginationClasses}>
           <button
             onClick={handlePrev}
             disabled={currentPage() === 1}

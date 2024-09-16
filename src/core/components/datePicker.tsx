@@ -1,7 +1,23 @@
+import type { Style, Class } from '../types/index'
+import { mergeStyle } from '../utils/style'
 import { enUS } from 'date-fns/locale'
-import { createSignal, onCleanup } from 'solid-js';
-import { format, parse, parseISO , isSameDay, isValid, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
+import { createSignal, onCleanup } from 'solid-js'
+import { 
+  format,
+  parse,
+  parseISO,
+  isSameDay,
+  isValid,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval
+} from 'date-fns'
 import useTheme from '@suid/material/styles/useTheme'
+
 import styles from './css/datePicker.module.css'
 
 const daysOfWeek = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa']
@@ -12,10 +28,86 @@ type DatePickerProps = {
   minDate?: Date
   maxDate?: Date
   locale?: Locale
-};
+  style?: Style
+  classes?: Class
+  dayButtonClasses?: Class
+  activeClasses?: Class
+  datepickerCalendarClasses?: Class
+  datepickerHeaderClasses?: Class
+  navButtonClasses?: Class
+  datepickerBodyClasses?: Class
+  dayNamesClasses?: Class
+  monthDaysClasses?: Class
+  datepickerInputClasses?: Class
+}
 
 export default function DatePicker (props: DatePickerProps = {}) {
+  // Styling
   const theme = useTheme()
+  const { style, classes } = mergeStyle(
+    props,
+    styles.datepicker,
+    {
+      background: theme.palette.primary.background,
+      color: theme.palette.primary.text
+    }
+  )
+
+  const { classes: dayButtonClasses } = mergeStyle({
+      classes: props.dayButtonClasses
+    }, 
+    styles.dayButton
+  )
+
+  const { classes: activeClasses } = mergeStyle({
+      classes: props.activeClasses
+    }, 
+    styles.active
+  )
+
+  const { classes: datepickerCalendarClasses } = mergeStyle({
+      classes: props.datepickerCalendarClasses
+    }, 
+    styles.datepickerCalendar
+  )
+
+  const { classes: datepickerHeaderClasses } = mergeStyle({
+      classes: props.datepickerHeaderClasses
+    }, 
+    styles.datepickerHeader
+  )
+
+  const { classes: navButtonClasses } = mergeStyle({
+      classes: props.navButtonClasses
+    }, 
+    styles.navButton
+  )
+
+  const { classes: datepickerBodyClasses } = mergeStyle({
+      classes: props.datepickerBodyClasses
+    }, 
+    styles.datepickerBody
+  )
+
+  const { classes: dayNamesClasses } = mergeStyle({
+      classes: props.dayNamesClasses
+    }, 
+    styles.dayNames
+  )
+
+  const { classes: monthDaysClasses } = mergeStyle({
+      classes: props.monthDaysClasses
+    }, 
+    styles.monthDays
+  )
+
+  const { classes: datepickerInputClasses } = mergeStyle({
+      classes: props.datepickerInputClasses
+    }, 
+    styles.datepickerInput
+  )
+
+  // State
   const [isOpen, setIsOpen] = createSignal(false)
   const [selectedDate, setSelectedDate] = createSignal<Date | null>(null)
   const [inputValue, setInputValue] = createSignal(props.value)
@@ -24,8 +116,14 @@ export default function DatePicker (props: DatePickerProps = {}) {
   const minDate = props.minDate ?? new Date(1900, 0, 1)
   const maxDate = props.maxDate ?? new Date(2100, 11, 31)
 
+  /**
+   * 
+   */
   const formatDate = (date: Date) => format(date, 'yyyy-MM-dd', { locale: props.locale && enUS })
 
+  /**
+   * 
+   */
   const handleInput = (e: Event) => {
     const value = (e.target as HTMLInputElement).value
     setInputValue(value)
@@ -39,23 +137,35 @@ export default function DatePicker (props: DatePickerProps = {}) {
     }
   }
 
+  /**
+   * 
+   */
   const handleDateClick = (date: Date) => {
     setSelectedDate(date)
     setInputValue(formatDate(date))
     props.onChange(formatDate(date))
     setIsOpen(false)
-  };
+  }
 
+  /**
+   * 
+   */
   const navigateMonth = (direction: 'prev' | 'next') => {
     setCurrentMonth(direction === 'prev' ? subMonths(currentMonth(), 1) : addMonths(currentMonth(), 1))
   }
 
+  /**
+   * 
+   */
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsOpen(false)
     }
   }
 
+  /**
+   * 
+   */
   const renderDays = (value) => {
     const isoDate = parseISO(value ?? '0000-01-01')
     const monthStart = startOfMonth(currentMonth())
@@ -68,8 +178,8 @@ export default function DatePicker (props: DatePickerProps = {}) {
     return days.map((day) => (
       <button
         classList={{
-          [styles.dayButton]: true,
-          [styles.active]: isSameDay(isoDate, day)
+          [dayButtonClasses]: true,
+          [activeClasses]: isSameDay(isoDate, day)
         }}
         disabled={day < minDate || day > maxDate}
         onClick={() => handleDateClick(day)}
@@ -85,10 +195,13 @@ export default function DatePicker (props: DatePickerProps = {}) {
     ))
   }
 
+  /**
+   * 
+   */
   const renderCalendar = () => {
     return (
       <div
-        class={styles.datepickerCalendar}
+        class={datepickerCalendarClasses}
           style={{
             background: theme.palette.primary.dark, 
             color: theme.palette.primary.contrastText
@@ -96,10 +209,10 @@ export default function DatePicker (props: DatePickerProps = {}) {
 
       >
         <div
-          class={styles.datepickerHeader}
+          class={datepickerHeaderClasses}
         >
           <button
-            class={styles.navButton}
+            class={navButtonClasses}
             onClick={() => navigateMonth('prev')}
             style={{
               color: theme.palette.primary.contrastText
@@ -109,7 +222,7 @@ export default function DatePicker (props: DatePickerProps = {}) {
 
           >{format(currentMonth(), 'MMMM yyyy', { locale: props.locale })}</span>
           <button
-            class={styles.navButton}
+            class={navButtonClasses}
             onClick={() => navigateMonth('next')}
             style={{
               color: theme.palette.primary.contrastText
@@ -117,31 +230,31 @@ export default function DatePicker (props: DatePickerProps = {}) {
           >▶</button>
         </div>
         <div
-          class={styles.datepickerBody}
+          class={datepickerBodyClasses}
         >
           <div
-            class={styles.dayNames}
+            class={dayNamesClasses}
           >
             {daysOfWeek.map((day) => (
-              <div class={styles.dayName}>{day}</div>
+              <div class={dayNamesClasses}>{day}</div>
             ))}
           </div>
           <div
-            class={styles.monthDays}
+            class={monthDaysClasses}
           >
             {renderDays(inputValue())}
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  onCleanup(() => window.removeEventListener('keydown', handleKeyDown));
+  onCleanup(() => window.removeEventListener('keydown', handleKeyDown))
 
   return (
-    <div class={styles.datepicker}>
+    <div class={classes}>
       <input
-        class={styles.datepickerInput}
+        class={datepickerInputClasses}
         type='text'
         value={inputValue() || ''}
         onInput={handleInput}
@@ -150,5 +263,5 @@ export default function DatePicker (props: DatePickerProps = {}) {
       />
       {isOpen() && renderCalendar()}
     </div>
-  );
-};
+  )
+}
