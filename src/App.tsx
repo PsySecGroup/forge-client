@@ -2,7 +2,7 @@ import { type Component, onCleanup } from 'solid-js'
 import { addGlobalEvent } from './core/utils/events'
 import { useStoreContext } from './core'
 import ThemesProvider from './themes'
-import Navigation from './components/navigation'
+import Navigation from './core/components/navigation'
 
 import styles from './App.module.css'
 

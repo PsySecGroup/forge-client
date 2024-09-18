@@ -4,7 +4,7 @@ import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/buttonGroup.module.css'
 
-type ButtonGroupProps = {
+type Props = {
   buttons: string[] | JSX.Element[]
   activeIndex: number
   onButtonClick?: (index: number) => void
@@ -12,7 +12,10 @@ type ButtonGroupProps = {
   classes?: Class
 }
 
-export default function ButtonGroup (props: ButtonGroupProps) {
+/**
+ * 
+ */
+export default function ButtonGroup (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -21,12 +24,17 @@ export default function ButtonGroup (props: ButtonGroupProps) {
   )
 
   // State
+
+  /**
+   * 
+   */
   const handleButtonClick = (index: number) => {
     if (props.onButtonClick) {
       props.onButtonClick(index)
     }
   }
 
+  // Rendering
   return (
     <div
       class={classes}

@@ -4,11 +4,11 @@ import styles from './css/modal.module.css'
 import { useStoreContext } from '../../core'
 import { type ClickEvent } from '../../core/types'
 
-interface Props extends ParentProps {
+type Props = {
   close?: () => void
 }
 
-export default function Modal (props: Props): JSX.Element {
+export default function Modal (props: ParentProps<Props> = {}): JSX.Element {
   const { values, setValues } = useStoreContext()
 
   /**

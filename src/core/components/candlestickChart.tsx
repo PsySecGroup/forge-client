@@ -16,7 +16,7 @@ export type CandlestickData = {
   l: number
 }
 
-interface Props extends ParentProps {
+type Props = {
   xAxisLabel: string
   yAxisLabel: string
   xData: CandlestickData[]
@@ -39,7 +39,10 @@ interface Props extends ParentProps {
   classes?: Class
 }
 
-function CandlestickChart(props: Props = {}) {
+/**
+ * 
+ */
+export default function CandlestickChart(props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -103,7 +106,7 @@ function CandlestickChart(props: Props = {}) {
         backgroundColor: xLabelColor || 'rgba(75, 92, 192, 0.2)',
         fill: false,
       }],
-    };
+    }
 
     const config = {
       type: 'candlestick',
@@ -149,6 +152,7 @@ function CandlestickChart(props: Props = {}) {
     })
   })
 
+  // Rendering
   return (
     <div
       class={classes}
@@ -158,5 +162,3 @@ function CandlestickChart(props: Props = {}) {
     </div>
   )
 }
-
-export default CandlestickChart

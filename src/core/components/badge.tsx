@@ -3,7 +3,7 @@ import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
 import styles from './css/badge.module.css'
 
-type BadgeProps = {
+type Props = {
   label: string | JSX.Element
   color?: 'primary' | 'secondary' | 'success' | 'danger'
   size?: 'small' | 'medium' | 'large'
@@ -16,10 +16,16 @@ type BadgeProps = {
   positionClasses?: Class
 }
 
-export default function Badge (props: BadgeProps) {
+/**
+ * 
+ */
+export default function Badge (props: Props = {}) {
   // Styling
   const theme = useTheme()
 
+  /**
+   * 
+   */
   const getColorStyle = () => {
     if (props.disabled) {
       return {
@@ -54,6 +60,9 @@ export default function Badge (props: BadgeProps) {
     }
   }
 
+  /**
+   * 
+   */
   const getBadgeClass = () => {
     let baseClass = styles.badge
     if (props.size === 'small') baseClass += ` ${styles.small}`
@@ -65,6 +74,9 @@ export default function Badge (props: BadgeProps) {
     return baseClass
   }
 
+  /**
+   * 
+   */
   const getPositionClass = () => {
     switch (props.position) {
       case 'upper-left':

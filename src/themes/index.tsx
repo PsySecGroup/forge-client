@@ -6,8 +6,7 @@ import { mainLight } from './light'
 import { mainDark } from './dark'
 import { useStoreContext } from '../core'
 
-
-interface Props extends ParentProps {}
+type Props = {}
 
 export type Themes = keyof typeof themes
 
@@ -18,7 +17,7 @@ const themes = {
 
 let firstTime = true
 
-export default function ThemesProvider (props: Props): JSX.Element {
+export default function ThemesProvider (props: ParentProps<Props>): JSX.Element {
   const { ui } = useStoreContext()
 
   const theme = createMemo(() => {

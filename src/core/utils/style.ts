@@ -1,13 +1,5 @@
 import type { Style, Class } from '../types/index'
 
-interface Props {
-  defaultStyle?: Style
-  defaultClass?: Class
-  style?: Style
-  class?: Class
-  [key: string]: any
-}
-
 /**
  *
  */

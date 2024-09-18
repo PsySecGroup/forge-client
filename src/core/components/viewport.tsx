@@ -3,13 +3,16 @@ import { useStoreContext } from '../core'
 
 import styles from './css/viewport.module.css'
 
-interface Props extends ParentProps {
-  children: JSX.Element | JSX.Element[]
+type Props = {
   header?: JSX.Element | JSX.Element[]
   footer?: JSX.Element | JSX.Element[]
 }
 
-export default function Viewport (props: Props): JSX.Element {
+/**
+ * 
+ */
+export default function Viewport (props: ParentProps<Props> = {}): JSX.Element {
+  // Rendering
   return (
     <div class={styles.viewport}>
       {props.header && <div class={styles.viewportHeader}>{props.header}</div>}

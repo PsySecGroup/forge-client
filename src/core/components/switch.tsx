@@ -4,7 +4,7 @@ import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/switch.module.css'
 
-type DatePickerProps = {
+type Props = {
   checked: boolean
   onChange?: () => void
   style?: Style
@@ -12,7 +12,10 @@ type DatePickerProps = {
   sliderClasses?: Class
 }
 
-export default function Switch (props: Props) {
+/**
+ * 
+ */
+export default function Switch (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -32,7 +35,7 @@ export default function Switch (props: Props) {
       class={classes}
       style={style}
     >
-      <input type="checkbox"
+      <input type='checkbox'
         checked={props.checked}
         onChange={e => props.onChange(e.target.checked)}
       />

@@ -4,23 +4,27 @@ import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/checkbox.module.css'
 
-type DatePickerProps = {
+type Props = {
   checked: boolean
   onChange?: () => void
   style?: Style
   classes?: Class
 }
 
-export default function Checkbox (props: Props) {
+/**
+ * 
+ */
+export default function Checkbox (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props
   )
 
+  // Rendering
   return (
     <input
-      type="checkbox"
+      type='checkbox'
       checked={props.checked}
       onChange={e => props.onChange(e.target.checked)}
       class={classes}

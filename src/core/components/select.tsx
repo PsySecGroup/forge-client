@@ -1,11 +1,10 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
-import { createSignal } from "solid-js"
 
 import styles from './css/select.module.css'
 
-interface Props extends ParentProps {
+type Props = {
   id: string
   value: string
   onChange: () => void
@@ -26,8 +25,10 @@ interface Props extends ParentProps {
   helperClass?: Class
 }
 
-
-export default function Select(props: Props) {
+/**
+ * 
+ */
+export default function Select(props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -59,9 +60,9 @@ export default function Select(props: Props) {
       class={classes}
       style={style}
     >
-      {props.label && <label for={props.id || "select-input"}>{props.label}</label>}
+      {props.label && <label for={props.id || 'select-input'}>{props.label}</label>}
       <select
-        id={props.id || "select-input"}
+        id={props.id || 'select-input'}
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
         disabled={props.disabled || false}
@@ -69,12 +70,12 @@ export default function Select(props: Props) {
         {...props.selectProps} // Spread additional select props
       >
         {props.placeholder && (
-          <option value="" disabled hidden>
+          <option value='' disabled hidden>
             {props.placeholder}
           </option>
         )}
         {props.options.map((option) =>
-          typeof option === "string" ? (
+          typeof option === 'string' ? (
             <option
               value={option}
               key={option}
@@ -96,5 +97,5 @@ export default function Select(props: Props) {
       {props.error && <p class={errorClass}>{props.error}</p>}
       {props.helperText && <p class={helperClass}>{props.helperText}</p>}
     </div>
-  );
+  )
 }

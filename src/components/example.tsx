@@ -4,9 +4,9 @@ import { type ParentProps, type JSX } from 'solid-js'
 
 import styles from './css/example.module.css'
 
-interface Props extends ParentProps {}
+type Props = {}
 
-export default function ExampleComponent (props: Props): JSX.Element {
+export default function ExampleComponent (props: ParentProps<Props>): JSX.Element {
   // (-->) If you need access to central state helpers, do it here
   // const {  } = useStoreContext()
 

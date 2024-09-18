@@ -7,7 +7,7 @@ import { useStoreContext } from '../../core'
 
 import styles from './css/slider.module.css'
 
-interface Props {
+type Props = {
   value: number
   min: number
   max: number
@@ -25,7 +25,10 @@ interface Props {
   rightTextClasses?: Class
 }
 
-export default function Slider (props: Props): JSX.Element {
+/**
+ * 
+ */
+export default function Slider (props: Props = {}): JSX.Element {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -67,6 +70,8 @@ export default function Slider (props: Props): JSX.Element {
     styles.rightText
   )
 
+  // State
+
   /**
    * 
    */
@@ -90,7 +95,7 @@ export default function Slider (props: Props): JSX.Element {
       </div>
       <div class={sliderContainerClasses}>
         <input
-          type="range"
+          type='range'
           min={props.min}
           max={props.max}
           value={props.value}

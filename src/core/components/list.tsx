@@ -5,9 +5,7 @@ import { For, JSX } from 'solid-js'
 
 import styles from './css/list.module.css'
 
-const defaultRenderItem = (item, index) => <span>{index + 1}. {item}</span>
-
-type ListProps<T> = {
+type Props<T> = {
   items: T[]
   renderItem?: (item: T, index: number) => JSX.Element
   emptyState?: JSX.Element
@@ -17,7 +15,12 @@ type ListProps<T> = {
   emptyClasses?: Class
 }
 
-export default function List<T> (props: ListProps<T> = {}) {
+const defaultRenderItem = (item, index) => <span>{index + 1}. {item}</span>
+
+/**
+ * 
+ */
+export default function List<T> (props: Props<T> = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(

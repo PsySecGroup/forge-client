@@ -1,21 +1,21 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
-import { type ParentProps, type JSX, createSignal, batch, onMount } from 'solid-js'
+import { type ParentProps, type JSX, createSignal, For, batch, onCleanup } from 'solid-js'
 import useTheme from '@suid/material/styles/useTheme'
 import { fireOnce } from '../utils/events'
 
 import styles from './css/bottomNavigation.module.css'
 
-interface Props extends ParentProps {
+type Props = {
+  option: string
   actions: {
     [key: string]: {
       icons: JSX.Element
-      onClick: () => void
+      onClick?: () => void
       label?: string
     }
   }
   highlight?: boolean
-  option?: string
   style?: Style
   classes?: Class
 }
@@ -23,7 +23,7 @@ interface Props extends ParentProps {
 /**
  *
  */
-export default function BottomNavigation (props: Props): JSX.Element {
+export default function BottomNavigation (props: Props = {}): JSX.Element {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -36,43 +36,43 @@ export default function BottomNavigation (props: Props): JSX.Element {
   )
 
   // State
-  const [option, setOption] = createSignal<string>(props.option ?? '')
-  const options = []
+  const highlight = props.highlight ?? true
+  const [actions, setActions] = createSignal(props.actions ?? {})
+  const [option, setOption] = createSignal(props.option ?? '')
 
-  // Rendering
-  for (const key of Object.keys(props.actions)) {
-    const action = props.actions[key]
-    const isOption = key === option()
-
-    if (isOption) {
-      fireOnce(() => {
-        action.onClick(key)
-      })
-    }
-
-    options.push(<div
-      onClick={() => {
-        batch(() => {
-          action.onClick(key)
-          setOption(key)
-        })
-      }}
-      classList={{
-        [styles.bottomNavItem]: true,
-        [styles.bottomNavItemSelected]: props.highlight && isOption
-      }}
-    >
-      {action.icon && (<div>{action.icon}</div>)}
-      {action.label && (<div>{action.label}</div>)}
-    </div>)
-  }
+  onCleanup(() => {
+    setActions(props.actions ?? {})
+    setOption(props.option ?? '')
+  })
 
   return (
     <div
       class={classes}
       style={style}
     >
-      {options}
+      <For each={Object.keys(actions())}>
+        {(key) => {
+          const action = actions()[key]
+
+          return (
+            <div
+              onClick={() => batch(() => {
+                if (action.onClick) {
+                  action.onClick(key)
+                }
+                setOption(key)
+              })}
+              classList={{
+                [styles.bottomNavItem]: true,
+                [styles.bottomNavItemSelected]: highlight && key === option()
+              }}
+            >
+              {action.icon && (<div>{action.icon}</div>)}
+              {action.label && (<div>{action.label}</div>)}
+            </div>
+          )
+        }}
+      </For>
     </div>
   )
 }

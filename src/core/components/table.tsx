@@ -1,13 +1,13 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
-import { createSignal, createMemo } from 'solid-js'
+import { createSignal, createMemo, onCleanup } from 'solid-js'
 
 import styles from './css/table.module.css'
 
 type Row = Array<Array<string | number | null>>
 
-type TableProps = {
+type Props = {
   headers: string[]
   rows: Row
   onSort?: (columnIndex: number, ascending: boolean) => Row
@@ -28,7 +28,7 @@ type TableProps = {
   paginationClasses?: Class
 }
 
-export default function Table (props: TableProps) {
+export default function Table (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -90,11 +90,16 @@ export default function Table (props: TableProps) {
 
 
   // States
+  const rowsPerPage = props.rowsPerPage ?? 10
   const [sortConfig, setSortConfig] = createSignal({ column: -1, ascending: true })
   const [searchTerm, setSearchTerm] = createSignal('')
   const [currentPage, setCurrentPage] = createSignal(1)
 
-  const rowsPerPage = props.rowsPerPage ?? 10
+  onCleanup(() => {
+    setSortConfig({ column: -1, ascending: true })
+    setSearchTerm('')
+    setCurrentPage(1)
+  })
 
   /**
    * Sorting functionality
@@ -209,9 +214,9 @@ export default function Table (props: TableProps) {
     <div class={styles.container}>
       {props.onSearch && (
         <input
-          type="text"
+          type='text'
           class={searchBarClasses}
-          placeholder="Search..."
+          placeholder='Search...'
           value={searchTerm()}
           onInput={handleSearch}
         />

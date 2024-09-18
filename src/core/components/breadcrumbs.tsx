@@ -4,7 +4,7 @@ import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/breadcrumbs.module.css'
 
-type BreadCrumbsProps = {
+type Props = {
   links: { name: string, href: string }[]
   onLinkClick?: (href: string) => void
   style?: Style
@@ -14,7 +14,10 @@ type BreadCrumbsProps = {
   separatorClasses?: Class
 }
 
-export default function BreadCrumbs (props: BreadCrumbsProps) {
+/**
+ * 
+ */
+export default function BreadCrumbs (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -45,11 +48,16 @@ export default function BreadCrumbs (props: BreadCrumbsProps) {
   )
 
   // State
+
+  /**
+   * 
+   */
   const handleLinkClick = (href: string, event: MouseEvent) => {
     event.preventDefault()
     if (props.onLinkClick) props.onLinkClick(href)
   }
 
+  // Rendering
   return (
     <nav
       class={classes}

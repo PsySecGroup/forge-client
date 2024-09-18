@@ -5,15 +5,16 @@ import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/button.module.css'
 
-interface Props extends ParentProps {
-  class?: string[]
-  test?: string
+type Props = {
   onClick?: (e?: any) => void
   style?: Style
   classes?: Class
 }
 
-const Button: Component<Props> = (props) => {
+/**
+ * 
+ */
+export default function Button (props: ParentProps<Props> = {}): Component<Props> {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -21,6 +22,7 @@ const Button: Component<Props> = (props) => {
     styles.Button
   )
 
+  // Rendering
   return (
     <button
       onClick={props.onClick}
@@ -31,5 +33,3 @@ const Button: Component<Props> = (props) => {
     </button>
   )
 }
-
-export default Button

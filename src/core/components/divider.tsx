@@ -2,11 +2,15 @@ import {
   Divider
 } from '@suid/material'
 
-interface Props extends ParentProps {
+type Props = {
   light?: boolean
 }
 
+/**
+ * 
+ */
 export default function ListDividers(props: Props = {}) {
+  // Rendering
   return (
     <Divider {...props}/>
   )

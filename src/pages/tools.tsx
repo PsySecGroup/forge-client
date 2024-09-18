@@ -20,9 +20,9 @@ import Badge from '../core/components/badge'
 import ButtonGroup from '../core/components/buttonGroup'
 import BreadCrumbs from '../core/components/breadcrumbs'
 
-interface Props extends ParentProps {}
+type Props = {}
 
-export default function ToolsPage (props: Props): JSX.Element {
+export default function ToolsPage (props: ParentProps<Props> = {}): JSX.Element {
   const { values, setValues } = useStoreContext()
 
   const headers = ['Name', 'Age', 'Occupation']

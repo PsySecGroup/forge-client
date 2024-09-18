@@ -1,4 +1,5 @@
 import type { Style, Class } from '../types/index'
+import useTheme from '@suid/material/styles/useTheme'
 import { mergeStyle } from '../utils/style'
 import { enUS } from 'date-fns/locale'
 import { createSignal, onCleanup } from 'solid-js'
@@ -16,13 +17,10 @@ import {
   endOfWeek,
   eachDayOfInterval
 } from 'date-fns'
-import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/datePicker.module.css'
 
-const daysOfWeek = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa']
-
-type DatePickerProps = {
+type Props = {
   value: string
   onChange: (value: string) => void
   minDate?: Date
@@ -41,7 +39,12 @@ type DatePickerProps = {
   datepickerInputClasses?: Class
 }
 
-export default function DatePicker (props: DatePickerProps = {}) {
+const daysOfWeek = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa']
+
+/**
+ * 
+ */
+export default function DatePicker (props: Props = {}) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -108,14 +111,21 @@ export default function DatePicker (props: DatePickerProps = {}) {
   )
 
   // State
+  const minDate = props.minDate ?? new Date(1900, 0, 1)
+  const maxDate = props.maxDate ?? new Date(2100, 11, 31)
+
   const [isOpen, setIsOpen] = createSignal(false)
   const [selectedDate, setSelectedDate] = createSignal<Date | null>(null)
   const [inputValue, setInputValue] = createSignal(props.value)
   const [currentMonth, setCurrentMonth] = createSignal(new Date())
 
-  const minDate = props.minDate ?? new Date(1900, 0, 1)
-  const maxDate = props.maxDate ?? new Date(2100, 11, 31)
-
+  onCleanup(() => {
+    setIsOpen(false)
+    setSelectedDate(null)
+    setInputValue(props.value)
+    setCurrentMonth(new Date())
+  })
+  
   /**
    * 
    */
@@ -162,6 +172,10 @@ export default function DatePicker (props: DatePickerProps = {}) {
       setIsOpen(false)
     }
   }
+
+  onCleanup(() => window.removeEventListener('keydown', handleKeyDown))
+
+  // Rendering
 
   /**
    * 
@@ -248,8 +262,6 @@ export default function DatePicker (props: DatePickerProps = {}) {
       </div>
     )
   }
-
-  onCleanup(() => window.removeEventListener('keydown', handleKeyDown))
 
   return (
     <div
