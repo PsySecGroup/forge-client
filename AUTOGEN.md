@@ -1,24 +1,24 @@
 # Specification Proposal
 
-* Validation library
-* Layout generator
-* Endpoint generator
-* Error mapping
-* Code generator
-* Template handler
-  * primitive
-    * type
-    * string
-    * number
-    * regexp
-    * null
-    * array
-    * object
-  * {store}
-  * {values}
-  * {persist}
-  * {endpoints}
-  * {dot pathing}
+- Validation library
+- Error mapping
+? Layout generator
+? Endpoint generator
+? Code generator
+? Template handler
+  ? primitive
+    ? type
+    ? string
+    ? number
+    ? regexp
+    ? null
+    ? array
+    ? object
+  ? {store}
+  ? {values}
+  ? {persist}
+  ? {endpoints}
+  ? {dot pathing}
 
 
 Here's an idea for a schema

@@ -2,6 +2,7 @@ import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
 import { useError } from '../state/error'
+import '../utils/validation'
 
 import styles from './css/input.module.css'
 
@@ -14,12 +15,10 @@ type Props = {
   label?: string
   onChange?: () => void
   attributes?: { [key: string]: string | boolean }
-  error?: string
   helperText?: string
   style?: Style
   classes?: Class
   inputFieldClasses?: Class
-  inputErrorClasses?: Class
   inputHelperClasses?: Class
 }
 
@@ -42,12 +41,6 @@ export default function TextInput(props: Props = {}) {
       classes: props.inputFieldClasses
     }, 
     styles.inputField
-  )
-
-  const { classes: inputErrorClasses  } = mergeStyle({
-      classes: props.inputErrorClasses
-    }, 
-    styles.inputError
   )
 
   const { classes: inputHelperClasses  } = mergeStyle({
@@ -85,7 +78,6 @@ export default function TextInput(props: Props = {}) {
         class={inputFieldClasses}
         {...props.attributes} // Spread additional input props
       />
-      {props.error && <p class={inputErrorClasses}>{props.error}</p>}
       {props.helperText && <p style={inputHelperClasses}>{props.helperText}</p>}
     </div>
   )

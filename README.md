@@ -144,7 +144,6 @@ import styles from './css/component.module.css'
 const theme = useTheme()
 ```
 
-
 ### Errors
 
 We have a global error provider.  It's very easy to use.
@@ -199,6 +198,67 @@ export default function TextInput(props: Props = {}) {
 }
 
 ````
+
+### Validation
+
+We also have built-in validation
+
+```ts
+import { getValidationSchema } from './core/utils/validation'
+
+const { schema, validate } = getValidationSchema({
+  "name": {
+    "type": "string",
+    "required": true,
+    "min": 2,
+    "max": 50
+  },
+  "age": {
+    "type": "number",
+    "positive": true,
+    "integer": true,
+    "min": 18,
+    "max": 99,
+    "required": true
+  },
+  "password": {
+    "type": "string",
+    "min": 8,
+    "matches": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
+  },
+  "address": {
+    "type": "object",
+    "shape": {
+      "street": {
+        "type": "string",
+        "required": true
+      },
+      "city": {
+        "type": "string",
+        "required": true
+      }
+    }
+  },
+  "tags": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "min": 2
+    }
+  }
+})
+
+const { validated, error } = await validate({
+  name: 'John Doe',
+  age: 30,
+  password: 'password123',
+  address: {
+    street: '123 Main St',
+    city: 'Anytown'
+  },
+  tags: ['tag1', 'tag2']
+})
+```
 
 When the field is empty, an error containing the message `This field is required` will appear in the error tray and the edges of the screen will flash into red gradient. (like a player getting hit with bullets from a first-person-shooter.)
 
