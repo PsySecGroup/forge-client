@@ -144,6 +144,67 @@ import styles from './css/component.module.css'
 const theme = useTheme()
 ```
 
+
+### Errors
+
+We have a global error provider.  It's very easy to use.
+
+```tsx
+import useTheme from '@suid/material/styles/useTheme'
+import { mergeStyle } from '../utils/style'
+import { useError } from '../state/error'
+
+import styles from './css/input.module.css'
+
+type Props = {
+  value: string
+}
+
+/**
+ * 
+ */
+export default function TextInput(props: Props = {}) {
+  // Styling
+  const theme = useTheme()
+  const { style, classes } = mergeStyle(
+    props,
+    styles.input,
+    {
+      background: theme.palette.secondary.background,
+      color: theme.palette.secondary.text
+    }
+  )
+
+  // State
+  const { addError } = useError()
+
+  // Rendering
+  return (
+    <div
+      class={classes}
+      style={style}
+    >
+      <input
+        value={props.value}
+        onInput={e => {
+          if (e.target.value === '') {
+            addError('This field is required')
+          } else {
+            props.onChange(e.target.value)
+          }
+        }}
+      />
+    </div>
+  )
+}
+
+````
+
+When the field is empty, an error containing the message `This field is required` will appear in the error tray and the edges of the screen will flash into red gradient. (like a player getting hit with bullets from a first-person-shooter.)
+
+By default, `addError('This field is required')` will only appear once in the error tray.  For this message to appear multiple times int he error tray, use `addError('This field is required', true)`
+
+
 ### Icons
 
 We use [Lucide](https://lucide.dev/icons/) for all of our icons:

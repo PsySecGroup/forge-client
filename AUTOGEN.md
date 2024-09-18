@@ -1,5 +1,26 @@
 # Specification Proposal
 
+* Validation library
+* Layout generator
+* Endpoint generator
+* Error mapping
+* Code generator
+* Template handler
+  * primitive
+    * type
+    * string
+    * number
+    * regexp
+    * null
+    * array
+    * object
+  * {store}
+  * {values}
+  * {persist}
+  * {endpoints}
+  * {dot pathing}
+
+
 Here's an idea for a schema
 
 ```yaml
@@ -47,7 +68,7 @@ schema:
     userId:
       type: user # Reference to the 'user' type
       validation:
-        null: false # Must be populated
+        required: true # Must be populated
 
 pages:
   - name: "HomePage"
@@ -138,7 +159,6 @@ endpoints:
         - userId
 ```
 
-
 # Insights
 
 1. Tight Coupling of State and UI:
@@ -146,47 +166,32 @@ endpoints:
 * Impact: Refactoring state or changing data models later could result in cascading changes across multiple pages and components, as they all rely on explicit state bindings. It limits flexibility for future changes.
 * Solution: You may want to add an abstraction layer, like a StoreConnector component, that decouples state logic from the UI components to ensure flexibility in refactoring.
 
-2. Limited Logic Flexibility in YAML:
-* Problem: YAML is a declarative format and doesn't easily support complex conditional logic or dynamic behavior.
-* Impact: In more complex UI scenarios, where the form behavior depends on user actions (e.g., conditional rendering, showing/hiding elements), this YAML configuration might not be sufficient. You'll need to introduce custom logic inside the generated TSX files manually.
-* Solution: Allow embedding custom logic in the YAML, such as using special syntax or hooks to handle more advanced scenarios.
+Useful for when you have to update a Concept
 
-3. Batch Actions Complexity:
-* Problem: Using batch actions like [endpoints.UpdateUser, user[0]] is efficient, but it can introduce complexity in understanding the order of execution and handling potential errors.
-* Impact: If the API call fails, the UI might still try to update the store, leading to inconsistencies or invalid states.
-* Solution: You might need to introduce error handling in the batch action logic (e.g., preventing the state update unless the API call is successful). This could be difficult to model entirely in YAML, requiring additional handling in the generated TSX files.
+```ts
+import { createSignal } from "solid-js";
 
-4. State Synchronization:
-* Problem: Automatically binding input values (e.g., {user[0].name}) to the state directly in onChange might lead to immediate state updates with every keystroke.
-* Impact: This can cause performance issues, especially if many components update simultaneously or if frequent API calls are triggered as a result.
-* Solution: Introduce debouncing or throttling mechanisms in the generated code, or batch updates to the state to reduce the performance load and excessive state re-renders.
+// Example StoreConnector that handles the user state logic
+function StoreConnector({ children }) {
+  const [user, setUser] = createSignal([{ name: "John Doe" }]); // Example state
 
-5. Limited Validation Feedback:
-* Problem: While validation can be defined declaratively (e.g., in validation: min: 3, max: 10), it's unclear how this feedback would be communicated back to the user in the UI (e.g., displaying error messages).
-* Impact: Validation might only happen when submitting the form or through invisible side effects, without providing immediate feedback to the user during input.
-* Solution: Extend the generated components to handle real-time validation feedback, showing error messages in the UI when the input is invalid.
+  const getUserName = (index) => user()[index]?.name || "";
 
-6. Component Reusability:
-* Problem: The YAML binds specific properties (like user[0].name) to the UI, which might reduce the reusability of components across different pages or sections of the app.
-* Impact: If you need the same component on another page with a different state binding, you might end up duplicating components or writing custom code to handle that case.
-* Solution: Implement a way to define reusable components and pass dynamic state bindings to them in the YAML configuration to avoid duplication.
+  // Passing down a method to abstract state access
+  return children({ getUserName });
+}
 
-7. Error Handling and API Failures:
-* Problem: There's no mechanism defined for handling API errors or failures in the current YAML structure. For instance, what happens if endpoints.UpdateUser fails?
-* Impact: If the API fails and there’s no error handling in the generated TSX, it could leave the UI in an inconsistent state, with unsaved changes and no feedback to the user.
-* Solution: Incorporate error handling in the generated code, such as catching API errors and providing feedback to the user (e.g., error messages or rollback of state changes).
+function UserComponent() {
+  return (
+    <StoreConnector>
+      {({ getUserName }) => (
+        <div>
+          <p>User Name: {getUserName(0)}</p>
+        </div>
+      )}
+    </StoreConnector>
+  );
+}
 
-8. Scalability and Maintainability:
-* Problem: As the app grows, managing state, validations, and endpoints in a single YAML file might become unwieldy, leading to large, complex configurations.
-* Impact: It could be difficult to keep track of all bindings, rules, and endpoints, making debugging and extending the app more challenging.
-* Solution: Break down the YAML file into smaller, modular parts, or generate multiple YAML files for different concerns (e.g., separate schemas for state, UI components, and endpoints).
-
-9. Dynamic and Asynchronous Data:
-* Problem: The current setup seems to assume synchronous state changes (e.g., immediate reflection in the store). If certain data comes from async sources (e.g., API calls), the UI might not behave as expected without explicit loading states.
-* Impact: If user data is being fetched asynchronously, the form might render before the data is available, leading to errors or uninitialized states.
-* Solution: Add support for async state management, such as showing loading indicators or placeholders while data is being fetched, and handle resolved data dynamically in the generated code.
-
-10. Code Generation Complexity:
-* Problem: Autogenerating SolidJS components based on YAML configuration requires sophisticated tooling, especially when handling nested logic like batch actions, validation, and error handling.
-* Impact: If the code generation tool isn’t robust, it might introduce bugs or make it difficult to extend the generated code without breaking the core logic.
-* Solution: Ensure the code generation process is thoroughly tested and can handle edge cases, and provide hooks or extension points for developers to add custom logic beyond the YAML configuration.
+export default UserComponent;
+```

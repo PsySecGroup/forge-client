@@ -1,6 +1,7 @@
 import { render } from 'solid-js/web'
 import App from './App'
 import { StoreProvider } from './core'
+import { ErrorProvider } from './core/state/error'
 import './index.css'
 
 const root = document.getElementById('root')
@@ -11,6 +12,8 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(() => (
   <StoreProvider>
-    <App />
+    <ErrorProvider>
+      <App />
+    </ErrorProvider>
   </StoreProvider>
 ), root!)

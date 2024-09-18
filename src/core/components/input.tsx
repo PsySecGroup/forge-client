@@ -1,6 +1,7 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
+import { useError } from '../state/error'
 
 import styles from './css/input.module.css'
 
@@ -55,6 +56,9 @@ export default function TextInput(props: Props = {}) {
     styles.inputHelper
   )
 
+  // State
+  const { addError } = useError()
+
   // Rendering
   return (
     <div
@@ -66,7 +70,16 @@ export default function TextInput(props: Props = {}) {
         id={props.id || 'text-input'}
         type={props.type || 'text'}
         value={props.value}
-        onInput={e => props.onChange(e.target.value)}
+
+        onInput={e => {
+          // TODO remove
+          if (e.target.value === '!') {
+            addError('WHAT')
+          } else {
+            props.onChange(e.target.value)
+          }
+        }}
+
         placeholder={props.placeholder || ''}
         disabled={props.disabled || false}
         class={inputFieldClasses}
