@@ -2,24 +2,22 @@
 
 - Validation library
 - Error mapping
+- Template handler
+  - primitive
+    - type
+    - string
+    - number
+    - regexp
+    - null
+    - array
+    - object
+  - {values}
+  - {persist}
+  - {endpoints}
+  - {dot pathing}
 ? Layout generator
 ? Endpoint generator
 ? Code generator
-? Template handler
-  ? primitive
-    ? type
-    ? string
-    ? number
-    ? regexp
-    ? null
-    ? array
-    ? object
-  ? {store}
-  ? {values}
-  ? {persist}
-  ? {endpoints}
-  ? {dot pathing}
-
 
 Here's an idea for a schema
 
