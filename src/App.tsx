@@ -9,7 +9,10 @@ import styles from './App.module.css'
 // (-->) Import pages here
 import MainPage from './pages/index'
 
-const App: Component = () => {
+/**
+ * 
+ */
+export default function App (): Component {
   const { closeEverything } = useStoreContext()
 
   onCleanup(addGlobalEvent('keydown', e => {
@@ -27,5 +30,3 @@ const App: Component = () => {
     </ThemesProvider>
   )
 }
-
-export default App

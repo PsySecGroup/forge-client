@@ -15,11 +15,12 @@
   - {persist}
   - {endpoints}
   - {dot pathing}
-? Layout generator
-? Endpoint generator
-? Code generator
+- Concept Generator
+? Endpoint Generator
+? Layout Generator
+? Page Generator
 
-Here's an idea for a schema
+# Schema 
 
 ```yaml
 schema:
