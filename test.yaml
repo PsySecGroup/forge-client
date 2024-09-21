@@ -1,0 +1,42 @@
+layout:
+  top:
+    columns: 3
+    spacing: 1
+    wrap: true
+    direction: row
+    horizontal: left
+    components:
+      menu:
+        type: Menu
+        column: 1
+        props:
+          selectedItem: null
+          greetings: "Hello {user[0].name}!"
+      appLogo:
+        type: Image
+        column: 2
+        props:
+          src: "https://google.com/test.jpg"
+      hamburger:
+        type: Hamburger
+        column: 3
+        props:
+          isOpen: {values.hamburger}
+          clicked: {persist.clicked}
+      tickle:
+        type: Tickle
+        column: 3
+        props:
+          value: {values.tickle}
+  bottom:
+    columns:
+    - xs: 3
+      lg: 4
+    spacing: 1
+    components:
+      text:
+        type: p
+        column: 1
+        text: hello
+
+

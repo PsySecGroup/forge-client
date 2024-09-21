@@ -16,8 +16,8 @@
   - {endpoints}
   - {dot pathing}
 - Concept Generator
+- Layout Generator
 ? Endpoint Generator
-? Layout Generator
 ? Page Generator
 
 # Schema 
@@ -78,18 +78,18 @@ pages:
         components:
           menu:
             type: Menu
-            position: 1
+            column: 1
             props:
               selectedItem: null
               greetings: "Hello {user[0].name}!"
           appLogo:
             type: Image
-            position: 2
+            column: 2
             props:
               src: "https://google.com/test.jpg"
           hamburger:
             type: Hamburger
-            position: 3
+            column: 3
             props:
               isOpen: {values.hamburger}
               clicked: {persist.clicked}
@@ -98,7 +98,7 @@ pages:
         components:
           nameInput:
             type: Input # This would be a text input component
-            position: 1
+            column: 1
             props:
               label: "Name"
               value: {user[0].name} # Bind to the first user's name from the user store
@@ -106,7 +106,7 @@ pages:
 
           submitButton:
             type: Button
-            position: 1
+            column: 1
             newLine: true # if true, puts the submitButton below the nameInput.  If false, puts it next to it
             props:
               text: "Update Name"
@@ -115,16 +115,22 @@ pages:
   - name: "ProfilePage"
     layout:
       header:
-        columns: 2
+        columns:
+        - xs: 3
+          lg: 4
         components:
+          text:
+            type: p
+            column: 1
+            text: hello
           profilePicture:
             type: Image
-            position: 1
+            column: 1
             props:
               src: {user[0].profilePic} # Binding to a user's profile picture
           editButton:
             type: Button
-            position: 2
+            column: 2
             props:
               text: "Edit Profile"
               onClick: {endpoint.UpdateUser} # Example of an action bound to a function
@@ -157,6 +163,34 @@ endpoints:
         - text
         - userId
 ```
+
+# Layout
+
+<Grid container>
+- spacing: number
+- wrap: boolean ('nowrap' or 'wrap')
+- direction
+  - row
+  - column
+- horizontal (sx={{ justifyContent: "space-around" }})
+  - left
+  - center
+  - right
+  - spread
+  - around
+  - evenly
+- vertical (sx={{ alignItems: "baseline" }})
+  - top
+  - middle
+  - bottom
+  - stretch
+  - baseline
+
+<Grid item>
+  - xs: number or "auto"
+  - sm: number or "auto"
+  - md: number or "auto"
+  - lg: number or "auto"
 
 # Insights
 

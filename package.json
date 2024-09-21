@@ -19,6 +19,7 @@
     "esbuild-register": "^3.5.0",
     "eslint": "9.x",
     "globals": "^15.3.0",
+    "js-yaml": "^4.1.0",
     "solid-devtools": "^0.29.2",
     "typescript": "^5.3.3",
     "typescript-eslint": "^7.12.0",
