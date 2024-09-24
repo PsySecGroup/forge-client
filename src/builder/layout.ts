@@ -9,7 +9,7 @@ type GridItemSize = {
 
 type GridItemColumn = number | GridItemSize[]
 
-type GridLayout = {
+export type GridLayout = {
   layout: {
     [gridId: string]: GridConfig
   }

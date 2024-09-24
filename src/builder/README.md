@@ -139,29 +139,25 @@ endpoints:
   FetchUser:
     method: "GET"
     url: "/api/user"
-    description: "Fetch user data"
   
   UpdateUser:
     method: "POST"
     url: "/api/user/update"
-    description: "Update user data"
-    body:
-      requiredFields:
-        - name
+    fields: [
+      'name'
+    ]
 
   FetchComments:
     method: "GET"
     url: "/api/comments"
-    description: "Fetch user comments"
   
   CreateComment:
     method: "POST"
     url: "/api/comment/create"
-    description: "Create a new comment"
-    body:
-      requiredFields:
-        - text
-        - userId
+    fields: [
+      'text',
+      'userId'
+    ]
 ```
 
 # Layout
