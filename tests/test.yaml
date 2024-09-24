@@ -1,0 +1,134 @@
+concepts:
+  user:
+    id:
+      type: number
+      validation: true
+    name:
+      type: string
+      validation:
+        min: 3
+        max: 10
+        match: /someRegex/
+    profilePic:
+      type: string
+    email:
+      type: string
+      validation:
+        match: /emailRegex/
+    role:
+      type: string
+      validation:
+        values: 
+          - admin
+          - user
+          - guest
+    preferences:
+      type: json
+      validation: false
+      default: {}
+  comments:
+    id:
+      type: number
+      validation: true
+    text:
+      type: string
+      default: hello
+      validation:
+        min: 3
+        max: 100
+        match: /[A-Za-z0-9]/
+    createdAt:
+      type: Date
+      validation:
+        max: Date.now()
+    userId:
+      type: user
+      validation:
+        required: true
+
+pages:
+  HomePage:
+    layout: 
+      top: 
+        columns: 3
+        sticky: top
+        components:
+          menu:
+            type: Menu
+            column: 1
+            props:
+              selectedItem: null
+              greetings: {user[0].name}
+          appLogo:
+            type: Image
+            column: 2
+            props:
+              src: https://google.com/test.jpg
+          hamburger:
+            type: Hamburger
+            column: 3
+            props:
+              isOpen: {values.hamburger}
+              clicked: {persist.clicked}
+      form: # CSS Grid container for the form
+        columns: 2
+        components:
+          nameInput:
+            type: Input # This would be a text input component
+            column: 1
+            props:
+              label: Name
+              value: {user[0].name}
+              onChange: {user[0].name}
+
+          submitButton:
+            type: Button
+            column: 1
+            newLine: true
+            props:
+              text: Update Name
+              onClick: [endpoints.UpdateUser, user[0]]
+  ProfilePage:
+    layout:
+      header:
+        columns:
+        - xs: 3
+          lg: 4
+        components:
+          text:
+            type: p
+            column: 1
+            text: hello
+          profilePicture:
+            type: Image
+            column: 1
+            props:
+              src: {user[0].profilePic}
+          editButton:
+            type: Button
+            column: 2
+            props:
+              text: Edit Profile
+              onClick: {endpoint.UpdateUser}
+
+endpoints:
+  FetchUser:
+    method: GET
+    url: /api/user
+  
+  UpdateUser:
+    method: POST
+    url: /api/user/update
+    fields:
+      - name
+
+  FetchComments:
+    method: GET
+    url: /api/comments
+  
+  CreateComment:
+    method: POST
+    url: /api/comment/create
+    fields:
+      - text
+      - userId

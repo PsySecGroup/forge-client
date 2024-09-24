@@ -9,7 +9,15 @@ const stringPattern = /^'[^']*'$/
 const storePattern = /^[a-zA-Z]+$/
 const segmentationPattern = /^([a-zA-Z0-9_]+)(?:\[(.+)\])?$/
 
-function parseBinding(notation) {
+// type Binding = {
+//   segment: string
+//   target: string
+//   index: string | null
+//   type: string
+// }
+
+// export function function parseBinding(notation: string): Binding[] {
+exports.parseBinding = function parseBinding(notation) {
   const expression = notation.trim().slice(1, -1)
   
   const ast = []
@@ -166,23 +174,3 @@ function parseBinding(notation) {
 
   return ast
 }
-
-// Example usage
-// const notations = [
-//   "{users[0].tags[find:id=7].id}",
-//   "{7}",
-//   "{a}",
-//   "{'a'}",
-//   "{test[-2]}",
-//   "{profile[find:id=2].comments[-4].reactions[filter:mood=\"happy\"]}",
-//   "{downloads[group:count]}",
-//   "{downloads[sort:count]}",
-//   "{downloads[has:'bob']}",
-//   "{downloads[slice:0,9]}"
-// ]
-
-// notations.forEach(notation => {
-//   console.log('Notation:', notation)
-//   console.log('AST:', parseBinding(notation))
-//   console.log('---')
-// })

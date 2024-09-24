@@ -1,5 +1,3 @@
-import { openYaml } from './yaml'
-
 type GridItemSize = {
   xs?: number
   sm?: number
@@ -29,6 +27,7 @@ type GridConfig = {
   spacing?: number         // Spacing property for Grid component
   wrap?: boolean          // Wrap property (true = 'wrap', false = 'nowrap')
   direction?: 'row' | 'column' // Direction property ('row' or 'column')
+  sticky?: 'top' | 'bottom' | 'left' | 'right' // @TODO
   horizontal?: 'left' | 'center' | 'right' | 'spread' | 'around' | 'evenly' // Maps to justifyContent
   vertical?: 'top' | 'middle' | 'bottom' | 'stretch' | 'baseline' // Maps to alignItems
   components: {
@@ -176,13 +175,11 @@ function generateGridItem(config: ComponentConfig, componentId: string): string 
 /**
  *
  */
-export async function generateLayout(yamlPath: string): string {
-  // TODO take just the layout, the yaml file will be opened in the page generator
-  const layout = await openYaml(yamlPath)/* as GridLayout*/
+export async function generateLayout(layout: string): string {
   const imports = {}
   let grids = ''
 
-  Object.entries(layout.layout).forEach(([gridId, gridConfig]) => {
+  Object.entries(layout).forEach(([gridId, gridConfig]) => {
     // Generate <Grid> container based on gridConfig
     const gridContainer = generateGridContainer(gridConfig, gridId)
     const columns = generateGridColumns(gridConfig)

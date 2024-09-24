@@ -1,4 +1,15 @@
-const bindingPattern = /^\{[^\}]+\}$/
+// import { parseBinding } from './bindings'
+const { parseBinding } = require('./bindings')
+
+// type FieldType = {
+//   name: string
+//   type: string | Binding[]
+//   base: string
+//   defaultValue?: string | number | boolean
+//   validation?: string
+// }
+
+const bindingPattern = /\{[^\}]+\}/
 
 //const regexPatterns: { [key: string]: RegExp } = {
 const regexPatterns = {
@@ -116,11 +127,11 @@ const numberChecks = {
 /**
  *
  */
-//export function validateInput(name: string, type: string, defaultValue: any === undefined): boolean {
-function validateInput(name, type, defaultValue) {
+//export function validateInput(name: string, type: string, defaultValue: any = undefined): FieldType {
+exports.getFieldType  = function getFieldType (name, type, defaultValue) {
   const isString = type in regexPatterns
   const isNumber = type in numberChecks && numberChecks[type]
-  const isBinding = type.test(bindingPattern)
+  const isBinding = type.match(bindingPattern) !== null
   const isType = isString === false && isNumber === false && isBinding === false
 
   if (defaultValue !== undefined) { 
@@ -132,13 +143,13 @@ function validateInput(name, type, defaultValue) {
   }
 
   if (isBinding) {
-    const parts = 
+    const bindings = parseBinding(type)
     return {
       name,
       type: 'binding',
-      defaultValue: type,
+      defaultValue: bindings,
       validation: undefined,
-      base: 
+      base: bindings[0].type
     }
   } else {
 
@@ -161,51 +172,3 @@ function validateInput(name, type, defaultValue) {
     }
   }
 }
-
-const a = console.log
-
-a(validateInput('test', 'string', 'test'))
-a(validateInput('test', 'phone', '1234567890'))
-a(validateInput('test', 'email', 'test@test.com'))
-a(validateInput('test', 'name', 'Bob'))
-a(validateInput('test', 'guid', '12345678-1234-1234-1234-123456789012'))
-a(validateInput('test', 'url', 'www.example.com'))
-a(validateInput('test', 'hash', '12345678901234567890123456789012'))
-a(validateInput('test', 'color', '#FFFFFF'))
-a(validateInput('test', 'slug', 'test-slug'))
-a(validateInput('test', 'creditCard', '12345678890123'))
-a(validateInput('test', 'comment', 'yo man'))
-a(validateInput('test', 'filepath', '/home/user/documents/file.txt'))
-a(validateInput('test', 'ip', '8.8.8.8'))
-a(validateInput('test', 'password', 'Testpass123!'))
-a(validateInput('test', 'csv', 'a,b,c'))
-a(validateInput('test', 'xml', `<?xml version="1.0"?>
-<rootElement>
-  <child>Content</child>
-</rootElement>`))
-a(validateInput('test', 'address', '123 Main St. #4, Maintown, US 58393'))
-a(validateInput('test', 'markdown', ''))
-a(validateInput('test', 'json', '{ "a": 5 }'))
-a(validateInput('test', 'equation', '1 + 1'))
-a(validateInput('test', 'function', '() => {}'))
-a(validateInput('test', 'date', '12/01/1945'))
-a(validateInput('test', 'base64', 'alsdkjfh'))
-
-a(validateInput('test', 'age', 20))
-a(validateInput('test', 'year', 2012))
-a(validateInput('test', 'month', 4))
-a(validateInput('test', 'day', 15))
-a(validateInput('test', 'number', 7))
-a(validateInput('test', 'id', 657))
-a(validateInput('test', 'float', 4.16))
-a(validateInput('test', 'integer', 7))
-a(validateInput('test', 'scientific', '+2.32e39'))
-a(validateInput('test', 'percentage', 46))
-a(validateInput('test', 'currency', '4.24'))
-a(validateInput('test', 'timestamp', Date.now()))
-a(validateInput('test', 'coordinates', [25, 29.3949]))
-a(validateInput('test', 'hexadecimal', 'AF49B'))
-a(validateInput('test', 'binary', '0110100011101010'))
-a(validateInput('test', 'byteSize', 34))
-
-a(validateInput('test', 'User', { a: 'hello' }))
