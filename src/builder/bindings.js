@@ -1,206 +1,188 @@
-function lexer(input) {
-    // Regular expressions to match different notations
-    const stringRegex = /^\{(['"])(.*?)\1\}$/; // Matches quoted strings
-    const numberRegex = /^\{(\d+)\}$/;           // Matches numbers
-    const unquotedRegex = /^\{([a-zA-Z_]\w*)\}$/; // Matches unquoted identifiers
-    const pathRegex = /^\{([a-zA-Z_]\w*(?:\.\w+|\[\-?\d+\]|\[find:[^]]+\])*)+\}$/; // Matches paths with dots and brackets
+const numbersPattern = `[0-9\-]`
+const transformsPattern = `(find|filter|extract|has|every|sort|sortAsc|sortDesc|group|slice):`
+const variablePattern = `[a-zA-Z0-9\-'"\`,]`
+const operatorsPattern = `(=|==|===|<=|<|>|=>|!|!=|!==)`
+const arrayPatterns = new RegExp(`${numbersPattern}|(${transformsPattern}(${variablePattern}+)\s?${operatorsPattern}?\s?(${variablePattern}*))`)
+const digitPattern = /^\d+$/
+const negativeDigitPattern = /^-?\d+$/
+const stringPattern = /^'[^']*'$/
+const storePattern = /^[a-zA-Z]+$/
+const segmentationPattern = /^([a-zA-Z0-9_]+)(?:\[(.+)\])?$/
 
-    // Check for string notation
-    const stringMatch = input.match(stringRegex);
-    if (stringMatch) {
-        return {
-            base: undefined,
-            value: stringMatch[2], // The captured string value
-            isFunction: false,
-            isPrimitive: true       // Strings in quotes are primitive
-        };
-    }
+function parseBinding(notation) {
+  const expression = notation.trim().slice(1, -1)
+  
+  const ast = []
 
-    // Check for number notation
-    const numberMatch = input.match(numberRegex);
-    if (numberMatch) {
-        const value = parseInt(numberMatch[1], 10);
-        return {
-            base: undefined,
-            value: value,
-            isFunction: false,
-            isPrimitive: true       // Numbers are also primitive
-        };
-    }
+  // Handle special cases for primitive or store-like notation (single element, no dots/brackets)
+  if (digitPattern.test(expression)) {
+    // It's a number (primitive)
+    ast.push({
+      segment: expression,
+      target: Number(expression),
+      index: null,
+      type: 'primitive'
+    })
+  } else if (stringPattern.test(expression)) {
+    // It's a string wrapped in single quotes (primitive)
+    ast.push({
+      segment: expression,
+      target: expression.slice(1, -1),
+      index: null,
+      type: 'primitive'
+    })
+  } else if (storePattern.test(expression)) {
+    // It's a store name (no dots, no quotes, no brackets)
+    ast.push({
+      segment: expression,
+      target: expression,
+      index: null,
+      type: 'store'
+    })
+  } else {
+    // Complex cases with dots and brackets
+    let segments = expression.split('.')
+    
+    segments.forEach(segment => {
+      const match = segment.match(segmentationPattern)
 
-    // Check for unquoted string notation
-    const unquotedMatch = input.match(unquotedRegex);
-    if (unquotedMatch) {
-        return {
-            base: undefined,
-            value: unquotedMatch[1],
-            isFunction: false,
-            isPrimitive: false      // Unquoted strings are not primitive
-        };
-    }
+      if (match) {
+        const target = match[1]
+        let index = null
+        let type = 'property' // default to property
 
-    // Check for paths with brackets and dots
-    const pathMatch = input.match(pathRegex);
-    if (pathMatch) {
-        const fullPath = pathMatch[1];
-        const segments = fullPath.split(/(\.\w+|\[\-?\d+\]|\[find:[^]]+\])/).filter(Boolean); // Split and keep delimiters
+        if (match[2]) {
+          // It's an array if it contains brackets
+          const indexExpression = match[2];
 
-        // Get the base as the first segment (remove anything after the first bracket if present)
-        const base = segments[0].replace(/\[.*\]$/, '');
+          // Updated Regex to match new operations like find, filter, etc.
+          const complexIndexMatch = indexExpression.match(arrayPatterns)
 
-        // Prepare to build the final value
-        let value = segments.map(segment => {
-            if (segment.startsWith('.')) {
-                return `?.${segment.slice(1)}`; // Optional chaining for property access
+          if (digitPattern.test(indexExpression)) {
+            // Regular numeric index
+            index = Number(indexExpression)
+            type = 'array'
+          } else if (negativeDigitPattern.test(indexExpression)) {
+            // Negative index
+            index = `${target}[${target}.length ${indexExpression >= 0
+              ? '+'
+              : '-'} ${indexExpression.replace('-', '')}]`
+            type = 'array'
+          } else if (complexIndexMatch) {
+            const operator = complexIndexMatch[2]
+            const key = complexIndexMatch[3]
+            const value = complexIndexMatch[5]
+            let comparisonOperator = ''
+
+            switch (complexIndexMatch[4]) {
+              case '=':
+              case '==':
+                comparisonOperator = '==='
+                break
+              case '!=':
+                comparisonOperator = '!=='
+                break
+              default:
+                comparisonOperator = complexIndexMatch[4]
             }
-            if (segment.match(/^\[\d+\]$/) || segment.match(/^\[-?\d+\]$/)) {
-                return segment; // Keep array indices as is
-            }
-            if (segment.startsWith('[find:')) {
-                // Extract the condition from the find notation
-                const condition = segment.slice(6, -1); // Remove [find: and ]
-                // Convert operators
-                const convertedCondition = condition
-                    .replace(/=/g, '===')
-                    .replace(/<=/g, '<==')
-                    .replace(/>=/g, '>==')
-                    .replace(/!=/g, '!==');
-                return `(base) => ${base}.find(e => ${convertedCondition})`; // Generate the find function
-            }
-            return segment; // Return segment as is
-        }).join('');
 
-        // Check if there are any special array operations in the path
-        const isSpecialArrayOperation = segments.some(segment => segment.startsWith('[') && segment.endsWith(']') && !segment.match(/^\[\d+\]$/));
+            switch (operator) {
+              case 'find':
+                index = `${target}.find(e => e.${key} ${comparisonOperator} ${value})`
+                break
+              case 'filter':
+                index = `${target}.filter(e => e.${key} ${comparisonOperator} ${value})`
+                break
+              case 'extract':
+                index = `${target}.extract(e => e.${key} ${comparisonOperator} ${value})`
+                break
+              case 'has':
+                index = `${target}.indexOf(${key}) > -1`
+                break
+              case 'every':
+                index = `${target}.every(e => e.${key} ${comparisonOperator} ${value})`
+                break
+              case 'slice':
+                const parts = key.split(',').map(k => k === undefined
+                  ? ''
+                  : k
+                )
+                index = `${target}.slice(${parts[0]},${parts[1]})`
+                break
+              case 'group':
+                index = `${target}.reduce((acc, e) => {
+  (acc[e.${key}] = acc[e.${key}] || []).push(e)
+  return acc
+}, {})`
+                break
+              case 'sort':
+              case 'sortAsc':
+                index = `${target}.sort((a,b) => {
+  const typeA = typeof a
 
-        // If it's a special array operation, format as a function
-        if (isSpecialArrayOperation) {
-            const lastIndex = segments.filter(segment => segment.startsWith('[') && segment.endsWith(']')).pop();
-            const baseName = segments[0]; // Get base name for function creation
-            if (lastIndex.match(/^\[\d+\]$/) || lastIndex.match(/^\[-?\d+\]$/)) {
-                value = `(base) => ${baseName}[base.length - ${Math.abs(lastIndex.replace(/[\[\]]/g, ''))}]`;
+  if (typeA === 'number') {
+    return a - b
+  } else if (typeA === 'boolean') {
+    return a === b ? 0 : a ? 1 : -1
+  } else if (typeA === 'string') {
+    return a.localeCompare(b)
+  }
+
+  return 0
+})`
+                break
+              case 'sortDesc':
+                index = `${target}.sort((b, a) => {
+  const typeB = typeof b
+
+  if (typeB === 'number') {
+    return a - b
+  } else if (typeB === 'boolean') {
+    return a === b ? 0 : a ? 1 : -1
+  } else if (typeB === 'string') {
+    return a.localeCompare(b)
+  }
+
+  return 0
+})`
+                break
             }
+
+            type = 'array'
+          }
         }
+        
+        ast.push({
+          segment,
+          target,
+          index,
+          type,
+        });
+      } else {
+        throw new Error(`"${segment}" of "${notation}" is an invalid notation.`)
+      }
+    });
+  }
 
-        return {
-            base: base,
-            value: value,
-            isFunction: isSpecialArrayOperation,
-            isPrimitive: false // Complex paths are not primitive
-        };
-    }
-
-    throw new Error("Invalid notation");
+  return ast
 }
 
-// Example usage:
-try {
-    console.log(lexer("{7}"));                      // { base: undefined, value: 7, isFunction: false, isPrimitive: true }
-    console.log(lexer("{74903}"));                  // { base: undefined, value: 74903, isFunction: false, isPrimitive: true }
-    console.log(lexer("{'bob'}"));                  // { base: undefined, value: 'bob', isFunction: false, isPrimitive: true }
-    console.log(lexer("{a}"));                      // { base: undefined, value: 'a', isFunction: false, isPrimitive: false }
-    console.log(lexer("{value.test}"));             // { base: 'value', value: 'value?.test', isFunction: false, isPrimitive: false }
-    console.log(lexer("{value.test.hello}"));       // { base: 'value', value: 'value?.test?.hello', isFunction: false, isPrimitive: false }
-    console.log(lexer("{list[3].bob.tags[3]}"));    // { base: 'list', value: 'list[3]?.bob?.tags[3]', isFunction: false, isPrimitive: false }
-    console.log(lexer("{list[-2]}"));                // { base: 'list', value: '(base) => list[base.length - 2]', isFunction: true, isPrimitive: false }
-    console.log(lexer("{list[find:name='bob']}"));   // { base: 'list', value: '(list) => list.find(e => e.name === \'bob\')', isFunction: true, isPrimitive: false }
-} catch (error) {
-    console.error(error.message);
-}
+// Example usage
+// const notations = [
+//   "{users[0].tags[find:id=7].id}",
+//   "{7}",
+//   "{a}",
+//   "{'a'}",
+//   "{test[-2]}",
+//   "{profile[find:id=2].comments[-4].reactions[filter:mood=\"happy\"]}",
+//   "{downloads[group:count]}",
+//   "{downloads[sort:count]}",
+//   "{downloads[has:'bob']}",
+//   "{downloads[slice:0,9]}"
+// ]
 
-/*
-notation: {list[find:name='bob']}
-{
-  base: 'list',
-  value: (list) => list.find(e => e.name === 'bob'),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[has:'bob']}
-{
-  base: 'list',
-  value: (list) => list.indexOf('bob') > -1,
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[find:age < 40]}
-{
-  base: 'list',
-  value: (list) => list.find(e => e.age < 40),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[find:age >= 21]}
-{
-  base: 'list',
-  value: (list) => list.find(e => e.age >= 21),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[find:type != 'happy']}
-{
-  base: 'list',
-  value: (list) => list.find(e => e.type !== 'happy'),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[filter:name='bob']}
-{
-  base: 'list',
-  value: (list) => list.filter(e => e.name === 'bob'),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[every:name='bob']}
-{
-  base: 'list',
-  value: (list) => list.every(e => e.name === 'bob'),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[group:type]}
-{
-  base: 'list',
-  value: (list) => list.reduce((acc, e) => {
-    (acc[e.type] = acc[e.type] || []).push(e)
-    return acc
-  }, {}),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[sort:age,name]}
-{
-  base: 'list',
-  value: (list) => list.sort((a, b) => a.age - b.age || a.name.localeCompare(b.name)),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[slice:0,3]}
-{
-  base: 'list',
-  value: (list) => list.slice(0, 3),
-  isFunction: true
-  isPrimitive: false
-}
-
-notation: {list[extract:id,name,age]}
-{
-  base: 'list',
-  value: (list) => list.map(e => return {
-    id: e.id,
-    name: e.name,
-    age: e.age
-  }),
-  isFunction: true
-  isPrimitive: false
-}
-*/
+// notations.forEach(notation => {
+//   console.log('Notation:', notation)
+//   console.log('AST:', parseBinding(notation))
+//   console.log('---')
+// })
