@@ -1,10 +1,13 @@
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
+// import { readFile, writeFile } from 'fs/promises'
+// import { join } from 'path'
+const { readFile, writeFile } = require('fs/promises')
+const { join } = require('path')
 
 /**
  * 
  */
-export async function modifyFile(filePath: string, searchTexts: string[], newLine: string): Promise<void> {
+//export async function modifyFile(filePath: string, searchTexts: string[], newLine: string): Promise<void> {
+exports.modifyFile = async function modifyFile(filePath, searchTexts, newLine) {
 	// Read the file content
 	const fileContent = await readFile(filePath, 'utf-8')
 
@@ -44,7 +47,8 @@ export async function modifyFile(filePath: string, searchTexts: string[], newLin
 /**
  *
  */
-export function toCamelCaseVariants(str) {
+// export function toCamelCaseVariants(str: string) {
+exports.toCamelCaseVariants = function toCamelCaseVariants(str) {
   const lowerCase = str
     .toLowerCase()
     .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase())
@@ -52,7 +56,7 @@ export function toCamelCaseVariants(str) {
   const upperCase = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
 
   return {
-    lowerCase,    // First character lowercase
-    upperCase    // First character uppercase
+    lowerCase,
+    upperCase
   }
 }

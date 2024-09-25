@@ -1,50 +1,54 @@
 concepts:
   user:
-    id:
-      type: number
-      validation: true
-    name:
-      type: string
-      validation:
-        min: 3
-        max: 10
-        match: /someRegex/
-    profilePic:
-      type: string
-    email:
-      type: string
-      validation:
-        match: /emailRegex/
-    role:
-      type: string
-      validation:
-        values: 
-          - admin
-          - user
-          - guest
-    preferences:
-      type: json
-      validation: false
-      default: {}
+    persisting: true
+    properties:
+      id:
+        type: number
+        validation: true
+      name:
+        type: string
+        validation:
+          min: 3
+          max: 10
+          match: /someRegex/
+      profilePic:
+        type: string
+      email:
+        type: string
+        validation:
+          match: /emailRegex/
+      role:
+        type: string
+        validation:
+          values: 
+            - admin
+            - user
+            - guest
+      preferences:
+        type: json
+        validation: false
+        default: {}
   comments:
-    id:
-      type: number
-      validation: true
-    text:
-      type: string
-      default: hello
-      validation:
-        min: 3
-        max: 100
-        match: /[A-Za-z0-9]/
-    createdAt:
-      type: Date
-      validation:
-        max: Date.now()
-    userId:
-      type: user
-      validation:
-        required: true
+    persisting: false
+    properties:
+      id:
+        type: number
+        validation: true
+      text:
+        type: string
+        default: hello
+        validation:
+          min: 3
+          max: 100
+          match: /[A-Za-z0-9]/
+      createdAt:
+        type: Date
+        validation:
+          max: Date.now()
+      userId:
+        type: user
+        validation:
+          required: true
 
 pages:
   HomePage:
@@ -113,20 +117,24 @@ pages:
 
 endpoints:
   FetchUser:
+    concept: user
     method: GET
-    url: /api/user
+    url: /api/user/:id
   
   UpdateUser:
+    concept: user
     method: POST
-    url: /api/user/update
+    url: /api/user/update/:id
     fields:
       - name
 
   FetchComments:
+    concept: comments
     method: GET
     url: /api/comments
   
   CreateComment:
+    concept: comments
     method: POST
     url: /api/comment/create
     fields:

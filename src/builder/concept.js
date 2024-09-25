@@ -1,32 +1,42 @@
-import { modifyFile, toCamelCaseVariants } from './utls'
-import { writeFile } from 'fs/promises'
+// import { modifyFile, toCamelCaseVariants } from './utls'
+// import { writeFile } from 'fs/promises'
+const { modifyFile, toCamelCaseVariants } = require('./utils')
+const { writeFile } = require('fs/promises')
 
 const singleQuote = /'/g
 
-type StoreType = 'temporaryStore' | 'persisting'
+// type StoreType = 'temporary' | 'persisting'
 
 /**
  *
  */
-function generateTypeScriptAndDefaults(input) {
+function getConceptDetails(properties) {
   let definitions = []
   let defaults = []
   let conceptRegister = []
   let stateRegister = []
   let hydration = []
 
-  for (const [key, value] of Object.entries(input)) {
-    if (typeof value === 'number') {
+  for (const key of Object.keys(properties)) {
+    const property = properties[key]
+    const isArray = property.type.indexOf('[]') > -1
+    const type = property.type.replace('[]', '')
+    const value = property.default
+
+
+    if (type === 'number') {
       // Number
 
       definitions.push(`  ${key}: number`)
-      defaults.push(`  ${key}: ${value}`)
-    } else if (typeof value === 'string') {
+      defaults.push(`  ${key}: ${value ?? -1}`)
+    } else if (type === 'string') {
       // String
 
-      if (value.startsWith('class:')) {
+      const stringValue = value ?? ''
+
+      if (stringValue.startsWith('concept:')) {
         // Classes
-        const className = value.split(':')[1]
+        const className = stringValue.split(':')[1]
         const { lowerCase, upperCase } = toCamelCaseVariants(className)
         definitions.push(`  ${key}: ${className}`)
         defaults.push(`  ${key}: new ${className}()`)
@@ -41,24 +51,22 @@ function generateTypeScriptAndDefaults(input) {
       } else {
         // Strings
         definitions.push(`  ${key}: string`)
-        defaults.push(`  ${key}: '${value.replace(singleQuote, "\'")}'`)
+        defaults.push(`  ${key}: '${stringValue.replace(singleQuote, "\'")}'`)
       }
-    } else if (Array.isArray(value)) {
+    } else if (isArray) {
       // Arrays
 
-      const typeOf = typeof value[0]
-
-      const isClass = typeOf === 'string'
-        ? value[0].startsWith('class:')
+      const isClass = type === 'string'
+        ? (value[0] ?? '').startsWith('concept:')
         : false
 
       const className = isClass
-        ? value[0].split(':')[1]
+        ? (value[0] ?? '').split(':')[1]
         : ''
 
       const elementType = isClass
         ? className
-        : typeOf
+        : type
       
       let values = ''
       
@@ -80,21 +88,11 @@ function generateTypeScriptAndDefaults(input) {
 
       definitions.push(`  ${key}: ${elementType}[]`)
       defaults.push(`  ${key}: [${values}]`)
-    } else if (value === null) {
-      // Null
-
-      definitions.push(`  ${key}: null`)
-      defaults.push(`  ${key}: null`)
-    } else if (typeof value === 'boolean') {
+    } else if (type === 'boolean') {
       // Boolean
 
       definitions.push(`  ${key}: boolean`)
-      defaults.push(`  ${key}: ${value}`)
-    } else if (value === undefined) {
-      // Undefined
-
-      definitions.push(`  ${key}: undefined`)
-      defaults.push(`  ${key}: undefined`)
+      defaults.push(`  ${key}: ${value ?? false}`)
     }
   }
 
@@ -162,44 +160,38 @@ export const getStore = (): StoreState => {
 /**
  *
  */
-async function generateConcept (name, storeType, data) {
+exports.generateConcept = async function generateConcept (name, isPersisting, properties, dryRun = false) {
+  const storeType = isPersisting
+    ? 'persisting'
+    : 'temporary'
+
   const { lowerCase, upperCase } = toCamelCaseVariants(name)
-  const { definitions, defaults, conceptRegister, stateRegister, hydration } = generateTypeScriptAndDefaults(data)
+  const { definitions, defaults, conceptRegister, stateRegister, hydration } = getConceptDetails(properties)
   const concept = getConcept(storeType, upperCase, lowerCase, definitions, defaults, hydration)
   
-  await modifyFile('../concepts/register.ts', [
-    '// (-->) Import new concept default states here'
-  ], `import { defaultState as ${lowerCase}Defaults } from './${lowerCase}'`)
+  if (dryRun === false) {
+    await modifyFile('../concepts/register.ts', [
+      '// (-->) Import new concept default states here'
+    ], `import { defaultState as ${lowerCase}Defaults } from './${lowerCase}'`)
 
-  await modifyFile('../concepts/register.ts', [
-    '  // (-->) Add default states here'
-  ], `  ...${lowerCase}Defaults,`)
+    await modifyFile('../concepts/register.ts', [
+      '  // (-->) Add default states here'
+    ], `  ...${lowerCase}Defaults,`)
 
-  await modifyFile('../state/register.ts', [
-    '// (-->) Import the StoreState and getStore for Concepts here'
-  ], `import { type StoreState as ${upperCase}StoreState, getStore as get${upperCase}Store } from '../concepts/${lowerCase}'`)
+    await modifyFile('../state/register.ts', [
+      '// (-->) Import the StoreState and getStore for Concepts here'
+    ], `import { type StoreState as ${upperCase}StoreState, getStore as get${upperCase}Store } from '../concepts/${lowerCase}'`)
 
-  await modifyFile('../state/register.ts', [
-    '  // (-->) Register StoreStates here'
-  ], `  & ${upperCase}StoreState`)
+    await modifyFile('../state/register.ts', [
+      '  // (-->) Register StoreStates here'
+    ], `  & ${upperCase}StoreState`)
 
-  await modifyFile('../state/register.ts', [
-    '  // (-->) Register getStores here'
-  ], `  get${upperCase}Store,`)
+    await modifyFile('../state/register.ts', [
+      '  // (-->) Register getStores here'
+    ], `  get${upperCase}Store,`)
 
-  await writeFile(`../concepts/${lowerCase}.ts`, concept, 'utf-8')
+    await writeFile(`../concepts/${lowerCase}.ts`, concept, 'utf-8')
+  }
 
   return concept
 }
-
-// generateConcept('test', 'temporary', {
-//     a: 7,
-//     b: null,
-//     c: "cat",
-//     d: undefined,
-//     e: [7, 4, 3, 5],
-//     f: "class:User",
-//     g: true,
-//     h: "class:Date",
-//     i: ["class:User", "class:User", "class:User"]
-// })

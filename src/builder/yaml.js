@@ -4,6 +4,8 @@
 const yaml = require('js-yaml')
 const { readFile } = require('fs/promises')
 const { getFieldType } = require('./types')
+const { generateConcept } = require('./concept')
+const { generateEndpoint } = require('./endpoints')
 
 // type Validation = {
 //   min?: number // Minimum length
@@ -155,9 +157,19 @@ async function generateCode (config) {
 
   const endpoints = yaml.endpoints
 
-  // TODO generate concepts
-  // TODO generate endpoints
-  // TODO generate pages
+  // Generate concepts
+  for (const conceptName of Object.keys(concepts)) {
+    const conceptCode = await generateConcept(conceptName, concepts[conceptName].persisting, concepts[conceptName].properties, true)
+  }
+
+  // Generate endpoints
+  for (const endpointName of Object.keys(endpoints)) {
+    const endpointCode = await generateEndpoint(endpointName, endpoints[endpointName], true)
+    console.log(endpointCode)
+  }
+
+  // Generate pages
+  // TODO welcome to hell!
 }
 
 async function main () {

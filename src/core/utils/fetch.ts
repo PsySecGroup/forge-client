@@ -1,5 +1,5 @@
 import type { Dynamic, Json, HttpMethods } from '../types/common'
-import { BASE_URL } from '../../constants'
+import { API_URL } from '../../constants'
 import axios from 'axios'
 // TODO import { HardenedFetch } from 'hardened-fetch'
 
@@ -36,6 +36,8 @@ export const fetch = async <T = Dynamic>(method: HttpMethods, resourceUrl: strin
     return testResult
   }
 
+  // TODO attach authorization tokens
+
   try {
     const options: Options = {
       method,
@@ -58,6 +60,48 @@ export const fetch = async <T = Dynamic>(method: HttpMethods, resourceUrl: strin
 
     return json.data
   } catch (e) {
-    console.error(e)
+    throw new Error({
+      method,
+      resourceUrl,
+      data,
+      error: e
+    })
   }
 }
+
+/**
+ * 
+ */
+export const function urlParser(url: string, params: Record<string, string | number>) {
+  return url.replace(/:([a-zA-Z_\-0-9]+)/g, (_, key) => {
+    return params[key] ? params[key].toString() : `:${key}`;
+  });
+}
+
+// TODO custom error interception?
+/*
+const handleError = (error: any) => {
+  // Log the error, notify the user
+  console.error('API Error:', error);
+  return Promise.reject(error);
+};
+
+apiClient.interceptors.response.use((response) => response, handleError);
+*/
+
+// TODO success interception?
+/*
+const handleSuccess = (response: any) => {
+  // Optional: route based on response status
+  return response.data;
+};
+
+apiClient.interceptors.response.use(handleSuccess, handleError);
+
+// TODO caching? axios-cache-adapter
+
+// TODO cancellation?
+/*
+https://axios-http.com/docs/cancellation
+*/
+*/
