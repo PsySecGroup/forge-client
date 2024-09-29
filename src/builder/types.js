@@ -129,13 +129,23 @@ const numberChecks = {
  */
 //export function validateInput(name: string, type: string, defaultValue: any = undefined): FieldType {
 exports.getFieldType  = function getFieldType (name, type, defaultValue) {
-  const isString = type in regexPatterns
-  const isNumber = type in numberChecks && numberChecks[type]
+  if (type === null) {
+    return {
+      name,
+      type: 'unknown',
+      defaultValue: null,
+      validation: '',
+      base: 'unknown'
+    }
+  }
+
   const isBinding = type.match(bindingPattern) !== null
+  const isString = isBinding === false && (type in regexPatterns || typeof type === 'string')
+  const isNumber = type in numberChecks && numberChecks[type]
   const isType = isString === false && isNumber === false && isBinding === false
 
   if (defaultValue !== undefined) { 
-    if(isString && regexPatterns[type].test(defaultValue) === false) {
+    if(isString && regexPatterns[type] && regexPatterns[type].test(defaultValue) === false) {
       throw new Error(`${name} has a type of ${type}, but the default value (${defaultValue}) is not ${type}`)
     } else if (isNumber && numberChecks[type](defaultValue) === false) {
       throw new Error(`${name} has a type of ${type}, but the default value (${defaultValue}) is not ${type}`)
@@ -153,7 +163,7 @@ exports.getFieldType  = function getFieldType (name, type, defaultValue) {
     }
   } else {
 
-    const validation = isString
+    const validation = isString && regexPatterns[type] !== undefined
       ? `(value => value.test(${regexPatterns[type].source}))`
       : isNumber
         ? numberChecks[type].toString()
@@ -161,14 +171,16 @@ exports.getFieldType  = function getFieldType (name, type, defaultValue) {
 
     return {
       name,
-      type,
-      defaultValue,
-      validation,
-      base: isString
+      type: isString
         ? 'string'
         : isNumber
           ? 'number'
-          : 'type'
+          : 'type',
+      defaultValue: isString === true
+        ? `'${defaultValue}'`
+        : defaultValue,
+      validation,
+      base: null
     }
   }
 }

@@ -75,7 +75,7 @@ pages:
               isOpen: {values.hamburger}
               clicked: {persist.clicked}
       form: # CSS Grid container for the form
-        columns: 2
+        columns: 1
         components:
           nameInput:
             type: Input # This would be a text input component
@@ -83,7 +83,7 @@ pages:
             props:
               label: Name
               value: {user[0].name}
-              onChange: {user[0].name}
+              onChange: {user[0].name} # TODO automatically do setters with set:value
 
           submitButton:
             type: Button

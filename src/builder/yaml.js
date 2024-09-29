@@ -6,88 +6,7 @@ const { readFile } = require('fs/promises')
 const { getFieldType } = require('./types')
 const { generateConcept } = require('./concept')
 const { generateEndpoint } = require('./endpoints')
-
-// type Validation = {
-//   min?: number // Minimum length
-//   max?: number // Maximum length
-//   match?: RegExp // Regular expression for validation
-//   values?: string[] // Allowed values
-// }
-
-// type Field<T> = {
-//     type: T
-//     validation?: Validation | boolean // Validation rules or false
-//     default?: any // Default value, if applicable
-// }
-
-// type Schemas = {
-//     [schema: string]: {
-//         [field: string]: Field<any>
-//     }
-// }
-
-// type Endpoint = {
-//   method: string
-//   url: string
-//   fields: string[]
-// }
-
-// type Endpoints = {
-//     [endpoint: string]: Endpoint
-// }
-
-// type GridItemSize = {
-//   xs?: number
-//   sm?: number
-//   md?: number
-//   lg?: number
-// }
-
-// type GridItemColumn = number | GridItemSize[]
-
-// export type GridLayout = {
-//   layout: {
-//     [gridId: string]: GridConfig
-//   }
-// }
-
-// type ComponentConfig = {
-//   type: string            // JSX component class name
-//   column: number          // Which column the component is in
-//   text?: string
-//   props: {
-//     [propName: string]: any // Props passed to the JSX component
-//   }
-// }
-
-// type GridConfig = {
-//   columns: GridItemColumn // Number or array of size properties (xs, sm, md, lg)
-//   spacing?: number         // Spacing property for Grid component
-//   wrap?: boolean          // Wrap property (true = 'wrap', false = 'nowrap')
-//   direction?: 'row' | 'column' // Direction property ('row' or 'column')
-//   horizontal?: 'left' | 'center' | 'right' | 'spread' | 'around' | 'evenly' // Maps to justifyContent
-//   vertical?: 'top' | 'middle' | 'bottom' | 'stretch' | 'baseline' // Maps to alignItems
-//   components: {
-//     [componentId: string]: ComponentConfig
-//   }
-// }
-
-// type Pages = {
-//   [page: string]: {
-//     name: string
-//     layout: GridLayout  
-//   }
-// }
-
-// type Yaml = {
-//   schema: Schemas
-//   pages: Pages
-//   endpoints: Endpoints
-// }
-
-function getType () {
-  // TODO
-}
+const { generatePage } = require('./pages')
 
 /**
  *
@@ -108,12 +27,8 @@ async function openYaml (path) {
       return `: "[${variableName.trim()}]"`
     })
 
-
-
   return yaml.load(output)
 }
-
-  
 
 //export async function generateCode (config: Yaml | string): void {
 async function generateCode (config) {
@@ -160,16 +75,20 @@ async function generateCode (config) {
   // Generate concepts
   for (const conceptName of Object.keys(concepts)) {
     const conceptCode = await generateConcept(conceptName, concepts[conceptName].persisting, concepts[conceptName].properties, true)
+    //console.log(conceptCode)
   }
 
   // Generate endpoints
   for (const endpointName of Object.keys(endpoints)) {
     const endpointCode = await generateEndpoint(endpointName, endpoints[endpointName], true)
-    console.log(endpointCode)
+    //console.log(endpointCode)
   }
 
   // Generate pages
-  // TODO welcome to hell!
+  for (const page of pages) {
+    const pageCode = await generatePage(page)
+    console.log(page, pageCode)
+  }
 }
 
 async function main () {

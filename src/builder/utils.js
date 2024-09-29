@@ -53,10 +53,11 @@ exports.toCamelCaseVariants = function toCamelCaseVariants(str) {
     .toLowerCase()
     .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase())
   
-  const upperCase = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
+  const upperCase = lowerCase.charAt(0).toUpperCase() + str.slice(1)
 
   return {
     lowerCase,
-    upperCase
+    upperCase,
+    properCase: str.charAt(0).toLowerCase() + str.slice(1)
   }
 }

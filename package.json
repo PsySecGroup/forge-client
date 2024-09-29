@@ -10,7 +10,7 @@
     "compile": "npm run lint && npm run test && npm run build",
     "preview": "vite preview"
   },
-
+  "type": "module",
   "author": "HyperCrowd",
   "license": "None",
   "devDependencies": {

@@ -52,6 +52,7 @@ exports.parseBinding = function parseBinding(notation) {
     let segments = expression.split('.')
     
     segments.forEach(segment => {
+      // TODO implement a set:<field> type to parse and generate a setter based on the pathing
       const match = segment.match(segmentationPattern)
 
       if (match) {
@@ -161,7 +162,9 @@ exports.parseBinding = function parseBinding(notation) {
         }
         
         ast.push({
-          segment,
+          segment: index === null || typeof index === 'number'
+            ? segment
+            : index,
           target,
           index,
           type,

@@ -1,39 +1,5 @@
-type GridItemSize = {
-  xs?: number
-  sm?: number
-  md?: number
-  lg?: number
-}
-
-type GridItemColumn = number | GridItemSize[]
-
-export type GridLayout = {
-  layout: {
-    [gridId: string]: GridConfig
-  }
-}
-
-type ComponentConfig = {
-  type: string            // JSX component class name
-  column: number          // Which column the component is in
-  text?: string
-  props: {
-    [propName: string]: any // Props passed to the JSX component
-  }
-}
-
-type GridConfig = {
-  columns: GridItemColumn // Number or array of size properties (xs, sm, md, lg)
-  spacing?: number         // Spacing property for Grid component
-  wrap?: boolean          // Wrap property (true = 'wrap', false = 'nowrap')
-  direction?: 'row' | 'column' // Direction property ('row' or 'column')
-  sticky?: 'top' | 'bottom' | 'left' | 'right' // @TODO
-  horizontal?: 'left' | 'center' | 'right' | 'spread' | 'around' | 'evenly' // Maps to justifyContent
-  vertical?: 'top' | 'middle' | 'bottom' | 'stretch' | 'baseline' // Maps to alignItems
-  components: {
-    [componentId: string]: ComponentConfig
-  }
-}
+const { getFieldType } = require('./types')
+const { toCamelCaseVariants } = require('./utils')
 
 const standardHtmlComponents = new Set([
   'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'blockquote',
@@ -57,7 +23,8 @@ const forgeComponents = new Set([
 /**
  *
  */
-function generateGridContainer(config: GridConfig, gridId: string): string {
+//function generateGridContainer(config: GridConfig, gridId: string): string {
+function generateGridContainer(config, gridId) {
   const { spacing, wrap, direction, horizontal, vertical } = config
   
   const wrapProp = wrap === undefined
@@ -158,28 +125,47 @@ function generateGridColumns (gridConfig) {
 /**
  * 
  */
-function generateGridItem(config: ComponentConfig, componentId: string): string {
-  const { type, column, props, text = '' } = config
+//function generateGridItem(config: ComponentConfig, componentId: string): string {
+function generateGridItem(componentId, config, props) {
+  const { type, column, text = '' } = config
+  let propEntries = []
 
-  const propEntries = props !== undefined
-    ? Object.entries(props).map(([key, value]) => `${key}={${JSON.stringify(value)}}`).join(' ')
-    : ''
+  for (const propName of Object.keys(props)) {
+    const value = props[propName].defaultValue
+    if (value instanceof Array) {
+      propEntries.push(`${propName}={${props[propName]
+        .defaultValue.map(field => field.segment)
+        .join('?.')
+      }}`)
+    } else {
+      propEntries.push(`${propName}={${value}}`)
+    }
+  }
+
   
   const componentTag = text == undefined || text === ''
-    ? `  <${type} ${propEntries} />`
-    : `  <${type} ${propEntries}>${text}</${type}>`
-
+    ? `  <${type} ${propEntries.join(' ')} />`
+    : `  <${type} ${propEntries.join(' ')}>${text}</${type}>`
   return `  ${componentTag}`
 }
 
 /**
  *
  */
-export async function generateLayout(layout: string): string {
-  const imports = {}
-  let grids = ''
+
+exports.generateLayout = async function generateLayout(layout) {
+  const result = []
+
 
   Object.entries(layout).forEach(([gridId, gridConfig]) => {
+    const imports = []
+
+    const record = {
+      grids: '',
+      imports: '',
+      stores: {}
+    }
+
     // Generate <Grid> container based on gridConfig
     const gridContainer = generateGridContainer(gridConfig, gridId)
     const columns = generateGridColumns(gridConfig)
@@ -187,39 +173,53 @@ export async function generateLayout(layout: string): string {
 
     // Generate each component within the grid
     Object.entries(gridConfig.components).forEach(([componentId, componentConfig]) => {
-      const typeName = componentConfig.type.toLowerCase()
-      const columnIndex = (componentConfig.column - 1) || 0
+      const props = {}
 
-      if (forgeComponents.has(typeName)) {
-        imports[componentConfig.type] = `../core/components/${typeName}`
-      } else if(standardHtmlComponents.has(componentConfig.type.toLowerCase()) === false) {
-        imports[componentConfig.type] = `./components/${typeName}`
+      for (const propName of Object.keys(componentConfig.props || {})) {
+        const prop = componentConfig.props[propName]
+        const field = getFieldType(propName, prop, prop)
+        props[propName] = field
+        
+        if (field.type === 'binding') {
+          const base = field.defaultValue[0].target
+
+          if (base !== 'endpoint' && base !== 'persist') {
+            record.stores[base] = true
+          }
+        }
       }
+
+      const { lowerCase, upperCase, properCase } = toCamelCaseVariants(componentConfig.type)
+
+      if (forgeComponents.has(lowerCase)) {
+        imports[componentConfig.type] = `../core/components/${properCase}`
+      } else if(standardHtmlComponents.has(lowerCase) === false) {
+        imports[componentConfig.type] = `./components/${properCase}`
+      }
+
+      const columnIndex = (componentConfig.column - 1) || 0
 
       if (components[columnIndex] === undefined) {
         components[columnIndex] = []
       }
 
-      components[columnIndex].push(generateGridItem(componentConfig, componentId))
+      components[columnIndex].push(generateGridItem(componentId, componentConfig, props))
     })
 
-    grids += `${gridContainer}\n` + columns.map((grid, i) => {
+    // TODO make sure we can loop correctly to account for all pages
+
+    record.grids += `${gridContainer}\n` + columns.map((grid, i) => {
       if (components[i] === undefined) {
-        throw new Error(`Grid ${gridId} has ${columns.length} expected columns, but no components exist in column ${i + 1}`)
+        throw new Error(`Layout "${gridId}" has ${columns.length} expected columns, but no components exist in column ${i + 1}`)
       }
+
+    record.imports = Object.entries(imports).map(([i, path]) => `import { ${i} } from '${path}'`).join('\n')
 
       return `${grid}
 ${components[i].join('\n')}
   </Grid>`
     }).join('\n') + `\n</Grid>\n`
   }) 
-
-  const importText = Object.entries(imports).map(([i, path]) => `import { ${i} } from '${path}'`).join('\n')
  
-  return `${importText}\n\n${grids}`
+  return result
 }
-
-// async function main () {
-//   console.log(await generateLayout('../../test.yaml'))  
-// }
-// main()
