@@ -1,26 +1,32 @@
-import type { Style, Class } from '../types/index'
+import type { Component, Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
-import useTheme from '@suid/material/styles/useTheme'
+// import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/buttonGroup.module.css'
 
 type Props = {
-  buttons: string[] | JSX.Element[]
+  buttons: string[] | Component[]
   activeIndex: number
   onButtonClick?: (index: number) => void
   style?: Style
   classes?: Class
 }
 
+const defaultProps: Props = {
+  buttons: [],
+  activeIndex: 0
+}
+
 /**
  * 
  */
-export default function ButtonGroup (props: Props = {}) {
+export default function ButtonGroup (props: Props = defaultProps): Component {
   // Styling
-  const theme = useTheme()
+  // const theme = useTheme()
+  
   const { style, classes } = mergeStyle(
     props,
-    styles.buttonGroup
+    styles['buttonGroup']
   )
 
   // State
@@ -42,7 +48,11 @@ export default function ButtonGroup (props: Props = {}) {
     >
       {props.buttons.map((button, index) => (
         <button
-          class={`${styles.button} ${index === props.activeIndex ? styles.active : ''}`}
+          class={`${styles['button']}${
+            index === props.activeIndex
+              ? styles['active']
+              : ''
+          }`}
           onClick={() => handleButtonClick(index)}
         >
           {button}

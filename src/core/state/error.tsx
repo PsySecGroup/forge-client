@@ -3,7 +3,9 @@ import useTheme from '@suid/material/styles/useTheme'
 import { createSignal, createContext, createEffect, useContext, onCleanup, For } from 'solid-js'
 import styles from '../components/css/error.module.css'
 
-type ErrorStore = {}
+type ErrorStore = {
+  addStore: undefined
+}
 
 /**
  * Create the context for the error state

@@ -1,4 +1,4 @@
-import type { Style, Class } from '../types/index'
+import type { Style, Class } from '../types'
 
 /**
  *

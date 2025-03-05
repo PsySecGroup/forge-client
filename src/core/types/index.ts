@@ -76,7 +76,7 @@ export type ClickEvent = MouseEvent & { currentTarget: HTMLDivElement, target: E
 export type Style = JSX.CSSProperties
 export type Class = string | string[] | { [key: string]: boolean }
 export type Children = JSX.Element | JSX.Element[]
-
+export type Component = JSX.Element
 export type Theme = {
   palette: {
     primary: {

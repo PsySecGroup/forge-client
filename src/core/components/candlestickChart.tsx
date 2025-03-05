@@ -1,3 +1,4 @@
+import type { Style, Class } from '../types'
 import * as Luxon from 'chartjs-adapter-luxon'
 import Chart from 'chart.js/auto'
 import { onCleanup, onMount } from 'solid-js'
@@ -39,10 +40,24 @@ type Props = {
   classes?: Class
 }
 
+const defaultProps: Props = {
+  xAxisLabel: '',
+  yAxisLabel: '',
+  xData: [],
+  yData: {
+    x: '',
+    o: 0,
+    c: 0,
+    h: 0,
+    l: 0
+  }
+
+}
+
 /**
  * 
  */
-export default function CandlestickChart(props: Props = {}) {
+export default function CandlestickChart(props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
@@ -51,8 +66,8 @@ export default function CandlestickChart(props: Props = {}) {
     {
       width: `${props.width}px`,
       height: `${props.height}px`,
-      background: theme.palette.secondary.background,
-      color: theme.palette.secondary.text
+      background: theme.palette.secondary.background, // TODO theme stuff
+      color: theme.palette.secondary.text // TODO theme stuff
     }
   )
 

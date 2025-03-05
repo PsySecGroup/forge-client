@@ -1,6 +1,7 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
+import { For } from 'solid-js'
 
 import styles from './css/breadcrumbs.module.css'
 
@@ -14,37 +15,41 @@ type Props = {
   separatorClasses?: Class
 }
 
+const defaultProps = {
+  links: []
+}
+
 /**
  * 
  */
-export default function BreadCrumbs (props: Props = {}) {
+export default function BreadCrumbs (props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.breadCrumbs,
+    styles['breadCrumbs'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: crumbClasses  } = mergeStyle({
-      classes: props.crumbClasses
-    }, 
-    styles.crumb
+      classes: props.crumbClasses as Class
+    },
+    styles['crumb']
   )
 
   const { classes: linkClasses  } = mergeStyle({
-      classes: props.linkClasses
+      classes: props.linkClasses as Class
     }, 
-    styles.link
+    styles['link']
   )
 
   const { classes: separatorClasses  } = mergeStyle({
-      classes: props.separatorClasses
+      classes: props.separatorClasses as Class
     }, 
-    styles.separator
+    styles['separator']
   )
 
   // State
@@ -63,18 +68,20 @@ export default function BreadCrumbs (props: Props = {}) {
       class={classes}
       style={style}
     >
-      {props.links.map((link, index) => (
-        <span class={crumbClasses} key={index}>
-          <a
-            href={link.href}
-            class={linkClasses}
-            onClick={(event) => handleLinkClick(link.href, event)}
-          >
-            {link.name}
-          </a>
-          {index < props.links.length - 1 && <span class={separatorClasses}>/</span>}
-        </span>
-      ))}
+      <For each={props.links} fallback={<div>Loading...</div>}>
+        {(link, index) => (
+          <span class={crumbClasses}>
+            <a
+              href={link.href}
+              class={linkClasses}
+              onClick={(event) => handleLinkClick(link.href, event)}
+            >
+              {link.name}
+            </a>
+            {index() < props.links.length - 1 && <span class={separatorClasses}>/</span>}
+          </span>
+        )}
+      </For>
     </nav>
   )
 }

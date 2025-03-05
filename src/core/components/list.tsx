@@ -5,9 +5,9 @@ import { For, JSX } from 'solid-js'
 
 import styles from './css/list.module.css'
 
-type Props<T> = {
-  items: T[]
-  renderItem?: (item: T, index: number) => JSX.Element
+type Props = {
+  items: JSX.Element[] // TODO change this to props.children
+  renderItem?: (item: JSX.Element, index: number) => JSX.Element
   emptyState?: JSX.Element
   style?: Style
   classes?: Class
@@ -15,41 +15,40 @@ type Props<T> = {
   emptyClasses?: Class
 }
 
-const defaultRenderItem = (item, index) => <span>{index + 1}. {item}</span>
-
 /**
  * 
  */
-export default function List<T> (props: Props<T> = {}) {
+export default function List (props: Props = { items: [] }) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.listContainer,
+    styles['listContainer'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: itemClasses  } = mergeStyle({
-      classes: props.itemClasses
+      classes: props.itemClasses as Class
     }, 
-    styles.listItem
+    styles['listItem']
   )
 
   const { classes: emptyClasses } = mergeStyle({
-      classes: props.emptyClasses
+      classes: props.emptyClasses as Class
     }, 
-    styles.emptyState
+    styles['emptyState']
   )
 
   // State
+  const defaultRenderItem = (item: JSX.Element, index: number) => <span>{index + 1}. {item}</span>
+
   const {
     items,
     emptyState = (<div>No items</div>),
-    renderItem = defaultRenderItem,
-    className = ''
+    renderItem = defaultRenderItem
   } = props
 
   // Rendering
@@ -61,6 +60,7 @@ export default function List<T> (props: Props<T> = {}) {
       {items.length > 0 ? (
         <For each={items}>
           {(item, index) => <div class={itemClasses}>{
+            // TODO change this to props.children
             renderItem(item, index())
           }</div>}
         </For>

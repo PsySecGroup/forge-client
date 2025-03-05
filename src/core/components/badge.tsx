@@ -1,3 +1,4 @@
+import type { JSX } from 'solid-js/jsx-runtime'
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
@@ -16,10 +17,14 @@ type Props = {
   positionClasses?: Class
 }
 
+const defaultProps: Props = {
+  label: ''
+}
+
 /**
  * 
  */
-export default function Badge (props: Props = {}) {
+export default function Badge (props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
 
@@ -64,10 +69,10 @@ export default function Badge (props: Props = {}) {
    * 
    */
   const getBadgeClass = () => {
-    let baseClass = styles.badge
-    if (props.size === 'small') baseClass += ` ${styles.small}`
-    else if (props.size === 'large') baseClass += ` ${styles.large}`
-    else baseClass += ` ${styles.medium}` // Default size is medium
+    let baseClass = styles['badge']
+    if (props.size === 'small') baseClass += ` ${styles['small']}`
+    else if (props.size === 'large') baseClass += ` ${styles['large']}`
+    else baseClass += ` ${styles['medium']}` // Default size is medium
 
     // if (props.className) baseClass += ` ${props.className}`
 
@@ -77,18 +82,18 @@ export default function Badge (props: Props = {}) {
   /**
    * 
    */
-  const getPositionClass = () => {
+  const getPositionClass = (): CSSModuleClasses => {
     switch (props.position) {
       case 'upper-left':
-        return styles.upperLeft
+        return { upperLeft: styles['upperLeft'] as string }
       case 'upper-right':
-        return styles.upperRight
+        return { upperRight: styles['upperRight'] as string }
       case 'lower-left':
-        return styles.lowerLeft
+        return { lowerLeft: styles['lowerLeft'] as string }
       case 'lower-right':
-        return styles.lowerRight
+        return { lowerRight: styles['lowerRight'] as string }
       default:
-        return styles.upperRight // Default to upper-right
+        return { upperRight: styles['upperRight'] as string } // Default to upper-right
     }
   }
 
@@ -99,9 +104,10 @@ export default function Badge (props: Props = {}) {
   )
 
   const { classes: positionClasses  } = mergeStyle({
-      classes: props.positionClasses
+      classes: props.positionClasses as Class
     }, 
-    [styles.badgeCount, getPositionClass()]
+    styles['badgeCount'],
+    getPositionClass()
   )
 
   // Rendering

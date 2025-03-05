@@ -14,25 +14,31 @@ type Props = {
   radioLabelClasses?: Class
 }
 
+const defaultProps: Props = {
+  options: [],
+  selectedValue: '',
+  onChange: () => undefined
+}
+
 /**
  * 
  */
-export default function RadioGroup (props: Props = {}) {
+export default function RadioGroup (props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
-  const { style, classes } = mergeStyle(
+  const { /*style,*/ classes } = mergeStyle(
     props,
-    styles.radioGroup,
+    styles['radioGroup'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: radioLabelClasses  } = mergeStyle({
-      classes: props.radioLabelClasses
+      classes: props['radioLabelClasses'] as Class
     }, 
-    styles.radioLabel
+    styles['radioLabel']
   )
 
   // Rendering

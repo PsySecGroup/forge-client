@@ -1,7 +1,7 @@
-import type { Style, Class } from '../types/index'
+import type { Component, Style, Class } from '../types'
 import { mergeStyle } from '../utils/style'
-import type { Component, ParentProps } from 'solid-js'
-import useTheme from '@suid/material/styles/useTheme'
+import type { ParentProps } from 'solid-js'
+// import useTheme from '@suid/material/styles/useTheme'
 
 import styles from './css/button.module.css'
 
@@ -14,12 +14,13 @@ type Props = {
 /**
  * 
  */
-export default function Button (props: ParentProps<Props> = {}): Component<Props> {
+export default function Button (props: ParentProps<Props> = {}): Component {
   // Styling
-  const theme = useTheme()
+  // const theme = useTheme()
+
   const { style, classes } = mergeStyle(
     props,
-    styles.Button
+    styles['Button']
   )
 
   // Rendering

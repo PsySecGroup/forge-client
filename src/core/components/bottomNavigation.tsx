@@ -1,8 +1,7 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
-import { type ParentProps, type JSX, createSignal, For, batch, onCleanup } from 'solid-js'
+import { type JSX, createSignal, For, batch, onCleanup } from 'solid-js'
 import useTheme from '@suid/material/styles/useTheme'
-import { fireOnce } from '../utils/events'
 
 import styles from './css/bottomNavigation.module.css'
 
@@ -11,7 +10,7 @@ type Props = {
   actions: {
     [key: string]: {
       icons: JSX.Element
-      onClick?: () => void
+      onClick?: (key?: string) => void
       label?: string
     }
   }
@@ -20,18 +19,23 @@ type Props = {
   classes?: Class
 }
 
+const defaultProps = {
+  option: '',
+  actions: {}
+}
+
 /**
  *
  */
-export default function BottomNavigation (props: Props = {}): JSX.Element {
+export default function BottomNavigation (props: Props = defaultProps): JSX.Element {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.bottomNavContainer,
+    styles['bottomNavContainer'],
     {
-      background: theme.palette.secondary.background,
-      color: theme.palette.secondary.text
+      background: theme.palette.secondary.background, // TODO theme stuff
+      color: theme.palette.secondary.text // TODO theme stuff
     }
   )
 
@@ -54,6 +58,10 @@ export default function BottomNavigation (props: Props = {}): JSX.Element {
         {(key) => {
           const action = actions()[key]
 
+          if (action === undefined) {
+            return
+          }
+
           return (
             <div
               onClick={() => batch(() => {
@@ -63,11 +71,11 @@ export default function BottomNavigation (props: Props = {}): JSX.Element {
                 setOption(key)
               })}
               classList={{
-                [styles.bottomNavItem]: true,
-                [styles.bottomNavItemSelected]: highlight && key === option()
+                [styles['bottomNavItem'] as string]: true,
+                [styles['bottomNavItemSelected'] as string]: highlight && key === option()
               }}
             >
-              {action.icon && (<div>{action.icon}</div>)}
+              {action.icons && (<div>{action.icons}</div>)}
               {action.label && (<div>{action.label}</div>)}
             </div>
           )

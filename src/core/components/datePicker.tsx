@@ -1,7 +1,7 @@
 import type { Style, Class } from '../types/index'
 import useTheme from '@suid/material/styles/useTheme'
 import { mergeStyle } from '../utils/style'
-import { enUS } from 'date-fns/locale'
+import { enUS, Locale } from 'date-fns/locale'
 import { createSignal, onCleanup } from 'solid-js'
 import { 
   format,
@@ -39,75 +39,80 @@ type Props = {
   datepickerInputClasses?: Class
 }
 
+const defaultProps: Props = {
+  value: '',
+  onChange: () => undefined
+}
+
 const daysOfWeek = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa']
 
 /**
  * 
  */
-export default function DatePicker (props: Props = {}) {
+export default function DatePicker (props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.datepicker,
+    styles['datepicker'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: dayButtonClasses } = mergeStyle({
-      classes: props.dayButtonClasses
+      classes: props.dayButtonClasses as Class
     }, 
-    styles.dayButton
+    styles['dayButton']
   )
 
   const { classes: activeClasses } = mergeStyle({
-      classes: props.activeClasses
+      classes: props.activeClasses as Class
     }, 
-    styles.active
+    styles['active']
   )
 
   const { classes: datepickerCalendarClasses } = mergeStyle({
-      classes: props.datepickerCalendarClasses
+      classes: props.datepickerCalendarClasses as Class
     }, 
-    styles.datepickerCalendar
+    styles['datepickerCalendar']
   )
 
   const { classes: datepickerHeaderClasses } = mergeStyle({
-      classes: props.datepickerHeaderClasses
+      classes: props.datepickerHeaderClasses as Class
     }, 
-    styles.datepickerHeader
+    styles['datepickerHeader']
   )
 
   const { classes: navButtonClasses } = mergeStyle({
-      classes: props.navButtonClasses
+      classes: props.navButtonClasses as Class
     }, 
-    styles.navButton
+    styles['navButton']
   )
 
   const { classes: datepickerBodyClasses } = mergeStyle({
-      classes: props.datepickerBodyClasses
+      classes: props.datepickerBodyClasses as Class
     }, 
-    styles.datepickerBody
+    styles['datepickerBody']
   )
 
   const { classes: dayNamesClasses } = mergeStyle({
-      classes: props.dayNamesClasses
+      classes: props.dayNamesClasses as Class
     }, 
-    styles.dayNames
+    styles['dayNames']
   )
 
   const { classes: monthDaysClasses } = mergeStyle({
-      classes: props.monthDaysClasses
+      classes: props.monthDaysClasses as Class
     }, 
-    styles.monthDays
+    styles['monthDays']
   )
 
   const { classes: datepickerInputClasses } = mergeStyle({
-      classes: props.datepickerInputClasses
+      classes: props.datepickerInputClasses as Class
     }, 
-    styles.datepickerInput
+    styles['datepickerInput']
   )
 
   // State
@@ -115,7 +120,7 @@ export default function DatePicker (props: Props = {}) {
   const maxDate = props.maxDate ?? new Date(2100, 11, 31)
 
   const [isOpen, setIsOpen] = createSignal(false)
-  const [selectedDate, setSelectedDate] = createSignal<Date | null>(null)
+  const [, setSelectedDate] = createSignal<Date | null>(null)
   const [inputValue, setInputValue] = createSignal(props.value)
   const [currentMonth, setCurrentMonth] = createSignal(new Date())
 
@@ -126,10 +131,13 @@ export default function DatePicker (props: Props = {}) {
     setCurrentMonth(new Date())
   })
   
+  const locale = props.locale ?? enUS
   /**
    * 
    */
-  const formatDate = (date: Date) => format(date, 'yyyy-MM-dd', { locale: props.locale && enUS })
+  const formatDate = (date: Date) => format(date, 'yyyy-MM-dd', {
+    locale
+  })
 
   /**
    * 
@@ -180,7 +188,7 @@ export default function DatePicker (props: Props = {}) {
   /**
    * 
    */
-  const renderDays = (value) => {
+  const renderDays = (value: string) => {
     const isoDate = parseISO(value ?? '0000-01-01')
     const monthStart = startOfMonth(currentMonth())
     const monthEnd = endOfMonth(currentMonth())
@@ -234,7 +242,7 @@ export default function DatePicker (props: Props = {}) {
           >◀</button>
           <span
 
-          >{format(currentMonth(), 'MMMM yyyy', { locale: props.locale })}</span>
+          >{format(currentMonth(), 'MMMM yyyy', { locale })}</span>
           <button
             class={navButtonClasses}
             onClick={() => navigateMonth('next')}

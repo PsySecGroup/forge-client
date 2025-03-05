@@ -15,7 +15,7 @@ type Props = {
   suffix?: string
   leftLabel?: string
   rightLabel?: string
-  onUpdate?: () => void
+  onUpdate?: (value: string) => void
   style?: Style
   classes?: Class
   sliderHeaderClasses?: Class
@@ -25,49 +25,57 @@ type Props = {
   rightTextClasses?: Class
 }
 
+const defaultProps: Props = {
+  value: 0,
+  min: 0,
+  max: 0,
+  name: ''
+
+}
+
 /**
  * 
  */
-export default function Slider (props: Props = {}): JSX.Element {
+export default function Slider (props: Props = defaultProps): JSX.Element {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.sliderComponent,
+    styles['sliderComponent'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: sliderHeaderClasses  } = mergeStyle({
-      classes: props.sliderHeaderClasses
+      classes: props.sliderHeaderClasses as Class
     }, 
-    styles.sliderHeader
+    styles['sliderHeader']
   )
 
   const { classes: sliderContainerClasses  } = mergeStyle({
-      classes: props.sliderContainerClasses
+      classes: props.sliderContainerClasses as Class
     }, 
-    styles.sliderContainer
+    styles['sliderContainer']
   )
 
   const { classes: sliderClasses  } = mergeStyle({
-      classes: props.sliderClasses
+      classes: props.sliderClasses as Class
     }, 
-    styles.slider
+    styles['slider']
   )
 
   const { classes: leftTextClasses  } = mergeStyle({
-      classes: props.leftTextClasses
+      classes: props.leftTextClasses as Class
     }, 
-    styles.leftText
+    styles['leftText']
   )
 
   const { classes: rightTextClasses  } = mergeStyle({
-      classes: props.rightTextClasses
+      classes: props.rightTextClasses as Class
     }, 
-    styles.rightText
+    styles['rightText']
   )
 
   // State
@@ -76,7 +84,7 @@ export default function Slider (props: Props = {}): JSX.Element {
    * 
    */
   const updateSlide = (e: any): void => {
-    props.onUpdate(e.target.value)
+    props.onUpdate && props.onUpdate(e.target.value)
   }
 
   const hasLabel = props.leftLabel !== undefined || props.rightLabel !== undefined

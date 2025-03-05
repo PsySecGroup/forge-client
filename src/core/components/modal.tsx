@@ -34,7 +34,7 @@ export default function Modal (props: ParentProps<Props> = {}): JSX.Element {
   createEffect(async () => {
     if (values.closeEverything) {
       batch(() => {
-        props.close()
+        props.close && props.close()
         setValues({
           closeEverything: false
         })
@@ -44,11 +44,11 @@ export default function Modal (props: ParentProps<Props> = {}): JSX.Element {
 
   return (
     <div
-      class={styles.modalBackground}
+      class={styles['modalBackground']}
       onClick={closeModal}
       >
       <div
-        class={styles.modalContent}
+        class={styles['modalContent']}
         onClick={containClick}
       >
           {props.children}

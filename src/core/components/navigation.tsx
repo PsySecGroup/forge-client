@@ -7,12 +7,16 @@ type Props = {
   }
 }
 
+const defaultProps: Props = {
+  routes: {}
+}
+
 /**
  * 
  */
-export default function Navigation ({ routes }: Props = {}): JSX.Element {
+export default function Navigation ({ routes }: Props = defaultProps): JSX.Element {
   // State
-  const { navigation, changeLocation } = useStoreContext()
+  const { navigation /*, changeLocation*/ } = useStoreContext()
   const matches = []
 
   // Rendering

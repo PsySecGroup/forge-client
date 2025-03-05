@@ -9,11 +9,11 @@ import styles from './css/input.module.css'
 type Props = {
   id: string
   type: 'text'
+  value: string
   placeholder?: string
   disabled?: boolean
-  value: string
   label?: string
-  onChange?: () => void
+  onChange?: (value?: string) => void
   attributes?: { [key: string]: string | boolean }
   helperText?: string
   style?: Style
@@ -22,35 +22,41 @@ type Props = {
   inputHelperClasses?: Class
 }
 
+const defaultProps: Props = {
+  id: '',
+  type: 'text',
+  value: ''
+}
+
 /**
  * 
  */
-export default function TextInput(props: Props = {}) {
+export default function TextInput(props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
   const { style, classes } = mergeStyle(
     props,
-    styles.input,
+    styles['input'],
     {
-      background: theme.palette.secondary.background,
-      color: theme.palette.secondary.text
+      background: theme.palette.secondary.background, // TODO theme stuff
+      color: theme.palette.secondary.text // TODO theme stuff
     }
   )
 
   const { classes: inputFieldClasses  } = mergeStyle({
-      classes: props.inputFieldClasses
+      classes: props.inputFieldClasses as Class
     }, 
-    styles.inputField
+    styles['inputField']
   )
 
   const { classes: inputHelperClasses  } = mergeStyle({
-      classes: props.inputHelperClasses
+      classes: props.inputHelperClasses as Class
     }, 
-    styles.inputHelper
+    styles['inputHelper']
   )
 
   // State
-  const { addError } = useError()
+  const { addError } = useError() // TODO evaluate this better
 
   // Rendering
   return (
@@ -69,7 +75,7 @@ export default function TextInput(props: Props = {}) {
           if (e.target.value === '!') {
             addError('WHAT')
           } else {
-            props.onChange(e.target.value)
+            props.onChange && props.onChange(e.target.value)
           }
         }}
 
