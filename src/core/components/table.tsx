@@ -1,7 +1,7 @@
 import type { Style, Class } from '../types/index'
 import { mergeStyle } from '../utils/style'
 import useTheme from '@suid/material/styles/useTheme'
-import { createSignal, createMemo, onCleanup } from 'solid-js'
+import { For, createSignal, createMemo, onCleanup } from 'solid-js'
 
 import styles from './css/table.module.css'
 
@@ -22,70 +22,75 @@ type Props = {
   thClasses?: Class
   sortButtonClasses?: Class
   tbodyClasses?: Class
-  tdClasses?: Class
   trClasses?: Class
   tdClasses?: Class
   paginationClasses?: Class
 }
 
-export default function Table (props: Props = {}) {
+const defaultProps: Props = {
+  headers: [],
+  rows: [[]]
+
+}
+
+export default function Table (props: Props = defaultProps) {
   // Styling
   const theme = useTheme()
-  const { style, classes } = mergeStyle(
+  const { /*style,*/ classes } = mergeStyle(
     props,
-    styles.listContainer,
+    styles['listContainer'],
     {
-      background: theme.palette.primary.background,
-      color: theme.palette.primary.text
+      background: theme.palette.primary.background, // TODO theme stuff
+      color: theme.palette.primary.text // TODO theme stuff
     }
   )
 
   const { classes: searchBarClasses  } = mergeStyle({
-      classes: props.searchBarClasses
+      classes: props.searchBarClasses as Class
     }, 
-    styles.searchBar
+    styles['searchBar']
   )
 
   const { classes: theadClasses  } = mergeStyle({
-      classes: props.theadClasses
+      classes: props.theadClasses as Class
     }, 
-    styles.thead
+    styles['thead']
   )
 
   const { classes: thClasses  } = mergeStyle({
-      classes: props.thClasses
+      classes: props.thClasses as Class
     }, 
-    styles.th
+    styles['th']
   )
 
   const { classes: sortButtonClasses  } = mergeStyle({
-      classes: props.sortButtonClasses
+      classes: props.sortButtonClasses as Class
     }, 
-    styles.sortButton
+    styles['sortButton']
   )
 
   const { classes: tbodyClasses  } = mergeStyle({
-      classes: props.tbodyClasses
+      classes: props.tbodyClasses as Class
     }, 
-    styles.tbody
+    styles['tbody']
   )
 
   const { classes: tdClasses  } = mergeStyle({
-      classes: props.tdClasses
+      classes: props.tdClasses as Class
     }, 
-    styles.td
+    styles['td']
   )
 
   const { classes: trClasses  } = mergeStyle({
-      classes: props.trClasses
+      classes: props.trClasses as Class
     }, 
-    styles.tr
+    styles['tr']
   )
 
   const { classes: paginationClasses  } = mergeStyle({
-      classes: props.paginationClasses
+      classes: props.paginationClasses as Class
     }, 
-    styles.pagination
+    styles['pagination']
   )
 
 
@@ -211,7 +216,7 @@ export default function Table (props: Props = {}) {
 
   // Rendering
   return (
-    <div class={styles.container}>
+    <div class={styles['container']}>
       {props.onSearch && (
         <input
           type='text'
@@ -248,8 +253,7 @@ export default function Table (props: Props = {}) {
           </tr>
         </thead>
         <tbody class={tbodyClasses}>
-          {paginatedRows().length === 0 ? (
-            <tr>
+          <For each={paginatedRows()} fallback={<tr>
               <td
                 class={tdClasses}
                 colspan={props.headers.length}
@@ -257,21 +261,19 @@ export default function Table (props: Props = {}) {
                 No data available
               </td>
             </tr>
-          ) : (
-            paginatedRows().map((row, rowIndex) => (
-              <tr key={rowIndex} class={trClasses}>
+          }>
+            {(row) => (
+              <tr class={trClasses}>
                 {props.headers.map((_, colIndex) => (
-                  <td class={tdClasses}>
-                    {
+                  <td class={tdClasses}>{
                       row[colIndex] !== undefined && row[colIndex] !== null
                         ? row[colIndex]
                         : ''
-                    }
-                  </td>
+                  }</td>
                 ))}
               </tr>
-            ))
-          )}
+            )}
+          </For>
         </tbody>
       </table>
       {(props.onNext || props.onPrev) && (
