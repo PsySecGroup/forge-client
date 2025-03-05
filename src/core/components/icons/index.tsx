@@ -9,8 +9,12 @@ export type IconProps = {
   fill?: string
 }
 
+// TODO linter
 export default function Icon (props: IconProps) {
   return (
-    <LucideIcon iconNode={props.icon} {...props} />
+    <LucideIcon
+      iconNode={props.icon}
+      {...props}
+    />
   )
 }

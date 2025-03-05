@@ -3,7 +3,7 @@ import { cabin } from '@lucide/lab'
 
 const CustomIcon = (props: IconProps) => (
   <Icon
-    icon={cabin}
+    icon={cabin} // TODO what
     {...props}
   />
 )
