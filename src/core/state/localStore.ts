@@ -2,7 +2,6 @@ import { createEffect } from 'solid-js'
 import { createStore, type SetStoreFunction, type Store } from 'solid-js/store'
 
 export function createLocalStore<T extends object> (
-  name: string,
   init: T
 ): [Store<T>, SetStoreFunction<T>] {
   const localState = null // TODO localStorage.getItem(name)

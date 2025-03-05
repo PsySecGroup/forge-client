@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js/jsx-runtime'
+import { Typography } from 'src/themes/typography' 
 
 export type RecordKey = string | number | symbol
 
@@ -74,3 +75,54 @@ export type ClickEvent = MouseEvent & { currentTarget: HTMLDivElement, target: E
 
 export type Style = JSX.CSSProperties
 export type Class = string | string[] | { [key: string]: boolean }
+export type Children = JSX.Element | JSX.Element[]
+
+export type Theme = {
+  palette: {
+    primary: {
+      text: string,
+      light: string,
+      main: string,
+      dark: string,
+      background: string
+    },
+    secondary: {
+      text: string,
+      light: string,
+      main: string,
+      dark: string,
+      background: string
+    },
+    warning: {
+      main: string,
+      dark: string
+    },
+    error: {
+      light: string,
+      main: string,
+      dark: string
+    },
+    success: {
+      light: string,
+      main: string,
+      dark: string
+    },
+    grey: {
+      50: string,
+      100: string,
+      200: string,
+      300: string,
+      400: string,
+      500: string,
+      600: string,
+      700: string,
+      800: string,
+      900: string,
+    },
+    divider: string
+    action: {
+      selected: string
+    }
+  },
+  typography: typeof Typography
+}

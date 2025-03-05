@@ -10,5 +10,5 @@ export function getStores (): StoreState {
     }
   }
 
-  return result
+  return result as StoreState
 }

@@ -1,5 +1,6 @@
+import type { Children } from '../types'
 import useTheme from '@suid/material/styles/useTheme'
-import { createSignal, createContext, useContext, onCleanup, For } from 'solid-js'
+import { createSignal, createContext, createEffect, useContext, onCleanup, For } from 'solid-js'
 import styles from '../components/css/error.module.css'
 
 type ErrorStore = {}
@@ -9,22 +10,29 @@ type ErrorStore = {}
  */
 const ErrorContext = createContext<ErrorStore>()
 
+type Props = {
+  children?: Children
+}
 
 /**
  * ErrorProvider component to manage a queue of error messages
  */
-export function ErrorProvider(props) {
+export function ErrorProvider(props: Props) {
   // Styling
   const theme = useTheme()
 
   // State
-  const [errors, setErrors] = createSignal([]) // Array of errors as a FIFO queue
+  const [errors, setErrors] = createSignal<string[]>([]) // Array of errors as a FIFO queue
   
+  // Helpers
+
   /**
    * Function to add an error to the queue
    */
-  const addError = (errorMessage, allowMultiple = false) => {
-    if (allowMultiple === true || errors().indexOf(errorMessage) === -1) {
+  const addError = (errorMessage: string, allowMultiple = false) => {
+    const errorList = errors() || []
+
+    if (allowMultiple === true || errorList.indexOf(errorMessage) === -1) {
       setErrors((prev) => [...prev, errorMessage])
     }
   }
@@ -47,31 +55,35 @@ export function ErrorProvider(props) {
   /**
    * Returns if the error queue has a specific message in it
    */
-  const hasError = (errorMessage) => {
+  const hasError = (errorMessage: string) => {
     return errors().indexOf(errorMessage) > -1
   }
+
+  // Effects
+  createEffect(() => {
+    autoRemoveError()
+  })
 
   // Rendering
   return (
     <ErrorContext.Provider value={{ errors, addError, removeError, autoRemoveError, hasError }}>
       <div
         classList={{
-          [styles.container]: true,
-          [styles.damage]: errors().length > 0,
+          [styles['container'] as string]: true,
+          [styles['damage'] as string]: errors().length > 0
         }}
       >
         <For each={errors()}>
-          {(error, index) => (
+          {(error) => (
             <div
-              class={styles.tray}
+              class={styles['tray']}
               style={{
                 background: theme.palette.error.dark,
-                color: theme.palette.primary.text
+                color: theme.palette.primary.text // TODO figure out themes better
               }}
             >
               <p>{error}</p>
               <button onClick={removeError}>Dismiss</button>
-              {autoRemoveError()}
             </div>
           )}
         </For>

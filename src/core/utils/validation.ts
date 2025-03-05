@@ -28,7 +28,7 @@ type SchemaConfig = {
  * Function to convert JSON configuration to Yup schema
  */
 export function getValidationSchema(config: SchemaConfig, returnShape: boolean = false): Yup.ObjectSchema {
-  const shape: { [key: string]: Yup.BaseSchema } = {};
+  const shape: { [key: string]: Yup.BaseSchema } = {}
   let isArrayOnly = false
 
   for (const [key, rules] of Object.entries(config)) {
