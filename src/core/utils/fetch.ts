@@ -1,5 +1,5 @@
-import type { Dynamic, Json, HttpMethods } from '../types/common'
-import { API_URL } from '../../constants'
+import type { Any, DynamicRecord, HttpMethods } from '../types'
+import { BASE_URL } from '../../constants'
 import axios from 'axios'
 // TODO import { HardenedFetch } from 'hardened-fetch'
 
@@ -11,29 +11,29 @@ type Options = {
   }
   responseType: 'json'
   data?: string
-  params?: Dynamic
+  params?: Any
 }
 
 /**
  *
  */
-export const fetchGet = async (resourceUrl: string, data?: Dynamic): Promise<Dynamic> => {
+export const fetchGet = async (resourceUrl: string, data?: Any): Promise<Any> => {
   return await fetch('get', resourceUrl, data)
 }
 
 /**
  *
  */
-export const fetchPost = async (resourceUrl: string, data?: Dynamic): Promise<Dynamic> => {
+export const fetchPost = async (resourceUrl: string, data?: Any): Promise<Any> => {
   return await fetch('post', resourceUrl, data)
 }
 
 /**
  * TODO repalce testResult with an axios mock
  */
-export const fetch = async <T = Dynamic>(method: HttpMethods, resourceUrl: string, data?: Dynamic, testResult?: Dynamic): Promise<T> => {
+export const fetch = async <T extends Any = Any>(method: HttpMethods, resourceUrl: string, data?: Any, testResult?: Any): Promise<T> => {
   if (testResult !== undefined) {
-    return testResult
+    return testResult as T
   }
 
   // TODO attach authorization tokens
@@ -50,29 +50,31 @@ export const fetch = async <T = Dynamic>(method: HttpMethods, resourceUrl: strin
 
     if (data !== undefined) {
       if (method === 'get') {
-        options.params = data as unknown
+        options.params = data
       } else if (method === 'post') {
         options.data = JSON.stringify(data)
       }
     }
 
-    const json = await axios(options) as Json
+    const json: DynamicRecord = await axios(options)
+    const result = json['data'] as T
 
-    return json.data
+    return result
   } catch (e) {
-    throw new Error({
+    console.error({
       method,
       resourceUrl,
       data,
       error: e
     })
+    throw e
   }
 }
 
 /**
  * 
  */
-export const function urlParser(url: string, params: Record<string, string | number>) {
+export function urlParser(url: string, params: Record<string, string | number>) {
   return url.replace(/:([a-zA-Z_\-0-9]+)/g, (_, key) => {
     return params[key] ? params[key].toString() : `:${key}`;
   });
@@ -103,5 +105,4 @@ apiClient.interceptors.response.use(handleSuccess, handleError);
 // TODO cancellation?
 /*
 https://axios-http.com/docs/cancellation
-*/
 */

@@ -1,11 +1,11 @@
-import { createSignal, onMount, onCleanup } from 'solid-js'
+import { onCleanup } from 'solid-js'
 
-const firedCallbacks = new WeakMap<any, boolean>();
+const firedCallbacks = new WeakMap<object, boolean>()
 
 /**
  *
  */
-export const addGlobalEvent = (event: string, handler) => {
+export const addGlobalEvent = (event: string, handler: EventListenerOrEventListenerObject) => {
   document.addEventListener(event, handler)
 
   return () => {

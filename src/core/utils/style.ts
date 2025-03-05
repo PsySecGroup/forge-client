@@ -4,7 +4,10 @@ import type { Style, Class } from '../types/index'
  *
  */
 export function mergeStyle(
-  props: { classes?: Class; style?: Style } = {},
+  props: { 
+    classes?: Class;
+    style?: Style
+  } = {},
   defaultClass: Class = '',
   defaultStyle: Style = {}
 ) {
@@ -16,7 +19,7 @@ export function mergeStyle(
       return classInput.join(' ')
     } else if (typeof classInput === 'object') {
       return Object.entries(classInput)
-        .filter(([_, isEnabled]) => isEnabled)
+        .filter(([, isEnabled]) => isEnabled) // TODO is this gonna throw errors?
         .map(([className]) => className)
         .join(' ')
     }
@@ -24,7 +27,10 @@ export function mergeStyle(
   }
 
   // Merge defaultClass and props.classes
-  const mergedClass = `${processClassList(defaultClass)} ${processClassList(props.classes)}`.trim()
+  
+  const mergedClass = props.classes === undefined
+    ? `${processClassList(defaultClass)}`.trim()
+    : `${processClassList(defaultClass)} ${processClassList(props.classes)}`.trim()
 
   return {
     style: { ...defaultStyle, ...props.style },

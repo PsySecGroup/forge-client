@@ -1,9 +1,12 @@
+import type { Any, DynamicFunction } from '../types'
+
 /**
  * Manually waits for updates to stop for an amount of time before the state updates
  */
-export function debounce(fn: Function, delay: number) {
-  let timeout: NodeJS.Timeout
-  return (...args: any[]) => {
+export function debounce(fn: DynamicFunction, delay: number) {
+  let timeout: number
+
+  return (...args: Any[]) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => fn(...args), delay)
   }
@@ -12,9 +15,9 @@ export function debounce(fn: Function, delay: number) {
 /**
  * Update the state then wait a delayed amount of time before we update it again
  */
-export function throttle(fn: Function, limit: number) {
+export function throttle(fn: DynamicFunction, limit: number) {
   let inThrottle: boolean
-  return (...args: any[]) => {
+  return (...args: Any[]) => {
     if (!inThrottle) {
       fn(...args)
       inThrottle = true

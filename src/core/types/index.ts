@@ -1,3 +1,26 @@
+import type { JSX } from 'solid-js/jsx-runtime'
+
+export type RecordKey = string | number | symbol
+
+export type Primitive = string | number | boolean | null | Date | RegExp | bigint | symbol | undefined
+export type PrimitiveMap = Map<Primitive, Primitive>
+export type PrimitiveSet = Set<Primitive>
+export type PrimitiveRecord = Record<RecordKey, Primitive>
+export type PrimitiveCollection = PrimitiveMap | PrimitiveSet | PrimitiveRecord
+
+export type Dynamic = Primitive
+  | PrimitiveCollection
+  | DynamicFunction
+  | Dynamic[]
+
+export type DynamicMap = Map<Primitive, Dynamic>
+export type DynamicSet = Set<Dynamic>
+export type DynamicFunction = ((...args: Any[]) => Any)
+export type DynamicRecord = Record<RecordKey, Dynamic>
+export type DynamicCollection = DynamicMap | DynamicSet | DynamicRecord
+
+export type Any = Dynamic | DynamicCollection | Any[]
+
 // Makes all properties optional
 export type Optional<T> = {
   [K in keyof T]?: T[K]
@@ -26,15 +49,6 @@ export type Query = string
 export type HttpMethods = 'post' | 'get' | 'put' | 'delete'
 export type Key = string | number | symbol
 
-export type Dynamic = string | number | boolean | null | Date | RegExp | bigint | symbol
-  | Dynamic[]
-  | Record<Key, Dynamic>
-  | Map<Key, Dynamic>
-  | Set<Key, Dynamic>
-  | ((...args: Dynamic[]) => Dynamic) 
-
-export type Json = Record<Key , Dynamic>
-
 export type ApiResponse<T> = {
   success: boolean
   message?: string
@@ -58,5 +72,5 @@ export type DateRange = {
 export type KeyDownEvent = KeyboardEvent & { currentTarget: HTMLInputElement, target: Element }
 export type ClickEvent = MouseEvent & { currentTarget: HTMLDivElement, target: Element }
 
-type Style = JSX.CSSProperties
-type Class = string | string[] | { [key: string]: boolean }
+export type Style = JSX.CSSProperties
+export type Class = string | string[] | { [key: string]: boolean }

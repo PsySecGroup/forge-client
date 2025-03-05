@@ -8,7 +8,7 @@ type CandlestickData = {
 /**
  *
  */
-function randomNumber(min, max) {
+function randomNumber(min: number, max: number) {
   return Math.random() * (max - min) + min
 }
 
@@ -17,12 +17,17 @@ function randomNumber(min, max) {
  */
 function getMovingAverage (candlestickData: CandlestickData[], interval = 3) {
   // Group data by date (assuming daily data for simplicity)
-  const result: { x: number, y: number}[] = []
+  const result: { x: string, y: number}[] = []
   const prices: number[] = []
 
   for (let i = 0; i < candlestickData.length; i++) {
     // Add the current price to the list
-    prices.push(candlestickData[i].c);
+    const data = candlestickData[i]
+    if (data === undefined) {
+      continue
+    }
+
+    prices.push(data.c);
 
     // Remove prices outside the interval window
     if (prices.length > interval) {
@@ -33,7 +38,7 @@ function getMovingAverage (candlestickData: CandlestickData[], interval = 3) {
     if (prices.length === interval) {
       const sum = prices.reduce((acc, price) => acc + price, 0);
       result.push({
-        x: candlestickData[i].x,
+        x: data.x,
         y: sum / interval
       });
     }
@@ -52,7 +57,7 @@ export function candlestickSimulator (minutes = 10, movingAverageInterval = 3, m
   let lastClose = 1 * multiplier
 
   for (let i = 0; i < minutes; i++) {
-    const x = past.getTime()
+    const x = past.getTime().toString()
     const open = +randomNumber(lastClose * 0.95, lastClose * 1.05).toFixed(2)
     const close = +randomNumber(open * 0.95, open * 1.05).toFixed(2)
     const high = +randomNumber(Math.max(open, close), Math.max(open, close) * 1.1).toFixed(2)

@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { parseISO } from 'date-fns'
+// import { parseISO } from 'date-fns'
 
 // Define the type for the configuration schema
 type SchemaConfig = {
@@ -12,8 +12,8 @@ type SchemaConfig = {
     uuid?: boolean
     positive?: boolean
     integer?: boolean
-    oneOf?: (string | number | date | boolean)[]
-    notOneOf?: (string | number | date | boolean)[]
+    oneOf?: (string | number | Date | boolean)[]
+    notOneOf?: (string | number | Date | boolean)[]
     min?: number
     max?: number
     datetime?: boolean
