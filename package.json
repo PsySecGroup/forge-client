@@ -6,6 +6,7 @@
     "dev": "vite",
     "lint": "npx tsc --noEmit && npx eslint src/index.tsx",
     "test": "npx uvu -r esbuild-register tests/",
+    "test:core": "npx vitest watch src/core2/tests",
     "build": "vite build",
     "compile": "npm run lint && npm run test && npm run build",
     "preview": "vite preview"
@@ -20,6 +21,7 @@
     "eslint": "9.x",
     "globals": "^15.3.0",
     "js-yaml": "^4.1.0",
+    "jsdom": "^26.0.0",
     "solid-devtools": "^0.29.2",
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.26.0",
@@ -29,7 +31,8 @@
     "vite-plugin-inspect": "^0.8.5",
     "vite-plugin-singlefile": "^2.0.1",
     "vite-plugin-solid": "^2.10.2",
-    "vite-plugin-svgr": "^4.2.0"
+    "vite-plugin-svgr": "^4.2.0",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "@lucide/lab": "^0.1.2",

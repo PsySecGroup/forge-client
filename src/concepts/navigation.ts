@@ -1,5 +1,5 @@
 import type { SetStoreFunction } from 'solid-js/store'
-import type { Json } from '../core/types'
+import type { Any } from '../core/types'
 import { NOOP } from '../constants'
 import { persistingStore, hydrateJson } from '../core'
 
@@ -18,7 +18,7 @@ const defaultValues: Concept = {
   location: window.location.hash.replace('#', '')
 }
 
-export const hydrate = (json: string | Concept | Json = {}): Concept => {
+export const hydrate = (json: string | Concept | Any = {}): Concept => {
   return hydrateJson<Concept>(json, defaultValues)
 }
 

@@ -1,6 +1,6 @@
 import { NOOP } from '../constants'
 import type { SetStoreFunction } from 'solid-js/store'
-import type { Float, HexColor, GUID, Integer, Json, ID } from '../core/types'
+import type { Float, HexColor, GUID, Integer, Any, ID } from '../core/types'
 import { hydrateCollection, hydrateDate, hydrateJson } from '../core'
 import { persistingStore } from '../core'
 
@@ -76,7 +76,7 @@ const defaultValues: Concept = {
 /**
  *
  */
-export function hydrate (json: string | Concept | Json = {}): Concept {
+export function hydrate (json: string | Concept | Any = {}): Concept {
   const result = hydrateJson<Concept>(json, defaultValues)
 
   result.createdAt = hydrateDate(result, 'createdAt')

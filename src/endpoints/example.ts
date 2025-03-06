@@ -1,4 +1,4 @@
-import type { Dynamic, Json, HttpMethods } from '../core/types/index'
+import type { Dynamic, Any, HttpMethods } from '../core/types/index'
 import { fetch, urlParser } from '../core/utils/fetch'
 import { useError } from '../core/state/error'
 

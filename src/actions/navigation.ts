@@ -1,6 +1,6 @@
 export default {
   /**
-   *
+   * TODO: set navigation types
    */
   changeLocation: (target: string, { navigation, setNavigation }) => {
     if (navigation.location === target) {

@@ -1,5 +1,5 @@
 import type { SetStoreFunction } from 'solid-js/store'
-import type { Json } from '../core/types'
+import type { Any } from '../core/types'
 import { NOOP } from '../constants'
 import { temporaryStore, hydrateJson } from '../core'
 
@@ -23,7 +23,7 @@ const defaultValues: Concept = {
 /**
  *
  */
-export function hydrate (json: string | Concept | Json = {}): Concept {
+export function hydrate (json: string | Concept | Any = {}): Concept {
   const result = hydrateJson<Concept>(json, defaultValues)
 
   // (-->) If complex hydration is needed for arrays or dates, it is done here
