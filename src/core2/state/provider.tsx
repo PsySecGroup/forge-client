@@ -6,10 +6,10 @@ type Props<T> = {
 }
 
 export function StateProvider<T>(props: ParentProps<Props<T>>): JSX.Element {
-  const { getContext, context } = props.context
+  const { get, context } = props.context
 
   return (
-    <context.Provider value={getContext()}>
+    <context.Provider value={get()}>
       {props.children}
     </context.Provider>
   )

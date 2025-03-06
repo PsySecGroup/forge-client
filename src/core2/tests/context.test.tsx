@@ -1,18 +1,10 @@
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render } from 'solid-js/web'
-import { registerContext } from '../state/context'
-import { StateProvider } from '../state/provider'
-import { describe, it, expect, beforeEach } from 'vitest'
-
-const testContext = registerContext('bob', { a: 7 })
-
-/**
- * 
- * @returns
- */
-function Label () {
-  const { a } = testContext.getContext()
-  return (<p>Hello {a}</p>)
-}
+import { simpleContext } from './contexts/simple'
+import { Label } from './components/label'
+import { App } from './components/app'
+import { storesContext } from './contexts/stores'
+import { completeContext } from './contexts/complete'
 
 beforeEach(() => {
   const root = document.createElement('div')
@@ -20,14 +12,44 @@ beforeEach(() => {
   document.body.appendChild(root)
 })
 
+afterEach(() => {
+  const root = document.getElementById('root')
+  if (root) {
+    document.body.removeChild(root)
+  }
+})
+
 describe('Context Provider', () => {
-  it('renders without crashing', () => {
+  it('renders simple context', () => {
     render(() => (
-      <StateProvider context={testContext}>
+      <App context={simpleContext}>
         <Label />
-      </StateProvider>
+      </App>
     ), document.getElementById('root')!)
 
-    expect(document.body.innerHTML).toBe(`<div id="root"><p>Hello 7</p></div>`)
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root"><p>Hello 7</p></div>`)
+  })
+
+  it('renders stores context', () => {
+    render(() => (
+      <App context={storesContext}>
+        <Label />
+      </App>
+    ), document.getElementById('root')!)
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root"><p>Hello 7</p></div>`)
+  })
+
+  it('renders complete context', () => {
+    render(() => (
+      <App context={completeContext}>
+        <Label />
+      </App>
+    ), document.getElementById('root')!)
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root"><p>Hello 7</p></div>`)
   })
 })

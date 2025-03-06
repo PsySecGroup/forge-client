@@ -1,8 +1,8 @@
 import { type Context, createContext, useContext } from "solid-js"
 
 export type RegisteredContext<T> = {
-  getContext: () => T,
-  context: Context<T>
+  get: () => T,
+  readonly context: Context<T>
 }
 
 // Instead of a Record with a string key and `any` value, we use a more specific mapped type.
@@ -19,7 +19,7 @@ export function registerContext<T>(name: string, defaults: T): RegisteredContext
   }
 
   return {
-    getContext: () => useContext<T>(contexts[name] as Context<T>),
+    get: () => useContext<T>(contexts[name] as Context<T>),
     context: contexts[name]
   }
 }
