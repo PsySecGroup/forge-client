@@ -1,7 +1,9 @@
-import { type Context, createContext, useContext } from "solid-js"
+import { type Context, createContext, useContext } from 'solid-js'
+import { getStore, type RecordKey } from './store'
 
-export type RegisteredContext<T> = {
+export type RegisteredContext<T extends Record<RecordKey, any>> = {
   get: () => T,
+  getStore: () => ReturnType<typeof getStore<T>>
   readonly context: Context<T>
 }
 
@@ -11,7 +13,7 @@ const contexts: Record<string, Context<any>> = {}
 /**
  * Register a context by name and defaults and returns a function to use that context
  */
-export function registerContext<T>(name: string, defaults: T): RegisteredContext<T> {
+export function registerContext<T extends Record<RecordKey, any>>(name: string, defaults: T): RegisteredContext<T> {
   if (contexts[name] === undefined) {
     const context = createContext<T>(defaults)
 
@@ -19,7 +21,9 @@ export function registerContext<T>(name: string, defaults: T): RegisteredContext
   }
 
   return {
+    // useContext can only be used inside of components :/
     get: () => useContext<T>(contexts[name] as Context<T>),
+    getStore: () => getStore(defaults),
     context: contexts[name]
   }
 }

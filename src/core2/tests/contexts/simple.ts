@@ -1,4 +1,4 @@
-import { registerContext } from "../../state/context"
+import { registerContext } from '../../state/context'
 
 const defaults = {
   a: 7

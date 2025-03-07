@@ -1,6 +1,6 @@
 import { createStore, reconcile } from 'solid-js/store'
 
-type RecordKey = string | number | symbol
+export type RecordKey = string | number | symbol
 type Primitive = string | number | boolean | symbol | null | undefined | bigint
 type NonArrayObject = Exclude<object, any[]>;
 
@@ -69,5 +69,5 @@ export function getStore<T extends Record<RecordKey, any>>(values: T) {
     }
   }
 
-  return [store, actions, setStore]
+  return [store, setStore, actions]
 }

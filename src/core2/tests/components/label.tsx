@@ -1,10 +1,10 @@
-import { simpleContext } from "../contexts/simple"
+import { simpleContext } from '../contexts/simple'
 
 /**
  * 
  * @returns
  */
 export function Label () {
-  const { a } = simpleContext.get()
-  return (<p>Hello {a}</p>)
+  const [ store ] = simpleContext.get()
+  return (<p>Hello {store.a}</p>)
 }
