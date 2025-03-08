@@ -1,6 +1,5 @@
 import type { ParentProps } from 'solid-js'
 import { type StoreProviderProps, StoreProvider } from '../../state/provider'
-import type { BasicRecord } from '../../types/basic'
 
 export function App (props: ParentProps<StoreProviderProps>) {
   return (
