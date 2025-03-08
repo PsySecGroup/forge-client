@@ -1,7 +1,7 @@
-import { registerContext } from '../../state/context'
+import { createContext } from 'solid-js'
 
 const defaults = {
   a: 7
 }
 
-export const simpleContext = registerContext('simple', defaults)
+export const simpleContext = createContext(defaults)

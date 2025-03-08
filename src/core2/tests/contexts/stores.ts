@@ -1,6 +1,7 @@
-import { registerContext } from '../../state/context'
+import { createContext } from 'solid-js'
+import { defineStore } from '../../state/store'
 
-const defaults = {
+const defaultState = {
   id: 1,
   primitives: [1, 2, 3],
   objects: [
@@ -14,4 +15,10 @@ const defaults = {
   }
 }
 
-export const storesContext = registerContext('stores', defaults)
+export type StoreState = typeof defaultState
+
+export const getExampleStore = (state = defaultState) => defineStore(state, () => ({
+  test: () => undefined
+}))
+
+export const exampleContext = createContext(defaultState)

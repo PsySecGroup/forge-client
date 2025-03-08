@@ -1,15 +1,15 @@
 import type { ParentProps } from 'solid-js'
-import { StateProvider } from '../../state/provider'
-import { RegisteredContext } from 'src/core2/state/context'
+import { type StoreProviderProps, StoreProvider } from '../../state/provider'
+import type { BasicRecord } from '../../types/basic'
 
-type Props<T> = {
-  context: RegisteredContext<T>
-}
-
-export function App<T> (props: ParentProps<Props<T>>) {
+export function App (props: ParentProps<StoreProviderProps>) {
   return (
-    <StateProvider context={props.context}>
+    <StoreProvider
+      state={props.state}
+      store={props.store}
+      context={props.context}
+    >
       {props.children}
-    </StateProvider>
+    </StoreProvider>
   )
 }

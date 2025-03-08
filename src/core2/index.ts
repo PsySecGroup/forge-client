@@ -15,7 +15,7 @@ export {
   hydrateJson,
   hydrateDate,
   hydrateCollection
-} from './types/json'
+} from './utils/json'
 
 export {
   useStoreContext,

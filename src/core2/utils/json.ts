@@ -1,4 +1,4 @@
-import type { DynamicRecord, Optional } from './index'
+import type { DynamicRecord, Optional } from '../types/index'
 
 /**
  * Populates a JSON with defaults if the JSON is partial
