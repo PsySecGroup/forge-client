@@ -62,7 +62,7 @@ describe('Example App', () => {
     ), document.getElementById('root')!)
 
     expect(localStorage.getItem('forms'))
-    .toBe(`{"name":"default"}`)
+      .toBe(`{"name":"default"}`)
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root"><span>default</span><input></div>`)
