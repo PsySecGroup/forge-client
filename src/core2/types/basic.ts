@@ -14,7 +14,7 @@ export type Integer = number
 export type ResourcePath = string
 export type Query = string
 export type HttpMethods = 'post' | 'get' | 'put' | 'delete' | 'patch' | 'option' | 'head'
-export type BasicRecord = Record<RecordKey, unknown>
+export type BasicRecord = Record<RecordKey, any>
 
 // Common Types
 export type Dictionary<T> = { [key: string]: T }

@@ -2,14 +2,13 @@ import { type ParentProps, type JSX, createContext } from 'solid-js'
 import type { BasicRecord } from '../types/basic'
 import { defineStore } from './store' 
 
-export type StoreProviderProps = {
-  state: BasicRecord | undefined
-  store: (state: BasicRecord | undefined) => ReturnType<typeof defineStore>,
-  //context: ReturnType<typeof createContext<BasicRecord>>
-  context: ReturnType<typeof createContext<BasicRecord>>
+export type StoreProviderProps<T extends BasicRecord> = {
+  state: T | undefined
+  store: (state: T | undefined) => ReturnType<typeof defineStore<T>>,
+  context: ReturnType<typeof createContext<ReturnType<typeof defineStore<T>>>>
 }
 
-export function StoreProvider(props: ParentProps<StoreProviderProps>): JSX.Element {
+export function StoreProvider<T extends BasicRecord>(props: ParentProps<StoreProviderProps<T>>): JSX.Element {
   const store = props.store(props.state)
 
   return (
