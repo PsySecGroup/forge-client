@@ -16,6 +16,7 @@
   "license": "None",
   "devDependencies": {
     "@eslint/js": "^9.4.0",
+    "@testing-library/dom": "^10.4.0",
     "dotenv": "^16.4.5",
     "esbuild-register": "^3.5.0",
     "eslint": "9.x",
