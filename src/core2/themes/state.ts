@@ -1,0 +1,123 @@
+import { brand, secondary, green, gray } from './colors'
+import { alpha } from './utils'
+import { createStore } from 'solid-js/store'
+import { createContext } from 'solid-js'
+import { getActions } from '../state/actions'
+
+const palette = {
+  primary: {
+    text: '#fff',
+    light: brand[300],
+    main: brand[400],
+    dark: brand[800],
+    background: gray[900],
+  },
+  secondary: {
+    text: gray[100],
+    light: secondary[400],
+    main: secondary[500],
+    dark: secondary[900],
+    background: gray[400]
+  },
+  warning: {
+    main: '#F7B538',
+    dark: '#F79F00'
+  },
+  error: {
+    light: '#D32F2F',
+    main: '#D32F2F',
+    dark: '#B22A2A'
+  },
+  success: {
+    light: green[400],
+    main: green[500],
+    dark: green[700]
+  },
+  grey: {
+    50: gray[50],
+    100: gray[100],
+    200: gray[200],
+    300: gray[300],
+    400: gray[400],
+    500: gray[500],
+    600: gray[600],
+    700: gray[700],
+    800: gray[800],
+    900: gray[900]
+  },
+  divider: alpha(gray[600], 0.3),
+  action: {
+    selected: alpha(brand[800], 0.2)
+  }
+}
+
+const typography = {
+  fontFamily: '"Inter", "sans-serif"',
+  h1: {
+    fontSize: 60,
+    fontWeight: 600,
+    lineHeight: 78 / 70,
+    letterSpacing: -0.2
+  },
+  h2: {
+    fontSize: 48,
+    fontWeight: 600,
+    lineHeight: 1.2
+  },
+  h3: {
+    fontSize: 42,
+    lineHeight: 1.2
+  },
+  h4: {
+    fontSize: 36,
+    fontWeight: 500,
+    lineHeight: 1.5
+  },
+  h5: {
+    fontSize: 20,
+    fontWeight: 600
+  },
+  h6: {
+    fontSize: 18
+  },
+  subtitle1: {
+    fontSize: 18
+  },
+  subtitle2: {
+    fontSize: 16
+  },
+  body1: {
+    fontWeight: 400,
+    fontSize: 15
+  },
+  body2: {
+    fontWeight: 400,
+    fontSize: 14
+  },
+  caption: {
+    fontWeight: 400,
+    fontSize: 12
+  }
+}
+
+export type Palette = typeof palette
+export type Typography = typeof typography
+
+const state = {
+  palette,
+  typography
+}
+
+type State = typeof state
+
+export const store = createStore(state)
+
+type SetState = typeof store[1]
+
+export const themeContext = createContext(store)
+export const themeStore = store
+export const getThemeActions = getActions(store, (set: SetState) => ({
+  setPalette: (palette: Palette) => set('palette', palette),
+  setTypography: (typography: Typography) => set('typography', typography),
+  setTheme: (theme: State) => set(theme)
+}))

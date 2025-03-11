@@ -8,6 +8,7 @@ import svgr from 'vite-plugin-svgr'
 import devtools from 'solid-devtools/vite'
 import compression from 'vite-plugin-compression'
 import ViteInspect from 'vite-plugin-inspect'
+import suidPlugin from '@suid/vite-plugin'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -24,6 +25,7 @@ export default defineConfig({
   plugins: [
     isProduction ? NOOP : devtools(),
     isProduction ? NOOP : ViteInspect(),
+    suidPlugin(),
     solidPlugin(),
     viteSingleFile(),
     svgr(),
