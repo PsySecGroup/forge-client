@@ -1,5 +1,53 @@
 import { alpha } from './utils'
 
+export type Palette = {
+  primary: {
+    text: string
+    light: string
+    main: string
+    dark: string
+    background: string
+  },
+  secondary: {
+    text: string
+    light: string
+    main: string
+    dark: string
+    background: string
+  },
+  warning: {
+    light: string
+    main: string
+    dark: string
+  },
+  error: {
+    light: string
+    main: string
+    dark: string
+  },
+  success: {
+    light: string
+    main: string
+    dark: string
+  },
+  gray: {
+    50: string
+    100: string
+    200: string
+    300: string
+    400: string
+    500: string
+    600: string
+    700: string
+    800: string
+    900: string
+  },
+  divider: string
+  action: {
+    selected: string
+  }
+}
+
 export const gray = {
   50: '#FBFCFE',
   100: '#EAF0F5',
@@ -11,32 +59,6 @@ export const gray = {
   700: '#364049',
   800: '#131B20',
   900: '#090E10'
-}
-
-export const green = {
-  50: '#F6FEF6',
-  100: '#E3FBE3',
-  200: '#C7F7C7',
-  300: '#A1E8A1',
-  400: '#51BC51',
-  500: '#1F7A1F',
-  600: '#136C13',
-  700: '#0A470A',
-  800: '#042F04',
-  900: '#021D02'
-}
-
-export const red = {
-  50: '#ffebee',
-  100: '#ffcdd2',
-  200: '#ef9a9a',
-  300: '#e57373',
-  400: '#ef5350',
-  500: '#f44336',
-  600: '#e53935',
-  700: '#d32f2f',
-  800: '#c62828',
-  900: '#b71c1c'
 }
 
 /**
@@ -168,26 +190,57 @@ function calculateContrastRatio(luminance1: number, luminance2: number): number 
 }
 
 /**
- * Function to return the most contrasting calculation of white or black
+ * TODO name this
  */
-export function getContrastingColor(color: string): number {
+export function getContrastingColor(color: string): string {
   // Convert hex color to RGB
   const [r, g, b] = hexToRGB(color)
 
   // Calculate luminance of the given color
   const luminanceColor = calculateLuminance(r, g, b)
 
-  // Calculate luminance of white (#FFFFFF) and black (#000000)
-  const luminanceWhite = calculateLuminance(255, 255, 255)
-  const luminanceBlack = calculateLuminance(0, 0, 0)
+  // Get the contrasting white or black with dynamic shading
+  const contrastWhite = getContrastingWhite(luminanceColor)
+  const contrastBlack = getContrastingBlack(luminanceColor)
 
-  // Calculate contrast ratio with white and black
-  const contrastWithWhite = calculateContrastRatio(luminanceColor, luminanceWhite)
-  const contrastWithBlack = calculateContrastRatio(luminanceColor, luminanceBlack)
-
-  // Return the most contrasting calculation
-  return Math.max(contrastWithWhite, contrastWithBlack)
+  // Return the most contrasting variant
+  return contrastWhite.contrast > contrastBlack.contrast ? contrastWhite.color : contrastBlack.color
 }
+
+/**
+ * Function to dynamically calculate the best shade of white
+ */
+function getContrastingWhite(luminanceColor: number) {
+  // Dynamic shading of white based on luminance of the input color
+  const shade = luminanceColor < 0.5 ? 255 - luminanceColor * 255 : luminanceColor * 255
+
+  // Calculate contrast ratio for this shade of white
+  const contrast = calculateContrastRatio(luminanceColor, calculateLuminance(shade, shade, shade))
+
+  // Return the contrasting shade and its contrast ratio
+  return {
+    color: `rgb(${shade}, ${shade}, ${shade})`,
+    contrast
+  }
+}
+
+/**
+ * Function to dynamically calculate the best shade of black
+ */
+function getContrastingBlack(luminanceColor: number) {
+  // Dynamic shading of black based on luminance of the input color
+  const shade = luminanceColor < 0.5 ? luminanceColor * 255 : 255 - luminanceColor * 255
+
+  // Calculate contrast ratio for this shade of black
+  const contrast = calculateContrastRatio(luminanceColor, calculateLuminance(shade, shade, shade))
+
+  // Return the contrasting shade and its contrast ratio
+  return {
+    color: `rgb(${shade}, ${shade}, ${shade})`,
+    contrast
+  }
+}
+
 
 /**
  * Function to generate triadic colors from a given color or random color
@@ -235,12 +288,15 @@ export function getGradient(startColor: string, endColor: string, steps: number)
   return gradient
 }
 
+/**
+ * TODO name this
+ */
 export function getPalette (
   sourceColor: string = '',
   warningColor: string = '#8B0000',
   errorColor: string = '#FF8C00',
   successColor: string = '#006400'
-) {
+): Palette {
   const triad = getTriadicColors(sourceColor)
   const primaryText = getContrastingColor(triad[0])
   const secondaryText = getContrastingColor(triad[1])
@@ -248,32 +304,32 @@ export function getPalette (
   return {
     primary: {
       text: primaryText,
-      light: getGradient(triad[0], '#FFFFFF', 3)[1],
+      light: getGradient(triad[0], '#FFFFFF', 3)[1] as string,
       main: triad[0],
-      dark: getGradient(triad[0], '#000000', 3)[1],
+      dark: getGradient(triad[0], '#000000', 3)[1] as string,
       background: gray[900],
     },
     secondary: {
       text: secondaryText,
-      light: getGradient(triad[1], '#FFFFFF', 3)[1],
+      light: getGradient(triad[1], '#FFFFFF', 3)[1] as string,
       main: triad[1],
-      dark: getGradient(triad[1], '#000000', 3)[1],
+      dark: getGradient(triad[1], '#000000', 3)[1] as string,
       background: gray[400]
     },
     warning: {
-      light: getGradient(warningColor, '#FFFFFF', 3)[1],
+      light: getGradient(warningColor, '#FFFFFF', 3)[1] as string,
       main: warningColor,
-      dark: getGradient(warningColor, '#FFFFFF', 3)[1]
+      dark: getGradient(warningColor, '#FFFFFF', 3)[1] as string
     },
     error: {
-      light: getGradient(errorColor, '#FFFFFF', 3)[1],
+      light: getGradient(errorColor, '#FFFFFF', 3)[1] as string,
       main: errorColor,
-      dark: getGradient(errorColor, '#FFFFFF', 3)[1]
+      dark: getGradient(errorColor, '#FFFFFF', 3)[1] as string
     },
     success: {
-      light: getGradient(successColor, '#FFFFFF', 3)[1],
+      light: getGradient(successColor, '#FFFFFF', 3)[1] as string,
       main: successColor,
-      dark: getGradient(successColor, '#FFFFFF', 3)[1]
+      dark: getGradient(successColor, '#FFFFFF', 3)[1] as string
     },
     gray,
     divider: alpha(gray[600], 0.3),
