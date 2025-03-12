@@ -52,7 +52,7 @@ export function createHistoryStore<T extends BasicRecord>(
    * Updates the state, saving the current state to the history stack
    * before applying the new state.
    */
-  const setState: SetStoreFunction<T> = (newState) => {
+  const setState: SetStoreFunction<T> = (newState: T) => {
     if (store) {
       // Push the current state to the history stack before applying new state
       history.push(store[0]);
@@ -69,6 +69,11 @@ export function createHistoryStore<T extends BasicRecord>(
       // Move the current state to the future stack and pop the last state from history
       future.push(history.pop()!); // Ensure history isn't empty before popping
       const prevState = history[history.length - 1];
+
+      if (prevState === undefined) {
+        return
+      }
+
       store![1](prevState); // Revert to the previous state
     }
   };
