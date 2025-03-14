@@ -1,10 +1,19 @@
 import { type JSX } from 'solid-js'
 
-export type StyleClasses = { [key: string]: boolean | (() => boolean) }
+export type StyleClasses = string | boolean | (() => boolean | string)
 
 export type ComponentStyle = {
-  classes?: StyleClasses
-  style?: JSX.CSSProperties
+  classes?: { [key: string]: StyleClasses }
+  style?: { [key: string]: JSX.CSSProperties }
+}
+
+/**
+ * 
+ */
+function getClass(identifier: string) {
+  return identifier[0] === '_'
+    ? identifier.substring(0, identifier.lastIndexOf('_'))
+    : identifier
 }
 
 /**
@@ -17,24 +26,31 @@ export function getStyling({
   theme = {}
 }: {
   className?: string | undefined
-  classes?: StyleClasses | undefined
+  classes?: { [key: string]: StyleClasses } | undefined
   style?: JSX.CSSProperties | undefined
   theme?: JSX.CSSProperties | undefined
 }): [string, JSX.CSSProperties] {
 
   const mergedClasses = className === undefined
-    ? []
-    : [className]
+    ? {}
+    : { [getClass(className)]: className }
 
   if (classes) {
     Object.entries(classes)
-      .filter(([_, condition]) => {
+      .map(([_, condition]) => {
         return typeof condition === 'function' ? condition() : condition
       })
-      .forEach(([className]) => {
+      .filter(value => value !== false)
+      .forEach((className, i, classes) => {
         // If conditional class is 'container', it should overwrite baseClass
-        if (mergedClasses.indexOf(className )=== -1) {
-          mergedClasses.push(className)
+        const targetClass = className === true
+          ? classes[i] as string
+          : className
+
+        const trimmeClassName = getClass(targetClass)
+
+        if(mergedClasses[trimmeClassName] !== undefined) {
+          mergedClasses[trimmeClassName] = targetClass
         }
       })
   }
@@ -49,41 +65,5 @@ export function getStyling({
   Object.assign(mergedStyles, style)
 
   // Return the merged class string and style object
-  return [mergedClasses.join(' '), mergedStyles]
+  return [Object.values(mergedClasses).join(' '), mergedStyles]
 }
-
-/**
-Usage example:
-
-import { createMemo, useContext } from 'solid-js'
-import { themeContext } from '../themes/state'
-import { type ComponentStyle, getStyling } from '../themes/styles'
-import css from './TestComponent.module.css'
-
-const TestComponent = ({ classes, style }: ComponentStyle) => {
-  const [ theme ] = useContext(themeContext)
-
-  const [containerClass, containerStyle] = createMemo(() => getStyling({
-    className: css['container'],
-    theme: theme.primary,
-    classes,
-    style    
-  }))()
-
-  const [headerClass, headerStyle] = createMemo(() => getStyling({
-    className: css['header'],
-    theme: theme.secondary,
-    classes,
-    style    
-  }))()
-
-  return (
-    <div class={containerClass} style={containerStyle}>
-      <h1 class={headerClass} style={headerStyle}>Hello, Solid!</h1>
-      <p class={css['content']}>This component has custom and module styles combined.</p>
-    </div>
-  );
-};
-
-export default TestComponent
-*/
