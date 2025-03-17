@@ -1,50 +1,50 @@
 import { alpha } from './utils'
 
 export type Palette = {
-  primary: {
-    text: string
-    light: string
-    main: string
-    dark: string
-    background: string
+  primary?: {
+    text?: string
+    light?: string
+    main?: string
+    dark?: string
+    background?: string
   },
-  secondary: {
-    text: string
-    light: string
-    main: string
-    dark: string
-    background: string
+  secondary?: {
+    text?: string
+    light?: string
+    main?: string
+    dark?: string
+    background?: string
   },
-  warning: {
-    light: string
-    main: string
-    dark: string
+  warning?: {
+    light?: string
+    main?: string
+    dark?: string
   },
-  error: {
-    light: string
-    main: string
-    dark: string
+  error?: {
+    light?: string
+    main?: string
+    dark?: string
   },
-  success: {
-    light: string
-    main: string
-    dark: string
+  success?: {
+    light?: string
+    main?: string
+    dark?: string
   },
-  gray: {
-    50: string
-    100: string
-    200: string
-    300: string
-    400: string
-    500: string
-    600: string
-    700: string
-    800: string
-    900: string
+  gray?: {
+    50?: string
+    100?: string
+    200?: string
+    300?: string
+    400?: string
+    500?: string
+    600?: string
+    700?: string
+    800?: string
+    900?: string
   },
-  divider: string
-  action: {
-    selected: string
+  divider?: string
+  action?: {
+    selected?: string
   }
 }
 

@@ -1,3 +1,42 @@
+import { createSignal, onCleanup } from 'solid-js';
+import { createContext, useContext } from 'solid-js';
+
+// ErrorContext
+const ErrorContext = createContext();
+
+export const ErrorProvider = (props) => {
+  const [error, setError] = createSignal(null);
+  
+  // Set up a global error handler
+  const handleError = (error) => {
+    setError(error);
+    // Log error, send to an external service, etc.
+  };
+
+  onCleanup(() => {
+    // Clean up or reset error state
+  });
+
+  return (
+    <ErrorContext.Provider value={{ error, handleError }}>
+      {props.children}
+      {error() && <ErrorFallback error={error()} />}
+    </ErrorContext.Provider>
+  );
+};
+
+export const useError = () => {
+  return useContext(ErrorContext);
+};
+
+// Component to show the error
+const ErrorFallback = ({ error }) => (
+  <div>
+    <h2>Oops, something went wrong!</h2>
+    <p>{error.message}</p>
+  </div>
+);
+
 // TODO redo this
 // import type { Children } from '../types'
 // import useTheme from '@suid/material/styles/useTheme'

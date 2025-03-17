@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
+import { useContext } from 'solid-js'
 import { App } from './exampleApp/app'
-// import { fireEvent,  } from '@testing-library/dom'
+import { fireEvent  } from '@testing-library/dom'
 import { exampleContext, exampleStore } from './exampleApp/state'
 import { ThemeProvider } from '../themes'
+import { themeContext, getThemeActions } from '../themes/state'
 import { ThemedBox } from './exampleApp/themedBox'
 import otherCss from './exampleApp/other.module.css'
 
@@ -87,7 +89,7 @@ Hello, Solid!\
 </h1></div></div>`)
   })
 
-  it.only('render themes with mixed class props', async () => {
+  it('render themes with mixed class props', async () => {
     const showContainer = false
 
     render(() => (
@@ -134,5 +136,56 @@ Hello, Solid!\
 <h1 class="_header_bb0683" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
 </h1></div></div>`)
+  })
+
+  it('changes themes upon click', async () => {
+    const showContainer = false
+    const { setTheme } = getThemeActions()
+
+    render(() => (
+      <App
+        context={exampleContext}
+        store={exampleStore}
+      >
+        <ThemeProvider>
+          <ThemedBox
+            classes={{
+              container: () => showContainer ? otherCss['container']! : false,
+              header: otherCss['header']!
+            }}
+          />
+          <button onClick={() => setTheme({
+            primary: {
+              background: '#00FF00'
+            }
+          })}>
+            Change
+          </button>
+        </ThemeProvider>
+      </App>
+    ), document.getElementById('root')!)
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root"><div class="_container_bb0683" style="background: rgb(9, 14, 16);">\
+<h1 class="_header_9f53f5" style="background: rgb(148, 166, 184);">\
+Hello, Solid!\
+</h1></div>\
+<button>Change</button></div>`)
+
+    // Find the button and click it
+    const button = document.querySelector('button')
+
+    if (button) {
+      await fireEvent.click(button)
+    } else {
+      throw new Error('Button not found')
+    }
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root"><div class="_container_bb0683" style="background: rgb(0, 255, 0);">\
+<h1 class="_header_9f53f5" style="background: rgb(148, 166, 184);">\
+Hello, Solid!\
+</h1></div>\
+<button>Change</button></div>`)
   })
 })

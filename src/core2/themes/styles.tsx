@@ -29,7 +29,7 @@ export function getStyling({
   classes?: { [key: string]: StyleClasses } | undefined
   style?: JSX.CSSProperties | undefined
   theme?: JSX.CSSProperties | undefined
-}): [string, JSX.CSSProperties] {
+}): { classes: string, style: JSX.CSSProperties } {
 
   const mergedClasses = className === undefined
     ? {}
@@ -65,5 +65,8 @@ export function getStyling({
   Object.assign(mergedStyles, style)
 
   // Return the merged class string and style object
-  return [Object.values(mergedClasses).join(' '), mergedStyles]
+  return {
+    classes: Object.values(mergedClasses).join(' '),
+    style: mergedStyles
+  }
 }
