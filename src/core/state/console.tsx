@@ -5,8 +5,7 @@ import { createStore } from 'solid-js/store'
 
 export type Command = {
   name: string
-  onExecute: (...args: any[]) => string
-  arguments?: (string | number)[]
+  onExecute: (args: (string | number)[]) => string | false | undefined
   permissions?: (string | number)[]
 }
 
@@ -89,36 +88,60 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
       const prompt = message === undefined
         ? store[0].prompt ?? ''
         : message
-  
+      console.log({prompt})
       if (prompt.length === 0) {
         return false
       }
   
       const promptParts = parseCommand(prompt)
       let result = ''
-  
+      console.log({promptParts})
       batch(async () => {
-        self.addMessage(prompt)
-        
         if (promptParts === false) {
           // TODO do something with errors here
           result = 'This command does not work'
         } else {
           const output = await self.runCommand(promptParts.command, promptParts.arguments, permissions)
-
+          console.log({output})
           if (output === false) {
             result = `Command "${promptParts.command}" not found`
           } else {
-            result = output
+            if (output !== undefined) {
+              result = output
+            }
             // When the command is successful, then we clear the prompt
             self.updatePrompt('')
           }
         }
-
-        set('messages', store[0].messages.length, result)
+        console.log({result})
+        self.addMessage(result)
       })
 
       return result
+    },
+
+    /**
+     * 
+     */
+    runCommand: async (commandName: string, args: (string | number)[] = [], permissions: string[] = []) => {
+      const command = store[0].commands.find(command => command.name === commandName)
+      console.log({command})
+      if (command === undefined) {
+        return false
+      }
+
+      if (permissions.length === 0) {
+        console.log({args})
+        return await command.onExecute(args)
+      } else {
+        const hasPermission = permissions.every(permission => command.permissions?.includes(permission))
+        console.log({hasPermission})
+        if (hasPermission) {
+          return await command.onExecute(args)
+        } else {
+          return false
+        }
+      }
     },
 
     /**
@@ -142,34 +165,10 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
     /**
      * 
      */
-    addCommands: (commands: Command[]) => set('commands', commands.map(command => ({
-      arguments: [],
+    setCommands: (commands: Command[]) => set('commands', commands.map(command => ({
       permissions: [],
       ...command
-    }))),
-
-    /**
-     * 
-     */
-    runCommand: async (commandName: string, args: (string | number)[] = [], permissions: string[] = []) => {
-      const command = store[0].commands.find(command => command.name === commandName)
-
-      if (command === undefined) {
-        return false
-      }
-
-      if (permissions.length === 0) {
-        return await command.onExecute(args)
-      } else {
-        const hasPermission = permissions.every(permission => command.permissions?.includes(permission))
-
-        if (hasPermission) {
-          return await command.onExecute(args)
-        } else {
-          return false
-        }
-      }
-    }
+    })))
   }
 
   return self
