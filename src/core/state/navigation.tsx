@@ -10,7 +10,7 @@ export type Navigation = {
 
 const state: Navigation = {
   history: [],
-  referenceIndex: 0
+  referenceIndex: -1
 }
 
 export const store = createLocalStore('navigation', state)
@@ -19,8 +19,16 @@ type SetState = typeof store[1]
 
 export const navigationContext = createContext(store)
 export const navigationStore = store
-export const getNotificationActions = getActions(store, (set: SetState) => {
+export const getNavigationActions = getActions(store, (set: SetState) => {
   const actions =  {
+    /**
+     * Get the current page
+     */
+    getPage: () => {
+      const history = store[0].history
+      return history[history.length - 1]
+    },
+
     /**
      * The main location handler for Navigation
      */
@@ -30,26 +38,35 @@ export const getNotificationActions = getActions(store, (set: SetState) => {
       if (history[history.length - 1] !== page) {
         // The location has changed, add it
 
-        set('history', history.length, page)
-        set('referenceIndex', referenceIndex ?? history.length)
+        const hash = !page
+          ? '#'
+          : '#' + page
 
-        window.history.pushState({}, '', '#' + page)
+        window.history.pushState({
+          hash
+        }, '', hash)
+
+        batch(() => {
+          set('history', history.length, page ?? '')
+          set('referenceIndex', referenceIndex ?? history.length - 1)
+        })        
       }
     },
 
     /**
      * Go back in location history an arbitrary number of steps
      */
-    goBack: (stepsBack: number = -1) => {
-      if (stepsBack > -1) {
+    goBack: (stepsBack: number = 1) => {
+      if (stepsBack < 1) {
         return
       }
 
       const { history, referenceIndex } = store[0]
 
-      const index = referenceIndex - stepsBack < 0
-        ? 0
+      const index = referenceIndex - stepsBack < -1
+        ? -1
         : referenceIndex - stepsBack
+
 
       actions.goto(history[index] as string, index)
     },
@@ -58,17 +75,17 @@ export const getNotificationActions = getActions(store, (set: SetState) => {
      * Go forward in location history an arbitrary number of steps
      */
     goForward: (stepsForward: number = 1) => {
-      if (stepsForward > -1) {
+      if (stepsForward < 1) {
         return
       }
+      
+      const { history, referenceIndex } = store[0]
 
-      const history = store[0].history
-      const index = history.length - stepsForward < 0
-        ? 0
-        : history.length - stepsForward
+      const index = referenceIndex + stepsForward > history.length - 1
+        ? history.length - 1
+        : referenceIndex + stepsForward
 
-
-      actions.goto(history[index] as string)
+        actions.goto(history[index] as string, index)
     }
   }
 
@@ -79,17 +96,17 @@ export const getNotificationActions = getActions(store, (set: SetState) => {
  * Catch when Navigation events happen
  */
 
-const { goto } = getNotificationActions()
+const { goto } = getNavigationActions()
 
 window.addEventListener('popstate', ({ state }) => {
-  goto(state as string)
+  goto(state?.hash ?? state) // TODO confirm this
 })
 
 /**
  * Catch when the hash in the URL is manually changed
  */
 window.addEventListener('hashchange', function () {
-  goto(this.window.location.hash)
+  goto((this.window.location.hash || '').substring(1)) // TODO confirm this
 })
 
 /**

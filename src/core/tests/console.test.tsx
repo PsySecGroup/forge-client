@@ -7,7 +7,7 @@ import { useContext, For } from 'solid-js'
 beforeEach(drawDOM)
 afterEach(clearDOM)
 
-describe.only('Console App', () => {
+describe('Console App', () => {
   it('renders console', async () => {
     render(() => (
       <ConsoleProvider>

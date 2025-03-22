@@ -7,7 +7,7 @@ import { drawDOM, clearDOM, click } from './utils'
 beforeEach(drawDOM)
 afterEach(clearDOM)
 
-describe.only('Notifications App', () => {
+describe('Notifications App', () => {
   it('renders an empty list', async () => {
     const [ notifications ] = useContext(notificationsContext)
 
