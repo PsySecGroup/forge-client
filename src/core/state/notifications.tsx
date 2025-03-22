@@ -8,8 +8,9 @@ export type Notification = UniqueRecord<{
   id: number
   type: string
   text: Dictionary<string>
-  createdAt: Date
-  isNew: boolean
+  isNew?: boolean
+  createdAt?: Date
+  seenAt?: Date
 }>
 
 const state = {
@@ -25,7 +26,11 @@ export const notificationsContext = createContext(store)
 export const notificationsStore = store
 export const getNotificationActions = getActions(store, (set: SetState) => ({
   updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime),
-  addNotification: (notification: Notification) => set('messages', store[0].messages.length, notification),
+  addNotification: (notification: Notification) => set('messages', store[0].messages.length, {
+    createdAt: new Date(),
+    isNew: true,
+    ...notification,
+  }),
   updateNotification: (notification: Partial<Notification>) => set(
     'messages',
     store[0].messages.findIndex(record => record.id === notification.id),

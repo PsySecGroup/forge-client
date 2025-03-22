@@ -62,6 +62,7 @@ describe.only('Notifications App', () => {
               <li>
                 <div>{message.text['from']}</div>
                 <div>{message.text['summary']}</div>
+                <div>{message.isNew ? 'new' : 'seen'}</div>
               </li>
             )}
           </For>
@@ -69,7 +70,7 @@ describe.only('Notifications App', () => {
         <button id="add" onClick={() => addNotification({
           id: 1,
           createdAt: new Date(),
-          isNew: true,
+          isNew: false,
           type: 'error' ,
           text: {
             from: 'me',
@@ -105,7 +106,7 @@ describe.only('Notifications App', () => {
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
-<ul><li><div>me</div><div>you broke the thing :(</div></li></ul>\
+<ul><li><div>me</div><div>you broke the thing :(</div><div>seen</div></li></ul>\
 <button id="add">Add</button>\
 <button id="modify">Modify</button>\
 <button id="remove">Remove</button>\
@@ -115,7 +116,7 @@ describe.only('Notifications App', () => {
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
-<ul><li><div>system</div><div>you saw the error</div></li></ul>\
+<ul><li><div>system</div><div>you saw the error</div><div>seen</div></li></ul>\
 <button id="add">Add</button>\
 <button id="modify">Modify</button>\
 <button id="remove">Remove</button>\
@@ -129,6 +130,38 @@ describe.only('Notifications App', () => {
 <button id="add">Add</button>\
 <button id="modify">Modify</button>\
 <button id="remove">Remove</button>\
+</div>`)
+  })
+
+  it('updates lastChecked', async () => {
+    const { updateLastChecked } = getNotificationActions()
+    const [ notifications ] = useContext(notificationsContext)
+
+    render(() => (
+      <NotificationsProvider>
+        <div>{
+          notifications.lastChecked.toISOString().substring(0, 2)
+        }</div>
+        <button id="update" onClick={
+          () => updateLastChecked(new Date('1/1/1999'))
+        }>
+          Update
+        </button>
+      </NotificationsProvider>
+    ), document.getElementById('root')!)
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root">\
+<div>20</div>\
+<button id="update">Update</button>\
+</div>`)
+
+    await click('#update')
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root">\
+<div>19</div>\
+<button id="update">Update</button>\
 </div>`)
   })
 })
