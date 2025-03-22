@@ -6,11 +6,13 @@ import { createLocalStore } from './localStore'
 export type Navigation = {
   history: string[]
   referenceIndex: number
+  location: string
 }
 
 const state: Navigation = {
   history: [],
-  referenceIndex: -1
+  referenceIndex: -1,
+  location: ''
 }
 
 export const store = createLocalStore('navigation', state)
@@ -22,33 +24,26 @@ export const NavigationStore = store
 export const getNavigationActions = defineActions(store, (set: SetState) => {
   const actions =  {
     /**
-     * Get the current page
-     */
-    getPage: () => {
-      const history = store[0].history
-      return history[history.length - 1]
-    },
-
-    /**
      * The main location handler for Navigation
      */
-    goto: (page: string, referenceIndex?: number) => {
+    goto: (location: string, referenceIndex?: number) => {
       const history = store[0].history
 
-      if (history[history.length - 1] !== page) {
+      if (history[history.length - 1] !== location) {
         // The location has changed, add it
 
-        const hash = !page
+        const hash = !location
           ? '#'
-          : '#' + page
+          : '#' + location
 
         window.history.pushState({
           hash
         }, '', hash)
 
         batch(() => {
-          set('history', history.length, page ?? '')
+          set('history', history.length, location ?? '')
           set('referenceIndex', referenceIndex ?? history.length - 1)
+          set('location', location ?? '')
         })        
       }
     },
