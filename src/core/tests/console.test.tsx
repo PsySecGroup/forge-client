@@ -66,14 +66,16 @@ describe.only('Console App', () => {
 
     const commands: Command[] = [
       {
-        name: 'appendText',
-        onExecute: ([ text ]) => {
-          if (text === undefined) {
+        name: 'add',
+        onExecute: (args) => {
+          const [ num1, num2 ] = args as [number, number]
+
+          if (num1 === undefined || num2 === undefined) {
             return false
           }
-          const result = term.prompt + text
-          updatePrompt(result)
-          return result
+
+          const result = (num1 as number) + (num2 as number)
+          return result.toString()
         }
       }
     ]
@@ -82,7 +84,7 @@ describe.only('Console App', () => {
     setCommands(commands)
     expect(term.commands).toStrictEqual([
       {
-        "name": 'appendText',
+        "name": 'add',
         "onExecute": commands[0]?.onExecute,
         "permissions": [],
       },
@@ -113,13 +115,13 @@ describe.only('Console App', () => {
 </div>`)
 
     expect(term.prompt).toBe('test')
-    await type('#promptInput', 'appendText')
-    expect(term.prompt).toBe('appendText')
+    await type('#promptInput', 'add')
+    expect(term.prompt).toBe('add')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
 <input id="promptInput">\
-<pre id="promptOutput">appendText</pre>\
+<pre id="promptOutput">add</pre>\
 <ul id="output"></ul>\
 </div>`)
 
@@ -129,12 +131,12 @@ describe.only('Console App', () => {
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
 <input id="promptInput">\
-<pre id="promptOutput">appendText</pre>\
-<ul id="output"><li>Command "appendText" not found</li></ul>\
+<pre id="promptOutput">add</pre>\
+<ul id="output"><li>Command "add" not found</li></ul>\
 </div>`)
 
     // Send a complete command
-    await type('#promptInput', 'appendText -complete')
+    await type('#promptInput', 'add 1 3')
     await typeEnter('#promptInput')
 
     expect(document.body.innerHTML)
@@ -142,8 +144,8 @@ describe.only('Console App', () => {
 <input id="promptInput">\
 <pre id="promptOutput"></pre>\
 <ul id="output">\
-<li>Command "appendText" not found</li>\
-<li>appendText -complete-complete</li>\
+<li>Command "add" not found</li>\
+<li>4</li>\
 </ul>\
 </div>`)
 

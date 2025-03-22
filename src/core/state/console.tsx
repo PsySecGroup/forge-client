@@ -3,9 +3,11 @@ import { getActions } from './actions'
 import { StoreProvider } from './provider'
 import { createStore } from 'solid-js/store'
 
+type CommandArgs = (string | number)[]
+
 export type Command = {
   name: string
-  onExecute: (args: (string | number)[]) => string | false | undefined
+  onExecute: (args: CommandArgs) => string | false | undefined
   permissions?: (string | number)[]
 }
 
@@ -123,7 +125,7 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
     /**
      * 
      */
-    runCommand: async (commandName: string, args: (string | number)[] = [], permissions: string[] = []) => {
+    runCommand: async (commandName: string, args: CommandArgs = [], permissions: string[] = []) => {
       const command = store[0].commands.find(command => command.name === commandName)
 
       if (command === undefined) {
