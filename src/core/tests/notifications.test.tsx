@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
-import { render } from 'solid-js/web'
-import { App } from './exampleApp/app'
+import { For, render } from 'solid-js/web'
 // import { fireEvent } from '@testing-library/dom'
-import { exampleContext, exampleStore } from './exampleApp/state'
+import { getNotificationActions, notificationsContext, NotificationsProvider } from '../state/notifications'
+import { useContext } from 'solid-js'
 
 beforeEach(() => {
   const root = document.createElement('div')
@@ -17,18 +17,27 @@ afterEach(() => {
   }
 })
 
-describe.skip('Notifications App', () => {
+describe.only('Notifications App', () => {
   it('renders console', async () => {
-    render(() => (
-      <App
-        context={exampleContext}
-        store={exampleStore}
-      >
+    const {} = getNotificationActions
+    const [ notifications ] = useContext(notificationsContext)
 
-      </App>
+    render(() => (
+      <NotificationsProvider>
+        <ul>
+          <For each={notifications.messages}>
+            {(message) => (
+              <li>
+                <div>{message.text['from']}</div>
+                <div>{message.text['summary']}</div>
+              </li>
+            )}
+          </For>
+        </ul>
+      </NotificationsProvider>
     ), document.getElementById('root')!)
 
     expect(document.body.innerHTML)
-      .toBe(`<div id="root"></div>`)
+      .toBe(`<div id="root"><ul></ul></div>`)
   })
 })

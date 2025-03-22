@@ -150,3 +150,6 @@ export type IsAny<T> = 0 extends (1 & T) ? true : false
 
 // Check if a type is `unknown`
 export type IsUnknown<T> = unknown extends T ? true : false
+
+// UniqueRecords
+export type UniqueRecord<T> = T & { id: number | string }

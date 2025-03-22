@@ -1,37 +1,52 @@
-import { createSignal, createContext, useContext } from 'solid-js';
+import { type ParentProps, type JSX, createContext } from 'solid-js'
+import { getActions } from './actions'
+import { StoreProvider } from './provider'
+import { Dictionary, type UniqueRecord } from '../types/basic'
+import { createStore } from 'solid-js/store'
 
-// NotificationContext
-const NotificationContext = createContext();
+export type Notification = UniqueRecord<{
+  id: number
+  type: string
+  text: Dictionary<string>
+  createdAt: Date
+  isNew: boolean
+}>
 
-export const NotificationProvider = (props) => {
-  const [notifications, setNotifications] = createSignal([]);
+const state = {
+  lastChecked: new Date(),
+  messages: [] as Notification[]
+}
 
-  const addNotification = (message, type = 'info', duration = 3000) => {
-    const id = Date.now();
-    setNotifications((prev) => [...prev, { id, message, type }]);
+export const store = createStore(state)
 
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter(n => n.id !== id));
-    }, duration);
-  };
+type SetState = typeof store[1]
 
+export const notificationsContext = createContext(store)
+export const notificationsStore = store
+export const getNotificationActions = getActions(store, (set: SetState) => ({
+  updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime),
+  addNotification: (notification: Notification) => set('messages', store[0].messages.length, notification),
+  updateNotification: (notification: Notification) => set(
+    'messages',
+    store[0].messages.findIndex(record => record.id === notification.id),
+    notification),
+  removeNotification: (notification: Notification) => set('messages', (prevMessages) => {
+    return prevMessages.filter(message => message.id !== notification.id)
+  }),
+  removeNotificationById: (id: number) => set('messages', (prevMessages) => {
+    return prevMessages.filter(message => message.id !== id)
+  })
+}))
+
+export function NotificationsProvider (
+  { children }: ParentProps
+): JSX.Element {
   return (
-    <NotificationContext.Provider value={{ addNotification }}>
-      {props.children}
-      <NotificationList notifications={notifications()} />
-    </NotificationContext.Provider>
-  );
-};
-
-export const useNotifications = () => useContext(NotificationContext);
-
-// NotificationList component to render all notifications
-const NotificationList = ({ notifications }) => (
-  <div>
-    {notifications.map(n => (
-      <div class={`notification ${n.type}`} key={n.id}>
-        {n.message}
-      </div>
-    ))}
-  </div>
-);
+    <StoreProvider
+      context={notificationsContext}
+      store={notificationsStore}
+    >
+      {children}
+    </StoreProvider>
+  )
+}
