@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
 import { App } from './exampleApp/app'
-import { fireEvent,  } from '@testing-library/dom'
+import { fireEvent } from '@testing-library/dom'
 import { Counter } from './exampleApp/counter'
 import { Forms } from './exampleApp/forms'
 import { exampleContext, exampleStore } from './exampleApp/state'

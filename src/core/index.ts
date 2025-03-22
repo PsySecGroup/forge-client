@@ -26,9 +26,9 @@ export {
 //   getStores
 // } from './state/stores'
 
-export {
-  createLocalStore as persistingStore
-} from './state/localStore'
+// export {
+//   createLocalStore as persistingStore
+// } from './state/localStore'
 
 export {
   createStore as temporaryStore

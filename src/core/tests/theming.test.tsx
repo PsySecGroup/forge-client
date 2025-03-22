@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
 import { App } from './exampleApp/app'
-import { fireEvent  } from '@testing-library/dom'
+import { fireEvent } from '@testing-library/dom'
 import { exampleContext, exampleStore } from './exampleApp/state'
 import { ThemeProvider } from '../themes'
 import { getThemeActions } from '../themes/state'
@@ -38,7 +38,8 @@ describe('Themed App', () => {
       .toBe(`<div id="root"><div class="_container_f5f486" style="background: rgb(9, 14, 16);">\
 <h1 class="_header_f5f486" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
-</h1></div></div>`)
+</h1>\
+</div></div>`)
   })
 
   it ('render themes with true class props', async () => {
@@ -62,7 +63,8 @@ Hello, Solid!\
 <div class="_container_57cb44" style="background: rgb(9, 14, 16);">\
 <h1 class="_header_f5f486" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
-</h1></div></div>`)
+</h1>\
+</div></div>`)
   })
 
   it ('render themes with false class props', async () => {
@@ -85,7 +87,8 @@ Hello, Solid!\
       .toBe(`<div id="root"><div class="_container_f5f486" style="background: rgb(9, 14, 16);">\
 <h1 class="_header_f5f486" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
-</h1></div></div>`)
+</h1>\
+</div></div>`)
   })
 
   it('render themes with mixed class props', async () => {
@@ -111,7 +114,8 @@ Hello, Solid!\
       .toBe(`<div id="root"><div class="_container_f5f486" style="background: rgb(9, 14, 16);">\
 <h1 class="_header_57cb44" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
-</h1></div></div>`)
+</h1>\
+</div></div>`)
   })
 
   it ('render styles', async () => {
@@ -134,7 +138,8 @@ Hello, Solid!\
       .toBe(`<div id="root"><div class="_container_f5f486" style="background: white;">\
 <h1 class="_header_f5f486" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
-</h1></div></div>`)
+</h1>\
+</div></div>`)
   })
 
   it('changes themes upon click', async () => {
@@ -169,7 +174,8 @@ Hello, Solid!\
 <h1 class="_header_57cb44" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
 </h1></div>\
-<button>Change</button></div>`)
+<button>Change</button>\
+</div>`)
 
     // Find the button and click it
     const button = document.querySelector('button')
@@ -185,6 +191,7 @@ Hello, Solid!\
 <h1 class="_header_57cb44" style="background: rgb(148, 166, 184);">\
 Hello, Solid!\
 </h1></div>\
-<button>Change</button></div>`)
+<button>Change</button>\
+</div>`)
   })
 })
