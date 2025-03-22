@@ -17,7 +17,7 @@ afterEach(() => {
   }
 })
 
-describe.skip('Router App', () => {
+describe.skip('Navigation App', () => {
   it('renders console', async () => {
     render(() => (
       <App
