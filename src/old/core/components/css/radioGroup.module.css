@@ -1,0 +1,15 @@
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radioLabel {
+  cursor: pointer;
+  font-family: var(--font-family, Arial, sans-serif);
+  color: var(--text-color, #333);
+}
+
+.radioLabel input {
+  margin-right: 8px;
+}

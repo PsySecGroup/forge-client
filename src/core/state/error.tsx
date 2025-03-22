@@ -1,101 +1,141 @@
-import type { Children } from '../types'
-import useTheme from '@suid/material/styles/useTheme'
-import { createSignal, createContext, createEffect, useContext, onCleanup, For } from 'solid-js'
-import styles from '../components/css/error.module.css'
+import { createSignal, onCleanup } from 'solid-js';
+import { createContext, useContext } from 'solid-js';
 
-type ErrorStore = {
-  addStore: undefined
-}
+// ErrorContext
+const ErrorContext = createContext();
 
-/**
- * Create the context for the error state
- */
-const ErrorContext = createContext<ErrorStore>()
-
-type Props = {
-  children?: Children
-}
-
-/**
- * ErrorProvider component to manage a queue of error messages
- */
-export function ErrorProvider(props: Props) {
-  // Styling
-  const theme = useTheme()
-
-  // State
-  const [errors, setErrors] = createSignal<string[]>([]) // Array of errors as a FIFO queue
+export const ErrorProvider = (props) => {
+  const [error, setError] = createSignal(null);
   
-  // Helpers
+  // Set up a global error handler
+  const handleError = (error) => {
+    setError(error);
+    // Log error, send to an external service, etc.
+  };
 
-  /**
-   * Function to add an error to the queue
-   */
-  const addError = (errorMessage: string, allowMultiple = false) => {
-    const errorList = errors() || []
+  onCleanup(() => {
+    // Clean up or reset error state
+  });
 
-    if (allowMultiple === true || errorList.indexOf(errorMessage) === -1) {
-      setErrors((prev) => [...prev, errorMessage])
-    }
-  }
-
-  /**
-   * Function to remove the oldest error from the queue (FIFO)
-   */
-  const removeError = () => {
-    setErrors((prev) => prev.slice(1)) // Remove the first element in the queue
-  }
-
-  /**
-   * Clear errors after a certain timeout (e.g., 5 seconds)
-   */
-  const autoRemoveError = (timeout = 5000) => {
-    const timeoutId = setTimeout(removeError, timeout)
-    onCleanup(() => clearTimeout(timeoutId)) // Cleanup if the component unmounts
-  }
-
-  /**
-   * Returns if the error queue has a specific message in it
-   */
-  const hasError = (errorMessage: string) => {
-    return errors().indexOf(errorMessage) > -1
-  }
-
-  // Effects
-  createEffect(() => {
-    autoRemoveError()
-  })
-
-  // Rendering
   return (
-    <ErrorContext.Provider value={{ errors, addError, removeError, autoRemoveError, hasError }}>
-      <div
-        classList={{
-          [styles['container'] as string]: true,
-          [styles['damage'] as string]: errors().length > 0
-        }}
-      >
-        <For each={errors()}>
-          {(error) => (
-            <div
-              class={styles['tray']}
-              style={{
-                background: theme.palette.error.dark,
-                color: theme.palette.primary.text // TODO figure out themes better
-              }}
-            >
-              <p>{error}</p>
-              <button onClick={removeError}>Dismiss</button>
-            </div>
-          )}
-        </For>
-      </div>
+    <ErrorContext.Provider value={{ error, handleError }}>
       {props.children}
+      {error() && <ErrorFallback error={error()} />}
     </ErrorContext.Provider>
   );
-}
+};
 
-// Custom hook to use the ErrorContext in any component
-export function useError() {
-  return useContext(ErrorContext)
-}
+export const useError = () => {
+  return useContext(ErrorContext);
+};
+
+// Component to show the error
+const ErrorFallback = ({ error }) => (
+  <div>
+    <h2>Oops, something went wrong!</h2>
+    <p>{error.message}</p>
+  </div>
+);
+
+// TODO redo this
+// import type { Children } from '../types'
+// import useTheme from '@suid/material/styles/useTheme'
+// import { createSignal, createContext, createEffect, useContext, onCleanup, For } from 'solid-js'
+// import styles from '../components/css/error.module.css'
+
+// type ErrorStore = {
+//   addStore: undefined
+// }
+
+// /**
+//  * Create the context for the error state
+//  */
+// const ErrorContext = createContext<ErrorStore>()
+
+// type Props = {
+//   children?: Children
+// }
+
+// /**
+//  * ErrorProvider component to manage a queue of error messages
+//  */
+// export function ErrorProvider(props: Props) {
+//   // Styling
+//   const theme = useTheme()
+
+//   // State
+//   const [errors, setErrors] = createSignal<string[]>([]) // Array of errors as a FIFO queue
+  
+//   // Helpers
+
+//   /**
+//    * Function to add an error to the queue
+//    */
+//   const addError = (errorMessage: string, allowMultiple = false) => {
+//     const errorList = errors() || []
+
+//     if (allowMultiple === true || errorList.indexOf(errorMessage) === -1) {
+//       setErrors((prev) => [...prev, errorMessage])
+//     }
+//   }
+
+//   /**
+//    * Function to remove the oldest error from the queue (FIFO)
+//    */
+//   const removeError = () => {
+//     setErrors((prev) => prev.slice(1)) // Remove the first element in the queue
+//   }
+
+//   /**
+//    * Clear errors after a certain timeout (e.g., 5 seconds)
+//    */
+//   const autoRemoveError = (timeout = 5000) => {
+//     const timeoutId = setTimeout(removeError, timeout)
+//     onCleanup(() => clearTimeout(timeoutId)) // Cleanup if the component unmounts
+//   }
+
+//   /**
+//    * Returns if the error queue has a specific message in it
+//    */
+//   const hasError = (errorMessage: string) => {
+//     return errors().indexOf(errorMessage) > -1
+//   }
+
+//   // Effects
+//   createEffect(() => {
+//     autoRemoveError()
+//   })
+
+//   // Rendering
+//   return (
+//     <ErrorContext.Provider value={{ errors, addError, removeError, autoRemoveError, hasError }}>
+//       <div
+//         classList={{
+//           [styles['container'] as string]: true,
+//           [styles['damage'] as string]: errors().length > 0
+//         }}
+//       >
+//         <For each={errors()}>
+//           {(error) => (
+//             <div
+//               class={styles['tray']}
+//               style={{
+//                 background: theme.palette.error.dark,
+//                 color: theme.palette.primary.text // TODO figure out themes better
+//               }}
+//             >
+//               <p>{error}</p>
+//               <button onClick={removeError}>Dismiss</button>
+//             </div>
+//           )}
+//         </For>
+//       </div>
+//       {props.children}
+//     </ErrorContext.Provider>
+//   );
+// }
+
+// // Custom hook to use the ErrorContext in any component
+// export function useError() {
+//   return useContext(ErrorContext)
+// }

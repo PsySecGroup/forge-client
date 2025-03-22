@@ -1,0 +1,53 @@
+.badge {
+  padding: 0.5em 1em;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  user-select: none;
+}
+
+.small {
+  font-size: 0.75rem;
+}
+
+.medium {
+  font-size: 1rem;
+}
+
+.large {
+  font-size: 1.25rem;
+}
+
+.badgeCount {
+  border-radius: 50%;
+  padding: 0.2em 0.5em;
+  font-size: 0.75rem;
+  position: absolute;
+}
+
+.upperLeft {
+  top: 0;
+  left: 0;
+}
+
+.upperRight {
+  top: 0;
+  right: 0;
+}
+
+.lowerLeft {
+  bottom: 0;
+  left: 0;
+}
+
+.lowerRight {
+  bottom: 0;
+  right: 0;
+}
+
+.disabled {
+  cursor: not-allowed;
+}

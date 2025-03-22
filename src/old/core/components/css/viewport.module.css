@@ -1,0 +1,28 @@
+.viewport {
+  display: -webkit-box;      /* Old Safari/iOS */
+  display: -ms-flexbox;      /* IE 10 */
+  display: -webkit-flex;     /* Old Android */
+  display: flex;             /* Modern Browsers */
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh; /* Full height of the viewport */
+}
+
+.viewportHeader {
+  width: 100%;
+  text-align: center;
+}
+
+.viewportContent {
+  -webkit-box-flex: 1;      /* Old Safari/iOS */
+  -ms-flex: 1;              /* IE 10 */
+  -webkit-flex-grow: 1;     /* Old Android */
+  flex-grow: 1;             /* Modern Browsers */
+  width: 100%;
+  overflow-y: auto;         /* Vertical scrollbar */
+}
+
+.viewportFooter {
+  width: 100%;
+  text-align: center;
+}

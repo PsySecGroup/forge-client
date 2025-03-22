@@ -15,16 +15,16 @@ export {
   hydrateJson,
   hydrateDate,
   hydrateCollection
-} from './types/json'
+} from './utils/json'
 
-export {
-  useStoreContext,
-  StoreProvider
-} from './state/index'
+// export {
+//   useStoreContext,
+//   StoreProvider
+// } from './state/index'
 
-export {
-  getStores
-} from './state/stores'
+// export {
+//   getStores
+// } from './state/stores'
 
 export {
   createLocalStore as persistingStore

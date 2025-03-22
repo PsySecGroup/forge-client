@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js/jsx-runtime'
-import { Typography } from 'src/themes/typography' 
+import { Typography } from 'src/old/themes/typography' 
 
 export type RecordKey = string | number | symbol
 

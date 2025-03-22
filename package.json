@@ -6,7 +6,7 @@
     "dev": "vite",
     "lint": "npx tsc --noEmit && npx eslint src/index.tsx",
     "test": "npx uvu -r esbuild-register tests/",
-    "test:core": "npx vitest watch src/core2/tests",
+    "test:core": "npx vitest watch src/core/tests",
     "build": "vite build",
     "compile": "npm run lint && npm run test && npm run build",
     "preview": "vite preview"

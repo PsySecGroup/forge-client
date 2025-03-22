@@ -1,0 +1,20 @@
+.input {
+  margin-bottom: 1rem;
+}
+
+.inputField {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inputError {
+  color: red;
+  marginTop: 0.25rem;
+}
+
+.inputHelper {
+  marginTop: 0.25rem;
+}

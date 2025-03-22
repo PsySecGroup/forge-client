@@ -1,0 +1,20 @@
+.buttonGroup {
+  display: flex;
+}
+
+.button {
+  border: 1px solid;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #e0e0e0;
+}
+
+.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
