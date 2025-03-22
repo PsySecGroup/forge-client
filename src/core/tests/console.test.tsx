@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render } from 'solid-js/web'
 import { drawDOM, clearDOM, type, typeEnter } from './utils'
 import { Command, consoleContext, ConsoleProvider, getConsoleActions } from '../state/console'
-import { useContext } from 'solid-js'
+import { useContext, For } from 'solid-js'
 
 beforeEach(drawDOM)
 afterEach(clearDOM)
@@ -13,7 +13,7 @@ describe.only('Console App', () => {
       <ConsoleProvider>
         <input id="promptInput" />
         <pre id="promptOutput"></pre>
-        <div id="output"></div>
+        <ul id="output"></ul>
       </ConsoleProvider>
     ), document.getElementById('root')!)
 
@@ -21,7 +21,7 @@ describe.only('Console App', () => {
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput"></pre>\
-<div id="output"></div>\
+<ul id="output"></ul>\
 </div>`)
   })
 
@@ -37,7 +37,7 @@ describe.only('Console App', () => {
           onInput={({ target }) => updatePrompt(target.value)}
         />
         <pre id="promptOutput">{term.prompt}</pre>
-        <div id="output"></div>
+        <ul id="output"></ul>
       </ConsoleProvider>
     ), document.getElementById('root')!)
 
@@ -45,18 +45,18 @@ describe.only('Console App', () => {
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput"></pre>\
-<div id="output"></div>\
+<ul id="output"></ul>\
 </div>`)
 
-    expect(term.prompt, '')
+    expect(term.prompt).toBe('')
     await type('#promptInput', 'test')
-    expect(term.prompt, 'test')
+    expect(term.prompt).toBe('test')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput">test</pre>\
-<div id="output"></div>\
+<ul id="output"></ul>\
 </div>`)
   })
 
@@ -97,7 +97,11 @@ describe.only('Console App', () => {
           onKeyDown={({ key }) => key === "Enter" ? sendCommand() : false}
         />
         <pre id="promptOutput">{term.prompt}</pre>
-        <div id="output"></div>
+        <ul id="output">
+          <For each={term.messages}>
+            {(message) => (<li>{message}</li>)}
+          </For>
+        </ul>
       </ConsoleProvider>
     ), document.getElementById('root')!)
 
@@ -105,27 +109,43 @@ describe.only('Console App', () => {
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput">test</pre>\
-<div id="output"></div>\
+<ul id="output"></ul>\
 </div>`)
 
-    expect(term.prompt, '')
+    expect(term.prompt).toBe('test')
     await type('#promptInput', 'appendText')
-    expect(term.prompt, 'test')
+    expect(term.prompt).toBe('appendText')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput">appendText</pre>\
-<div id="output"></div>\
+<ul id="output"></ul>\
 </div>`)
 
+    // Send an incomplete command
     await typeEnter('#promptInput')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
 <input id="promptInput">\
 <pre id="promptOutput">appendText</pre>\
-<div id="output"></div>\
+<ul id="output"><li>Command "appendText" not found</li></ul>\
 </div>`)
+
+    // Send a complete command
+    await type('#promptInput', 'appendText -complete')
+    await typeEnter('#promptInput')
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root">\
+<input id="promptInput">\
+<pre id="promptOutput"></pre>\
+<ul id="output">\
+<li>Command "appendText" not found</li>\
+<li>appendText -complete-complete</li>\
+</ul>\
+</div>`)
+
   })
 })
