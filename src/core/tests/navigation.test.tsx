@@ -96,7 +96,7 @@ describe.only('Navigation App', () => {
     
   })
 
-  it('complex testing', async () => {
+  it('performs complex testing', async () => {
     const [ navigation ] = useContext(navigationContext)
     const { goto, goBack, goForward, getPage } = getNavigationActions()
 
