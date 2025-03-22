@@ -1,10 +1,10 @@
 import { createMemo, useContext } from 'solid-js'
-import { themeContext } from '../../themes/state'
+import { ThemeContext } from '../../themes/state'
 import { type ComponentStyle, getStyling } from '../../themes/styles'
 import css from './themedBox.module.css'
 
 export const ThemedBox = ({ classes, style }: ComponentStyle) => {
-  const [ theme ] = useContext(themeContext)
+  const [ theme ] = useContext(ThemeContext)
 
   const containerMemo = createMemo(() => getStyling({
     classes,

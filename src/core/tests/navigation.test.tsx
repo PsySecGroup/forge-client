@@ -2,12 +2,12 @@ import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
 import { drawDOM, clearDOM, click } from './utils'
 import { useContext } from 'solid-js'
-import { getNavigationActions, navigationContext, NavigationProvider } from '../state/navigation'
+import { getNavigationActions, NavigationContext, NavigationProvider } from '../state/navigation'
 
 beforeEach(drawDOM)
 afterEach(clearDOM)
 
-describe.only('Navigation App', () => {
+describe('Navigation App', () => {
   it('renders navigation', async () => {
     render(() => (
       <NavigationProvider>
@@ -22,7 +22,7 @@ describe.only('Navigation App', () => {
   })
 
   it('performs simple Goto navigation', async () => {
-    const [ navigation ] = useContext(navigationContext)
+    const [ navigation ] = useContext(NavigationContext)
     const { goto } = getNavigationActions()
 
     render(() => (
@@ -46,7 +46,7 @@ describe.only('Navigation App', () => {
   })
 
   it('performs simple Back navigation', async () => {
-    const [ navigation ] = useContext(navigationContext)
+    const [ navigation ] = useContext(NavigationContext)
     const { goBack } = getNavigationActions()
 
     render(() => (
@@ -71,7 +71,7 @@ describe.only('Navigation App', () => {
 
 
   it('performs simple Forward navigation', async () => {
-    const [ navigation ] = useContext(navigationContext)
+    const [ navigation ] = useContext(NavigationContext)
     const { goForward } = getNavigationActions()
 
     render(() => (
@@ -97,7 +97,7 @@ describe.only('Navigation App', () => {
   })
 
   it('performs complex testing', async () => {
-    const [ navigation ] = useContext(navigationContext)
+    const [ navigation ] = useContext(NavigationContext)
     const { goto, goBack, goForward, getPage } = getNavigationActions()
 
     render(() => (

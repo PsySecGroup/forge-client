@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv'
-import { NOOP } from './src/constants'
 import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
 import { viteSingleFile } from 'vite-plugin-singlefile'
@@ -19,6 +18,8 @@ dotenv.config({ path: resolve(__dirname, '.env.common') })
 dotenv.config({ path: resolve(__dirname, envFile) })
 
 // const assetPath = process.env['ASSET_PATH']
+
+const NOOP = () => undefined
 
 export default defineConfig({
   plugins: [

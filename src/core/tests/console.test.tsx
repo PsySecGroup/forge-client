@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { render } from 'solid-js/web'
 import { drawDOM, clearDOM, type, typeEnter } from './utils'
-import { Command, consoleContext, ConsoleProvider, getConsoleActions } from '../state/console'
+import { type ConsoleCommand, ConsoleContext, ConsoleProvider, getConsoleActions } from '../state/console'
 import { useContext, For } from 'solid-js'
 
 beforeEach(drawDOM)
@@ -26,7 +26,7 @@ describe('Console App', () => {
   })
 
   it('adds to the prompt', async () => {
-    const [ term ] = useContext(consoleContext)
+    const [ term ] = useContext(ConsoleContext)
     const { updatePrompt } = getConsoleActions()
 
     render(() => (
@@ -61,10 +61,10 @@ describe('Console App', () => {
   })
 
   it('runs a command', async () => {
-    const [ term ] = useContext(consoleContext)
+    const [ term ] = useContext(ConsoleContext)
     const { setCommands, updatePrompt, sendCommand } = getConsoleActions()
 
-    const commands: Command[] = [
+    const commands: ConsoleCommand[] = [
       {
         name: 'add',
         onExecute: (args) => {

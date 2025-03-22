@@ -1,19 +1,19 @@
 import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
-import { getActions } from './actions'
+import { defineActions } from './actions'
 import { StoreProvider } from './provider'
 import { createStore } from 'solid-js/store'
 
-type CommandArgs = (string | number)[]
+type ConsoleCommandArgs = (string | number)[]
 
-export type Command = {
+export type ConsoleCommand = {
   name: string
-  onExecute: (args: CommandArgs) => string | false | undefined
+  onExecute: (args: ConsoleCommandArgs) => string | false | undefined
   permissions?: (string | number)[]
 }
 
 export type Console = {
   prompt: string
-  commands: Command[]
+  commands: ConsoleCommand[]
   messages: string[]
 }
 
@@ -74,9 +74,9 @@ export const store = createStore(state)
 
 type SetState = typeof store[1]
 
-export const consoleContext = createContext(store)
-export const consoleStore = store
-export const getConsoleActions = getActions(store, (set: SetState) => {
+export const ConsoleContext = createContext(store)
+export const ConsoleStore = store
+export const getConsoleActions = defineActions(store, (set: SetState) => {
   const self =  {
     /**
      * 
@@ -125,7 +125,7 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
     /**
      * 
      */
-    runCommand: async (commandName: string, args: CommandArgs = [], permissions: string[] = []) => {
+    runCommand: async (commandName: string, args: ConsoleCommandArgs = [], permissions: string[] = []) => {
       const command = store[0].commands.find(command => command.name === commandName)
 
       if (command === undefined) {
@@ -166,7 +166,7 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
     /**
      * 
      */
-    setCommands: (commands: Command[]) => set('commands', commands.map(command => ({
+    setCommands: (commands: ConsoleCommand[]) => set('commands', commands.map(command => ({
       permissions: [],
       ...command
     })))
@@ -180,8 +180,8 @@ export function ConsoleProvider (
 ): JSX.Element {
   return (
     <StoreProvider
-      context={consoleContext}
-      store={consoleStore}
+      context={ConsoleContext}
+      store={ConsoleStore}
     >
       {children}
     </StoreProvider>

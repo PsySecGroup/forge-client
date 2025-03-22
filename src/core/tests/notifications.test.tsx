@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { For, render } from 'solid-js/web'
-import { getNotificationActions, notificationsContext, NotificationsProvider } from '../state/notifications'
+import { getNotificationActions, NotificationsContext, NotificationsProvider } from '../state/notifications'
 import { useContext } from 'solid-js'
 import { drawDOM, clearDOM, click } from './utils'
 
@@ -9,7 +9,7 @@ afterEach(clearDOM)
 
 describe('Notifications App', () => {
   it('renders an empty list', async () => {
-    const [ notifications ] = useContext(notificationsContext)
+    const [ notifications ] = useContext(NotificationsContext)
 
     render(() => (
       <NotificationsProvider>
@@ -32,7 +32,7 @@ describe('Notifications App', () => {
 
   it('manipulates messages', async () => {
     const { addNotification, updateNotification, removeNotificationById } = getNotificationActions()
-    const [ notifications ] = useContext(notificationsContext)
+    const [ notifications ] = useContext(NotificationsContext)
 
     render(() => (
       <NotificationsProvider>
@@ -115,7 +115,7 @@ describe('Notifications App', () => {
 
   it('updates lastChecked', async () => {
     const { updateLastChecked } = getNotificationActions()
-    const [ notifications ] = useContext(notificationsContext)
+    const [ notifications ] = useContext(NotificationsContext)
 
     render(() => (
       <NotificationsProvider>

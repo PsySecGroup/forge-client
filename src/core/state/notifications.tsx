@@ -1,5 +1,5 @@
 import { type ParentProps, type JSX, createContext } from 'solid-js'
-import { getActions } from './actions'
+import { defineActions } from './actions'
 import { StoreProvider } from './provider'
 import { Dictionary, type UniqueRecord } from '../types/basic'
 import { createStore } from 'solid-js/store'
@@ -22,9 +22,9 @@ export const store = createStore(state)
 
 type SetState = typeof store[1]
 
-export const notificationsContext = createContext(store)
-export const notificationsStore = store
-export const getNotificationActions = getActions(store, (set: SetState) => ({
+export const NotificationsContext = createContext(store)
+export const NotificationsStore = store
+export const getNotificationActions = defineActions(store, (set: SetState) => ({
   updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime),
   addNotification: (notification: Notification) => set('messages', store[0].messages.length, {
     createdAt: new Date(),
@@ -48,8 +48,8 @@ export function NotificationsProvider (
 ): JSX.Element {
   return (
     <StoreProvider
-      context={notificationsContext}
-      store={notificationsStore}
+      context={NotificationsContext}
+      store={NotificationsStore}
     >
       {children}
     </StoreProvider>

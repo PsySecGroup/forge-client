@@ -1,6 +1,6 @@
 import { createLocalStore } from '../../state/localStore'
 import { createContext } from 'solid-js'
-import { getActions } from '../../state/actions'
+import { defineActions } from '../../state/actions'
 
 const state = {
   name: 'default'
@@ -12,6 +12,6 @@ type SetState = typeof store[1]
 
 export const formsContext = createContext(store)
 export const formsStore = store
-export const getFormsActions = getActions(store, (set: SetState) => ({
+export const getFormsActions = defineActions(store, (set: SetState) => ({
   updateName: (name: string) => set('name', name),
 }))

@@ -1,5 +1,5 @@
 import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
-import { getActions } from './actions'
+import { defineActions } from './actions'
 import { StoreProvider } from './provider'
 import { createLocalStore } from './localStore'
 
@@ -17,9 +17,9 @@ export const store = createLocalStore('navigation', state)
 
 type SetState = typeof store[1]
 
-export const navigationContext = createContext(store)
-export const navigationStore = store
-export const getNavigationActions = getActions(store, (set: SetState) => {
+export const NavigationContext = createContext(store)
+export const NavigationStore = store
+export const getNavigationActions = defineActions(store, (set: SetState) => {
   const actions =  {
     /**
      * Get the current page
@@ -118,8 +118,8 @@ export function NavigationProvider (
 ): JSX.Element {
   return (
     <StoreProvider
-      context={navigationContext}
-      store={navigationStore}
+      context={NavigationContext}
+      store={NavigationStore}
     >
       {children}
     </StoreProvider>

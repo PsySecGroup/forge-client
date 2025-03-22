@@ -4,7 +4,7 @@ import { type SetStoreFunction } from 'solid-js/store'
 /**
  * Defines mutating actions for a state
  */
-export function getActions<
+export function defineActions<
   T extends BasicRecord,
   A extends Record<string, (...args: any[]) => void>
 >(
