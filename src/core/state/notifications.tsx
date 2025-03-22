@@ -26,7 +26,7 @@ export const notificationsStore = store
 export const getNotificationActions = getActions(store, (set: SetState) => ({
   updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime),
   addNotification: (notification: Notification) => set('messages', store[0].messages.length, notification),
-  updateNotification: (notification: Notification) => set(
+  updateNotification: (notification: Partial<Notification>) => set(
     'messages',
     store[0].messages.findIndex(record => record.id === notification.id),
     notification),

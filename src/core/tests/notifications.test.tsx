@@ -50,8 +50,8 @@ describe.only('Notifications App', () => {
       .toBe(`<div id="root"><ul></ul></div>`)
   })
 
-  it('adds a message', async () => {
-    const { addNotification } = getNotificationActions()
+  it('manipulates messages', async () => {
+    const { addNotification, updateNotification, removeNotificationById } = getNotificationActions()
     const [ notifications ] = useContext(notificationsContext)
 
     render(() => (
@@ -66,7 +66,7 @@ describe.only('Notifications App', () => {
             )}
           </For>
         </ul>
-        <button onClick={() => addNotification({
+        <button id="add" onClick={() => addNotification({
           id: 1,
           createdAt: new Date(),
           isNew: true,
@@ -76,17 +76,59 @@ describe.only('Notifications App', () => {
             summary: 'you broke the thing :('
           }
         })}>
-            Add
-          </button>
+          Add
+        </button>
+        <button id="modify" onClick={() => updateNotification({
+          id: 1,
+          text: {
+            from: 'system',
+            summary: 'you saw the error'
+          }
+        })}>
+          Modify
+        </button>
+        <button id="remove" onClick={() => removeNotificationById(1)}>
+          Remove
+        </button>
       </NotificationsProvider>
     ), document.getElementById('root')!)
 
     expect(document.body.innerHTML)
-      .toBe(`<div id="root"><ul></ul><button>Add</button></div>`)
+      .toBe(`<div id="root">\
+<ul></ul>\
+<button id="add">Add</button>\
+<button id="modify">Modify</button>\
+<button id="remove">Remove</button>\
+</div>`)
 
-    await click('button')
+    await click('#add')
 
     expect(document.body.innerHTML)
-      .toBe(`<div id="root"><ul><li><div>me</div><div>you broke the thing :(</div></li></ul><button>Add</button></div>`)
+      .toBe(`<div id="root">\
+<ul><li><div>me</div><div>you broke the thing :(</div></li></ul>\
+<button id="add">Add</button>\
+<button id="modify">Modify</button>\
+<button id="remove">Remove</button>\
+</div>`)
+
+    await click('#modify')
+
+    expect(document.body.innerHTML)
+      .toBe(`<div id="root">\
+<ul><li><div>system</div><div>you saw the error</div></li></ul>\
+<button id="add">Add</button>\
+<button id="modify">Modify</button>\
+<button id="remove">Remove</button>\
+</div>`)
+
+    await click('#remove')
+
+    expect(document.body.innerHTML)
+    .toBe(`<div id="root">\
+<ul></ul>\
+<button id="add">Add</button>\
+<button id="modify">Modify</button>\
+<button id="remove">Remove</button>\
+</div>`)
   })
 })
