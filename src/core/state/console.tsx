@@ -1,109 +1,71 @@
-import { createSignal, createEffect, onCleanup } from 'solid-js';
+import { type ParentProps, type JSX, createContext } from 'solid-js'
+import { getActions } from './actions'
+import { StoreProvider } from './provider'
+import { createStore } from 'solid-js/store'
 
-// Sample store for demonstration
-const useStore = () => {
-  const [count, setCount] = createSignal(0);
-  
-  const increment = () => setCount(count() + 1);
-  const decrement = () => setCount(count() - 1);
+export type Command = {
+  name: string
+  onExecute: (...args: any[]) => void
+  arguments?: string[]
+  permissions?: (string | number)[]
+}
 
-  return { count, increment, decrement };
-};
+export type Console = {
+  commands: Command[]
+  messages: string[]
+}
 
-// Console component
-const Console = ({ stores }) => {
-  const [command, setCommand] = createSignal('');
-  const [output, setOutput] = createSignal([]);
-  const [history, setHistory] = createSignal([]);
+const state: Console = {
+  commands: [],
+  messages: []
+}
 
-  const executeCommand = () => {
-    const cmd = command().trim();
-    if (!cmd) return;
-    
-    // Add to history
-    setHistory((prevHistory) => [...prevHistory, cmd]);
+export const store = createStore(state)
 
-    // Try to execute the command
-    try {
-      const result = evalCommand(cmd);
-      setOutput((prevOutput) => [...prevOutput, `> ${cmd}`, result]);
-    } catch (error) {
-      setOutput((prevOutput) => [...prevOutput, `> ${cmd}`, `Error: ${error.message}`]);
+type SetState = typeof store[1]
+
+export const consoleContext = createContext(store)
+export const consoleStore = store
+export const getConsoleActions = getActions(store, (set: SetState) => ({
+  addMessage: (message: string) => set('messages', store[0].messages.length, message),
+  updateMessage: (index: number, message: string) => set('messages', index, message),
+  removeMessage: (index: number) => set(
+    'messages',
+    (messages) => messages.filter((_, i) => i !== index)
+  ),
+  addCommands: (commands: Command[]) => set('commands', commands.map(command => ({
+    arguments: [],
+    permissions: [],
+    ...command
+  }))),
+  runCommand: (commandName: string, args: string[] = [], permissions: string[] = []) => {
+    const command = store[0].commands.find(command => command.name === commandName)
+
+    if (command === undefined) {
+      return false
     }
 
-    // Clear the input field after command execution
-    setCommand('');
-  };
+    if (permissions.length === 0) {
+      return command.onExecute(args)
+    } else {
+      const hasPermission = permissions.every(permission => command.permissions?.includes(permission))
 
-  const evalCommand = (cmd) => {
-    const [funcName, ...args] = cmd.split(' ');
-
-    // Execute based on the command name
-    if (funcName === 'get') {
-      const store = args[0];
-      if (stores[store]) {
-        return stores[store]();
+      if (hasPermission) {
+        return command.onExecute(args)
       }
-      return `No store named "${store}" found.`;
-    } else if (funcName === 'set') {
-      const store = args[0];
-      const value = args.slice(1).join(' ');
-
-      if (stores[store] && typeof stores[store].set === 'function') {
-        stores[store].set(value);
-        return `Set ${store} to ${value}`;
-      }
-      return `No set function available for ${store}.`;
-    } else if (funcName === 'increment' || funcName === 'decrement') {
-      const store = args[0];
-      if (stores[store] && typeof stores[store][funcName] === 'function') {
-        stores[store][funcName]();
-        return `${store} ${funcName}ed`;
-      }
-      return `${store} does not have an "${funcName}" function.`;
     }
+  }
+}))
 
-    return `Unknown command: ${cmd}`;
-  };
-
+export function ConsoleProvider (
+  { children }: ParentProps
+): JSX.Element {
   return (
-    <div class="console">
-      <div class="console-output">
-        {output().map((line, index) => (
-          <div key={index}>{line}</div>
-        ))}
-      </div>
-      <div class="console-input">
-        <input
-          type="text"
-          value={command()}
-          onInput={(e) => setCommand(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && executeCommand()}
-          placeholder="Type a command..."
-        />
-      </div>
-      <div class="console-history">
-        <h4>Command History</h4>
-        <ul>
-          {history().map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-// Sample usage with stores and context
-const App = () => {
-  const store = useStore();
-  
-  return (
-    <div>
-      <h1>Interactive Console Example</h1>
-      <Console stores={{ counter: store }} />
-    </div>
-  );
-};
-
-export default App;
+    <StoreProvider
+      context={consoleContext}
+      store={consoleStore}
+    >
+      {children}
+    </StoreProvider>
+  )
+}
