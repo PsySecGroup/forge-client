@@ -6,19 +6,10 @@ import { Counter } from './exampleApp/counter'
 import { Forms } from './exampleApp/forms'
 import { exampleContext, exampleStore } from './exampleApp/state'
 import { formsContext, formsStore } from './exampleApp/formsState'
+import { drawDOM, clearDOM, click } from './utils'
 
-beforeEach(() => {
-  const root = document.createElement('div')
-  root.id = 'root'
-  document.body.appendChild(root)
-})
-
-afterEach(() => {
-  const root = document.getElementById('root')
-  if (root) {
-    document.body.removeChild(root)
-  }
-})
+beforeEach(drawDOM)
+afterEach(clearDOM)
 
 describe('Example App', () => {
   it('renders counter', async () => {
@@ -35,13 +26,7 @@ describe('Example App', () => {
       .toBe(`<div id="root"><div>1<button>Increment</button></div></div>`)
 
     // Find the button and click it
-    const button = document.querySelector('button')
-
-    if (button) {
-      await fireEvent.click(button)
-    } else {
-      throw new Error('Button not found')
-    }
+    await click('button')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root"><div>2<button>Increment</button></div></div>`)

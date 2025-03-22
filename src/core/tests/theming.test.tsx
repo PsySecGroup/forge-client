@@ -1,25 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
 import { App } from './exampleApp/app'
-import { fireEvent } from '@testing-library/dom'
 import { exampleContext, exampleStore } from './exampleApp/state'
 import { ThemeProvider } from '../themes'
 import { getThemeActions } from '../themes/state'
 import { ThemedBox } from './exampleApp/themedBox'
 import otherCss from './exampleApp/other.module.css'
+import { drawDOM, clearDOM, click } from './utils'
 
-beforeEach(() => {
-  const root = document.createElement('div')
-  root.id = 'root'
-  document.body.appendChild(root)
-})
-
-afterEach(() => {
-  const root = document.getElementById('root')
-  if (root) {
-    document.body.removeChild(root)
-  }
-})
+beforeEach(drawDOM)
+afterEach(clearDOM)
 
 describe('Themed App', () => {
   it ('render themes', async () => {
@@ -178,13 +168,7 @@ Hello, Solid!\
 </div>`)
 
     // Find the button and click it
-    const button = document.querySelector('button')
-
-    if (button) {
-      await fireEvent.click(button)
-    } else {
-      throw new Error('Button not found')
-    }
+    await click('button')
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root"><div class="_container_f5f486" style="background: rgb(0, 255, 0);">\

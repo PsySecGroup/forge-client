@@ -153,16 +153,16 @@ export const getConsoleActions = getActions(store, (set: SetState) => {
      */
     runCommand: async (commandName: string, args: (string | number)[] = [], permissions: string[] = []) => {
       const command = store[0].commands.find(command => command.name === commandName)
-  
+
       if (command === undefined) {
         return false
       }
-  
+
       if (permissions.length === 0) {
         return await command.onExecute(args)
       } else {
         const hasPermission = permissions.every(permission => command.permissions?.includes(permission))
-  
+
         if (hasPermission) {
           return await command.onExecute(args)
         } else {

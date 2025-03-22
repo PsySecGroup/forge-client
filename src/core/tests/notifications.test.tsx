@@ -1,31 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { For, render } from 'solid-js/web'
-import { fireEvent } from '@testing-library/dom'
 import { getNotificationActions, notificationsContext, NotificationsProvider } from '../state/notifications'
 import { useContext } from 'solid-js'
+import { drawDOM, clearDOM, click } from './utils'
 
-async function click (query: string) {
-    const button = document.querySelector(query)
-
-    if (button) {
-      await fireEvent.click(button)
-    } else {
-      throw new Error('Button not found')
-    }
-}
-
-beforeEach(() => {
-  const root = document.createElement('div')
-  root.id = 'root'
-  document.body.appendChild(root)
-})
-
-afterEach(() => {
-  const root = document.getElementById('root')
-  if (root) {
-    document.body.removeChild(root)
-  }
-})
+beforeEach(drawDOM)
+afterEach(clearDOM)
 
 describe.only('Notifications App', () => {
   it('renders an empty list', async () => {
