@@ -65,7 +65,7 @@ describe('ForgeApp App', () => {
             {(message) => (<li>{message}</li>)}
           </For>
         </ul>
-        <ul>
+        <ul id="notifications">
           <For each={notifications.messages}>
             {(message) => (
               <li>
@@ -85,7 +85,7 @@ describe('ForgeApp App', () => {
 <button id="sendNotification"></button>\
 <button id="changeTheme"></button>\
 <ul id="consoleOutput"></ul>\
-<ul></ul>\
+<ul id="notifications"></ul>\
 </div>`)
 
     expect(window.location.hash).toBe('')
@@ -102,7 +102,7 @@ describe('ForgeApp App', () => {
 <button id="sendNotification"></button>\
 <button id="changeTheme"></button>\
 <ul id="consoleOutput"></ul>\
-<ul></ul>\
+<ul id="notifications"></ul>\
 </div>`)
 
     await click('#fireConsole')
@@ -119,7 +119,7 @@ describe('ForgeApp App', () => {
 <li>goto B</li>\
 <li>Going to B</li>\
 </ul>\
-<ul></ul>\
+<ul id="notifications"></ul>\
 </div>`)
 
     await click('#sendNotification')
@@ -134,7 +134,7 @@ describe('ForgeApp App', () => {
 <li>goto B</li>\
 <li>Going to B</li>\
 </ul>\
-<ul>\
+<ul id="notifications">\
 <li><div>a message!</div></li>\
 </ul>\
 </div>`)
@@ -151,7 +151,7 @@ describe('ForgeApp App', () => {
 <li>goto B</li>\
 <li>Going to B</li>\
 </ul>\
-<ul>\
+<ul id="notifications">\
 <li><div>a message!</div></li>\
 </ul>\
 </div>`)
