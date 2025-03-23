@@ -42,7 +42,6 @@ describe('Notifications App', () => {
               <li>
                 <div>{message.text['from']}</div>
                 <div>{message.text['summary']}</div>
-                <div>{message.isNew ? 'new' : 'seen'}</div>
               </li>
             )}
           </For>
@@ -86,7 +85,9 @@ describe('Notifications App', () => {
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
-<ul><li><div>me</div><div>you broke the thing :(</div><div>seen</div></li></ul>\
+<ul>\
+<li><div>me</div><div>you broke the thing :(</div></li>\
+</ul>\
 <button id="add">Add</button>\
 <button id="modify">Modify</button>\
 <button id="remove">Remove</button>\
@@ -96,7 +97,9 @@ describe('Notifications App', () => {
 
     expect(document.body.innerHTML)
       .toBe(`<div id="root">\
-<ul><li><div>system</div><div>you saw the error</div><div>seen</div></li></ul>\
+<ul>\
+<li><div>system</div><div>you saw the error</div></li>\
+</ul>\
 <button id="add">Add</button>\
 <button id="modify">Modify</button>\
 <button id="remove">Remove</button>\

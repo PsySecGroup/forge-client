@@ -3,7 +3,7 @@ import { defineActions } from './actions'
 import { StoreProvider } from './provider'
 import { createStore } from 'solid-js/store'
 
-type ConsoleCommandArgs = (string | number)[]
+export type ConsoleCommandArgs = (string | number)[]
 
 export type ConsoleCommand = {
   name: string
@@ -112,6 +112,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
               result = output
             }
             // When the command is successful, then we clear the prompt
+            self.addMessage(prompt)
             self.updatePrompt('')
           }
         }

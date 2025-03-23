@@ -145,6 +145,7 @@ describe('Console App', () => {
 <pre id="promptOutput"></pre>\
 <ul id="output">\
 <li>Command "add" not found</li>\
+<li>add 1 3</li>\
 <li>4</li>\
 </ul>\
 </div>`)

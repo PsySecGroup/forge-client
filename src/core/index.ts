@@ -4,6 +4,7 @@ export {
 
 export {
   type ConsoleCommand,
+  type ConsoleCommandArgs,
   type Console,
   ConsoleProvider,
   ConsoleContext,
@@ -15,10 +16,10 @@ export {
 } from './state/localStore'
 
 export {
-    type Navigation,
-    NavigationProvider,
-    NavigationContext,
-    getNavigationActions
+  type Navigation,
+  NavigationProvider,
+  NavigationContext,
+  getNavigationActions
 } from './state/navigation'
 
 export {
@@ -28,7 +29,7 @@ export {
   NotificationsContext,
 } from './state/notifications'
 
-  export {
+export {
   StoreProvider,
   type StoreProviderProps
 } from './state/provider'
@@ -62,3 +63,7 @@ export {
 export {
   alpha
 } from './themes/utils'
+
+export {
+  ForgeApp
+} from './app'

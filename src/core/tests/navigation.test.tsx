@@ -2,26 +2,11 @@ import { describe, it, expect, beforeEach, afterEach,  } from 'vitest'
 import { render } from 'solid-js/web'
 import { drawDOM, clearDOM, click } from './utils'
 import { useContext } from 'solid-js'
-import { getNavigationActions, NavigationContext, NavigationProvider } from '../state/navigation'
+import { NavigationContext } from '../state/navigation'
+import { NavigationCompoonent } from './exampleApp/navigation'
 
 beforeEach(drawDOM)
 afterEach(clearDOM)
-
-function NavigationCompoonent () {
-  const { goto, goBack, goForward } = getNavigationActions()
-
-  return (<NavigationProvider>
-    <button id="gotoA" onClick={() => goto('A')} />
-    <button id="gotoB" onClick={() => goto('B')} />
-    <button id="gotoC" onClick={() => goto('C')} />
-    <button id="back1" onClick={() => goBack(1)} />
-    <button id="back2" onClick={() => goBack(2)} />
-    <button id="back3" onClick={() => goBack(3)} />
-    <button id="forward1" onClick={() => goForward(1)} />
-    <button id="forward2" onClick={() => goForward(2)} />
-    <button id="forward3" onClick={() => goForward(3)} />
-  </NavigationProvider>)
-}
 
 const navigationHtml = `<div id="root">\
 <button id="gotoA"></button>\
@@ -34,8 +19,6 @@ const navigationHtml = `<div id="root">\
 <button id="forward2"></button>\
 <button id="forward3"></button>\
 </div>`
-
-
 
 describe('Navigation App', () => {
   it('renders navigation', async () => {
