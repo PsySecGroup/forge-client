@@ -46,8 +46,6 @@ export {
   getTriadicColors
 } from './themes/palette'
 
-export * as reset from './themes/reset.css'
-
 export {
   getThemeActions,
   ThemeContext,
