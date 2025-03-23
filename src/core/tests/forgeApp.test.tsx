@@ -11,9 +11,7 @@ import { For, useContext } from 'solid-js'
 beforeEach(drawDOM)
 afterEach(clearDOM)
 
-
-
-describe.only('ForgeApp App', () => {
+describe('ForgeApp App', () => {
   it('renders ForgeApp', async () => {
     const [ navigation ] = useContext(NavigationContext)
     const [ term ] = useContext(ConsoleContext)
