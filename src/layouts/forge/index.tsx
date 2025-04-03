@@ -1,7 +1,7 @@
 import './css/pure-3.0.0.css'
 import './css/pure-grids-responsive-3.0..0.css'
 import styles from './css/index.module.css'
-import { JSXElement, Show } from 'solid-js'
+import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
 
 type Props = {
   appBar?: JSXElement
@@ -11,6 +11,24 @@ type Props = {
 }
 
 export function ForgeLayout ({ appBar, left, right, middle }: Props) {
+  const [isMobile, setIsMobile] = createSignal(window.innerWidth < 767)
+  
+  const mediaQuery = window.matchMedia("(max-width: 767px)")
+
+  createEffect(() => {
+    const handler = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches)
+    }
+
+    // Listen to changes in the media query
+    mediaQuery.addEventListener("change", handler)
+
+    // Clean up listener when component unmounts
+    return () => {
+      mediaQuery.removeEventListener("change", handler)
+    }
+  })
+
   return (<div class={styles['layout']}>
     <Show when={appBar !== undefined}>
       <div class="pure-g">
@@ -29,6 +47,9 @@ export function ForgeLayout ({ appBar, left, right, middle }: Props) {
       <div class={`${styles['middle-column']} ${styles['inner-shadow']} pure-u-md-3-5 pure-u-lg-3-4`}>
         <div class={styles['content']}>
           <p>Content (80% height)</p>
+          <p>{isMobile()
+          ? "We're in mobile"
+          : "We're in desktop"}</p>
           {middle}
         </div>
         <div class={styles['options']}>
