@@ -43,4 +43,5 @@ You can check out file sizes and load times of individual files in dev by visiti
 
 ## Research
 
-TBD
+* Make `core` an npm/git/importale module 
+* Create an app generator as a separate repo

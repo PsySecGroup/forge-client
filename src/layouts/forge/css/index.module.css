@@ -1,0 +1,70 @@
+
+.layout {
+  display: -webkit-box;      /* Old Safari/iOS */
+  display: -ms-flexbox;      /* IE 10 */
+  display: -webkit-flex;     /* Old Android */
+  display: flex;             /* Modern Browsers */
+  -webkit-box-flex: 1;       /* Old Safari/iOS */
+  -webkit-flex-grow: 1;      /* Old Android */
+  flex-grow: 1;              /* Modern Browsers */
+  flex-direction: column;
+  overflow-y: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+.left-column, .right-column, .middle-column {
+  height: 100vh;
+}
+
+.left-column, .right-column {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.middle-column {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  overflow-y: auto;
+}
+
+.content {
+  margin-bottom: 0;
+  flex: 8;
+}
+
+.options {
+  flex: 2;
+  border-top: 1px solid  #888;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background: white; /* To ensure it's above the shadow */
+}
+
+.inner-shadow {
+  box-shadow: 
+    inset -15px 0 20px -10px rgba(0, 0, 0, 0.4), /* Left inner shadow */
+    inset 15px 0 20px -10px rgba(0, 0, 0, 0.4); /* Right outer shadow */
+}
+
+.app-bar {
+  color: white;
+  background-color: black;
+  padding: 0.5em;
+}
+
+/* Mobile view */
+@media screen and (max-width: 767px) {
+  .left-column, .right-column {
+    display: none; /* Hide left and right columns */
+  }
+
+  .middle-column {
+    height: 100vh;
+    width: 100%;
+  }
+}
