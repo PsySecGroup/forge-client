@@ -1,4 +1,5 @@
 import './app.module.css'
+import { NavButton } from './components/NavButton'
 
 import {
   type ConsoleCommandArgs,
@@ -30,7 +31,14 @@ export function App () {
     >
       <ForgeLayout
         appBar={<></>}
-        left={<></>}
+        left={<>
+          <NavButton location='test'>
+            Test
+          </NavButton>
+          <NavButton location='next'>
+            Next
+          </NavButton>
+        </>}
         middle={<></>}
         right={<></>}
       />

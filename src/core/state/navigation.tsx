@@ -1,4 +1,4 @@
-import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
+import { type ParentProps, type JSX, createContext, batch, type Setter } from 'solid-js'
 import { defineActions } from './actions'
 import { StoreProvider } from './provider'
 import { createLocalStore } from './localStore'
@@ -12,7 +12,7 @@ export type Navigation = {
 const state: Navigation = {
   history: [],
   referenceIndex: -1,
-  location: ''
+  location: window.location.hash ? window.location.hash.substring(1) : ''
 }
 
 export const store = createLocalStore('navigation', state)
@@ -94,15 +94,44 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
 const { goto } = getNavigationActions()
 
 window.addEventListener('popstate', ({ state }) => {
+  console.log('popstate', { state })
   goto(state?.hash ?? state) // TODO confirm this
 })
 
 /**
  * Catch when the hash in the URL is manually changed
  */
-window.addEventListener('hashchange', function () {
-  goto((this.window.location.hash || '').substring(1)) // TODO confirm this
+window.addEventListener('hashchange', function (e) {
+  const newHash = e.newURL.substring(e.newURL.lastIndexOf('#') + 1)
+  goto(newHash) // TODO confirm this
 })
+
+/**
+ * 
+ * @returns 
+ */
+export function detectMobile (width = 767) {
+  const mediaQuery = window.matchMedia(`(max-width: ${width}px)`)
+
+  const checkMobile = (setter: Setter<boolean>) => {
+    const handler = (event: MediaQueryListEvent) => {
+      setter(event.matches)
+    }
+  
+    // Listen to changes in the media query
+    mediaQuery.addEventListener('change', handler)
+  
+    // Clean up listener when component unmounts
+    return () => {
+      mediaQuery.removeEventListener('change', handler)
+    }  
+  }
+
+  return {
+    isMobileWidth: window.innerWidth < width,
+    checkMobile
+  }
+}
 
 /**
  * Context Provider

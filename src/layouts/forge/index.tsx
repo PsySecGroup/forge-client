@@ -2,6 +2,7 @@ import './css/pure-3.0.0.css'
 import './css/pure-grids-responsive-3.0..0.css'
 import styles from './css/index.module.css'
 import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
+import { detectMobile } from '../../core/state/navigation'
 
 type Props = {
   appBar?: JSXElement
@@ -11,22 +12,12 @@ type Props = {
 }
 
 export function ForgeLayout ({ appBar, left, right, middle }: Props) {
-  const [isMobile, setIsMobile] = createSignal(window.innerWidth < 767)
+  const { checkMobile, isMobileWidth } = detectMobile()
+
+  const [isMobile, setIsMobile] = createSignal(isMobileWidth)
   
-  const mediaQuery = window.matchMedia("(max-width: 767px)")
-
   createEffect(() => {
-    const handler = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches)
-    }
-
-    // Listen to changes in the media query
-    mediaQuery.addEventListener("change", handler)
-
-    // Clean up listener when component unmounts
-    return () => {
-      mediaQuery.removeEventListener("change", handler)
-    }
+    checkMobile(setIsMobile)
   })
 
   return (<div class={styles['layout']}>
