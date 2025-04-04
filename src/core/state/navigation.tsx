@@ -12,9 +12,9 @@ export type Navigation = {
 const state: Navigation = {
   history: [],
   referenceIndex: -1,
-  location: window.location.hash ? window.location.hash.substring(1) : ''
+  location: window.location.hash ? window.location.hash.substring(1) : '' ? window.location.hash.substring(1) : ''
 }
-
+console.log({ hash: window.location.hash, l: state.location })
 export const store = createLocalStore('navigation', state)
 
 type SetState = typeof store[1]
@@ -39,6 +39,7 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         window.history.pushState({
           hash
         }, '', hash)
+        // TODO learn more about pushstate to make sure back and forward buttons work
 
         batch(() => {
           set('history', history.length, location ?? '')
@@ -103,7 +104,7 @@ window.addEventListener('popstate', ({ state }) => {
  */
 window.addEventListener('hashchange', function (e) {
   const newHash = e.newURL.substring(e.newURL.lastIndexOf('#') + 1)
-  goto(newHash) // TODO confirm this
+  goto(newHash)
 })
 
 /**

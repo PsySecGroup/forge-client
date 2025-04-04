@@ -13,6 +13,8 @@ export function NavButton ({ location, children }: ParentProps<Props>) {
   const [ navigation ] = useContext(NavigationContext)
   const { goto } = getNavigationActions()
 
+  // TODO do styling
+
   const isActive = () => navigation.location === location
     ? styles['active']
     : ''
