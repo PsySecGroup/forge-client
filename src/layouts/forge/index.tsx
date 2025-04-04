@@ -2,7 +2,7 @@ import './css/pure-3.0.0.css'
 import './css/pure-grids-responsive-3.0..0.css'
 import styles from './css/index.module.css'
 import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
-import { detectMobile } from '../../core/state/navigation'
+import { detectMobile } from '../../core/state/device'
 
 type Props = {
   appBar?: JSXElement
