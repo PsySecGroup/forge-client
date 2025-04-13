@@ -6,15 +6,30 @@ import { detectMobile } from '../../core/state/device'
 
 type Props = {
   appBar?: JSXElement
-  left: JSXElement
-  middle: JSXElement
-  right: JSXElement
+  left?: JSXElement
+  main: JSXElement
+  right?: JSXElement
 }
 
-export function ForgeLayout ({ appBar, left, right, middle }: Props) {
+const mainStyle = `${styles['middle-column']} ${styles['inner-shadow']}`
+
+export function ForgeLayout ({ appBar, left, right, main }: Props) {
   const { checkMobile, isMobileWidth } = detectMobile()
 
   const [isMobile, setIsMobile] = createSignal(isMobileWidth)
+
+  const getMainClasses = () => {
+    if (left === undefined && right !== undefined) {
+      return `${mainStyle} pure-u-md-4-5 pure-u-lg-7-8`
+    } else if (left !== undefined && right === undefined) {
+      return `${mainStyle} pure-u-md-4-5 pure-u-lg-7-8`
+    } else if (left === undefined && right === undefined) {
+      return `${mainStyle} pure-u-md-1 pure-u-lg-1`
+    } else {
+      return `${mainStyle} pure-u-md-3-5 pure-u-lg-3-4`
+    }
+  }
+
   
   createEffect(() => {
     checkMobile(setIsMobile)
@@ -29,29 +44,34 @@ export function ForgeLayout ({ appBar, left, right, middle }: Props) {
         </div>
       </div>
     </Show>
+
     <div class="pure-g">
-      <div class={`${styles['left-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
-        <p>Left Column</p>
-        {left}
-      </div>
+      <Show when={left !== undefined}>
+        <div class={`${styles['left-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
+          <p>Left Column</p>
+          {left}
+        </div>
+      </Show>
       
-      <div class={`${styles['middle-column']} ${styles['inner-shadow']} pure-u-md-3-5 pure-u-lg-3-4`}>
+      <div class={getMainClasses()}>
         <div class={styles['content']}>
           <p>Content (80% height)</p>
           <p>{isMobile()
           ? "We're in mobile"
           : "We're in desktop"}</p>
-          {middle}
+          {main}
         </div>
         <div class={styles['options']}>
           <p>Options (20% height)</p>
         </div>
       </div>
-      
-      <div class={`${styles['right-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
-        <p>Right Column</p>
-        {right}
-      </div>
+
+      <Show when={right !== undefined}>
+        <div class={`${styles['right-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
+          <p>Right Column</p>
+          {right}
+        </div>
+      </Show>
     </div>
   </div>)
 }

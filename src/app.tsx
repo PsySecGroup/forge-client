@@ -39,7 +39,7 @@ export function App () {
             Next
           </NavButton>
         </>}
-        middle={<></>}
+        main={<></>}
         right={<></>}
       />
     </ForgeApp>
