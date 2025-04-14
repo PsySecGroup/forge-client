@@ -3,6 +3,8 @@ import './css/pure-grids-responsive-3.0..0.css'
 import styles from './css/index.module.css'
 import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
 import { detectMobile } from '../../core/state/device'
+import { ButtonTray } from './buttonTray'
+import { NavButton } from '../../components/NavButton'
 
 type Props = {
   appBar?: JSXElement
@@ -61,8 +63,15 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
           : "We're in desktop"}</p>
           {main}
         </div>
+
         <div class={styles['options']}>
-          <p>Options (20% height)</p>
+          <Show when={isMobile()}>
+            <ButtonTray>
+              <NavButton location={'beep'}>a</NavButton>
+              <button style={{ width: '500px' }}>b</button>
+              <button style={{ width: '500px' }}>c</button>
+            </ButtonTray>
+          </Show>
         </div>
       </div>
 
