@@ -32,7 +32,6 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
     }
   }
 
-  
   createEffect(() => {
     checkMobile(setIsMobile)
   })

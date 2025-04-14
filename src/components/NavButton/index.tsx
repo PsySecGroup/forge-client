@@ -14,14 +14,13 @@ export function NavButton ({ location, children }: ParentProps<Props>) {
   const { goto } = getNavigationActions()
 
   // TODO do styling
-
-  const isActive = () => navigation.location === location
+  const getClasses = () => navigation.location === location
     ? styles['active']
     : ''
 
   return (
     <button
-      class={isActive()}
+      class={getClasses()}
       onClick={() => goto(location)}
     >
       {children}

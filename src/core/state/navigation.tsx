@@ -1,7 +1,7 @@
-import { type ParentProps, type JSX, createContext, batch, type Setter } from 'solid-js'
+import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
 import { defineActions } from './actions'
 import { StoreProvider } from './provider'
-import { createLocalStore } from './localStore'
+import { createStore } from 'solid-js/store'
 
 export type Navigation = {
   history: string[]
@@ -12,10 +12,12 @@ export type Navigation = {
 const state: Navigation = {
   history: [],
   referenceIndex: -1,
-  location: window.location.hash ? window.location.hash.substring(1) : '' ? window.location.hash.substring(1) : ''
+  location: window.location.hash
+    ? window.location.hash.substring(1)
+    : ''
 }
-console.log({ hash: window.location.hash, l: state.location })
-export const store = createLocalStore('navigation', state)
+
+export const store = createStore(state)
 
 type SetState = typeof store[1]
 
@@ -27,14 +29,18 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
      * The main location handler for Navigation
      */
     goto: (location: string, referenceIndex?: number) => {
+      const destinateion = location[0] === '#'
+        ? location.substring(1)
+        : location
+
       const history = store[0].history
 
-      if (history[history.length - 1] !== location) {
+      if (state.location !== destinateion) {
         // The location has changed, add it
 
-        const hash = !location
+        const hash = !destinateion
           ? '#'
-          : '#' + location
+          : '#' + destinateion
 
         window.history.pushState({
           hash
@@ -42,9 +48,9 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         // TODO learn more about pushstate to make sure back and forward buttons work
 
         batch(() => {
-          set('history', history.length, location ?? '')
+          set('history', history.length, destinateion ?? '')
           set('referenceIndex', referenceIndex ?? history.length - 1)
-          set('location', location ?? '')
+          set('location', destinateion ?? '')
         })        
       }
     },
@@ -95,16 +101,16 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
 const { goto } = getNavigationActions()
 
 window.addEventListener('popstate', ({ state }) => {
-  console.log('popstate', { state })
-  goto(state?.hash ?? state) // TODO confirm this
+  if (state) {
+    goto(state.hash.substring(state.hash.lastIndexOf('#')))
+  }
 })
 
 /**
  * Catch when the hash in the URL is manually changed
  */
 window.addEventListener('hashchange', function (e) {
-  const newHash = e.newURL.substring(e.newURL.lastIndexOf('#') + 1)
-  goto(newHash)
+  goto(e.newURL.substring(e.newURL.lastIndexOf('#')))
 })
 
 /**
