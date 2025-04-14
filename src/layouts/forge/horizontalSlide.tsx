@@ -1,102 +1,215 @@
 import styles from './css/buttonTray.module.css'
-import { type ParentProps } from 'solid-js'
+import { type ParentProps, createSignal, onMount, onCleanup } from 'solid-js'
 
 type Props = {}
 
 export function HorizontalSlide ({ children }: ParentProps<Props>) {
+  const [showLeftButton, setShowLeftButton] = createSignal(false)
+  const [showRightButton, setShowRightButton] = createSignal(false)
+
   let isDragging = false
   let startX = 0
-  let scrollLeft = 0
+  let scrollLeftOffset = 0
   let lastX = 0
   let lastTime = 0
   let velocity = 0
   let containerRef!: HTMLDivElement
 
-/**
+  // Check if scrolling is possible in either direction
+  const checkScrollButtons = () => {
+    if (!containerRef) {
+      return
+    }
+    
+    // Show left button if we're not at the start
+    // TODO get better math
+    setShowLeftButton(
+      true
+      //containerRef.scrollLeft > 0
+    )
+    
+    // Show right button if we can scroll further right
+    // TODO get better math
+    setShowRightButton(
+      true
+      // containerRef.scrollLeft < containerRef.scrollWidth - containerRef.clientWidth - 200
+    )
+  }
+
+  onMount(() => {
+    // Check initial button visibility
+    checkScrollButtons()
+    
+    // Set up scroll event listener
+    if (containerRef) {
+      containerRef.addEventListener('scroll', checkScrollButtons)
+    }
+    
+    // Set up resize observer to recheck when container dimensions change
+    const resizeObserver = new ResizeObserver(() => {
+      checkScrollButtons()
+    })
+    
+    if (containerRef) {
+      resizeObserver.observe(containerRef)
+    }
+    
+    onCleanup(() => {
+      if (containerRef) {
+        containerRef.removeEventListener('scroll', checkScrollButtons)
+      }
+      resizeObserver.disconnect()
+    })
+  })
+
+  /**
    * Mouse moves down, begin dragging and calculate click offset of the drag as
    * a reference point for the movement
    */
-const handleMouseDown = (e: MouseEvent | TouchEvent) => {
-  isDragging = true
+  const handleMouseDown = (e: MouseEvent | TouchEvent) => {
+    isDragging = true
 
-  startX = (e as MouseEvent).pageX
-    ?? (e as TouchEvent).touches[0]?.pageX
-    ?? 0
+    startX = (e as MouseEvent).pageX
+      ?? (e as TouchEvent).touches[0]?.pageX
+      ?? 0
 
-  if (containerRef) {
-    scrollLeft = containerRef.scrollLeft
+    if (containerRef) {
+      scrollLeftOffset = containerRef.scrollLeft
+    }
+
+    lastX = startX
+    lastTime = performance.now()
+
+    // We add window listeners so that when the mouse leaves the container while down,
+    // it doesn't end the drag
+    window.addEventListener('mousemove', handleMouseMove as any)
+    window.addEventListener('mouseup', handleMouseUp as any)
+    window.addEventListener('touchmove', handleMouseMove as any, { passive: false })
+    window.addEventListener('touchend', handleMouseUp as any)
   }
 
-  lastX = startX
-  lastTime = performance.now()
+  /**
+   * Mouse moves up, no longer dragging
+   */
+  const handleMouseUp = () => {
+    isDragging = false
 
-  // We add window listeners so that when the mouse leaves the container while down,
-  // it doesn't end the drag
-  window.addEventListener('mousemove', handleMouseMove as any)
-  window.addEventListener('mouseup', handleMouseUp as any)
-  window.addEventListener('touchmove', handleMouseMove as any, { passive: false })
-  window.addEventListener('touchend', handleMouseUp as any)
-}
+    // Remove the window listeners
+    window.removeEventListener('mousemove', handleMouseMove as any)
+    window.removeEventListener('mouseup', handleMouseUp as any)
+    window.removeEventListener('touchmove', handleMouseMove as any)
+    window.removeEventListener('touchend', handleMouseUp as any)
 
-/**
- * Mouse moves up, no longer dragging
- */
-const handleMouseUp = () => {
-  isDragging = false
+    // Fling effect
+    const friction = 0.95
+    const animate = () => {
+      if (Math.abs(velocity) < 0.1 || !containerRef) {
+        return
+      }
 
-  // Remove the window listeners
-  window.removeEventListener('mousemove', handleMouseMove as any)
-  window.removeEventListener('mouseup', handleMouseUp as any)
-  window.removeEventListener('touchmove', handleMouseMove as any)
-  window.removeEventListener('touchend', handleMouseUp as any)
+      containerRef.scrollLeft -= velocity * 50
+      velocity *= friction
+      requestAnimationFrame(animate)
+    }
+    requestAnimationFrame(animate)
+  }
 
-  // Fling effect
-  const friction = 0.95
-  const animate = () => {
-    if (Math.abs(velocity) < 0.1 || !containerRef) {
+  /**
+   * The mouse is moving while dragging, set the scroll left based on offsets
+   */
+  const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+    if (!isDragging || !containerRef) {
       return
     }
 
-    containerRef.scrollLeft -= velocity * 50
-    velocity *= friction
-    requestAnimationFrame(animate)
-  };
-  requestAnimationFrame(animate)
-}
+    // Prepare values for fling calculations
+    const now = performance.now()
+    const x = (e as MouseEvent).pageX
+      ?? (e as TouchEvent).touches[0]?.pageX
+      ?? 0
+    const walk = x - startX
 
-/**
- * The mouse is moving while dragging, set the scroll left based on offsets
- */
-const handleMouseMove = (e: MouseEvent | TouchEvent) => {
-  if (!isDragging || !containerRef) {
-    return
+    velocity = (x - lastX) / (now - lastTime)
+    lastX = x
+    lastTime = now
+
+    containerRef.scrollLeft = scrollLeftOffset - walk
   }
 
-  // Prepare values for fling calculations
-  const now = performance.now()
-  const x = (e as MouseEvent).pageX
-    ?? (e as TouchEvent).touches[0]?.pageX
-    ?? 0
-  const walk = x - startX
+  /**
+   * Scroll the container left by one container width
+   */
+  const scrollLeft = () => {
+    if (!containerRef) {
+      return
+    }
+    
+    const scrollDistance = containerRef.clientWidth
+    const targetScroll = containerRef.scrollLeft - scrollDistance
+    
+    smoothScroll(targetScroll)
+    checkScrollButtons()
+  };
 
-  velocity = (x - lastX) / (now - lastTime)
-  lastX = x
-  lastTime = now
+  /**
+   * Scroll the container right by one container width
+   */
+  const scrollRight = () => {
+    if (!containerRef) {
+      return
+    }
+    
+    const scrollDistance = containerRef.clientWidth
+    const targetScroll = containerRef.scrollLeft + scrollDistance
+    
+    smoothScroll(targetScroll)
+    checkScrollButtons()
+  }
 
-  containerRef.scrollLeft = scrollLeft - walk
-}
+  const smoothScroll = (targetPosition: number) => {
+    if (!containerRef) {
+      return
+    }
+    
+    // Ensure target is within bounds
+    targetPosition = Math.max(0, Math.min(
+      targetPosition, 
+      containerRef.scrollWidth - containerRef.clientWidth
+    ))
+    
+    containerRef.scrollTo({
+      left: targetPosition,
+      behavior: 'smooth'
+    })
+  }
 
-  return (<div
-    ref={el => (containerRef = el)}
-    class={styles['tray']}
-    style={{
-      cursor: isDragging
-        ? 'grabbing'
-        : 'grab'
-    }}
-    onMouseDown={handleMouseDown}
-    onTouchStart={handleMouseDown}
-  >
-    { children }
+  return (<div>
+    <button 
+      onClick={scrollLeft}
+      style={{ display: showLeftButton() ? 'flex' : 'none' }}
+    >
+      &lt;
+    </button>
+
+    <div
+      ref={el => (containerRef = el)}
+      class={styles['tray']}
+      style={{
+        cursor: isDragging
+          ? 'grabbing'
+          : 'grab'
+      }}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleMouseDown}
+    >
+      { children }
+    </div>
+
+    <button 
+      onClick={scrollRight}
+      style={{ display: showRightButton() ? 'flex' : 'none' }}
+    >
+      &gt;
+    </button>
   </div>)
 }
