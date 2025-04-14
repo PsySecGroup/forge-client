@@ -1,0 +1,12 @@
+.itemContainer {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.tray {
+  display: flex;
+  overflow-x: hidden;
+  user-select: none;
+  touch-action: pan-x;
+}

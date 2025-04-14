@@ -1,3 +1,4 @@
+import styles from './css/buttonTray.module.css'
 import { type ParentProps } from 'solid-js'
 
 type Props = {}
@@ -63,8 +64,6 @@ const handleMouseUp = () => {
   requestAnimationFrame(animate)
 }
 
-
-
 /**
  * The mouse is moving while dragging, set the scroll left based on offsets
  */
@@ -89,11 +88,8 @@ const handleMouseMove = (e: MouseEvent | TouchEvent) => {
 
   return (<div
     ref={el => (containerRef = el)}
+    class={styles['tray']}
     style={{
-      display: 'flex',
-      'overflow-x': 'hidden',
-      'user-select': 'none',
-      'touch-action': 'pan-x',
       cursor: isDragging
         ? 'grabbing'
         : 'grab'

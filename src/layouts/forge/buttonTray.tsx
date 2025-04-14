@@ -1,3 +1,4 @@
+import styles from './css/buttonTray.module.css'
 import {
   For,
   createMemo,
@@ -62,7 +63,7 @@ export function ButtonTray (props: Props) {
           const key = originalOrder()[index] as string
           return (
             <div
-              style={{ 'margin-right': '1rem', flex: '0 0 auto' }}
+              class={styles['itemContainer']}
               onClick={() => handleClick(key)}
             >
               {childrenArray()[index]}
