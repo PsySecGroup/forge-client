@@ -1,16 +1,15 @@
 
 .layout {
-  display: -webkit-box;      /* Old Safari/iOS */
-  display: -ms-flexbox;      /* IE 10 */
-  display: -webkit-flex;     /* Old Android */
-  display: flex;             /* Modern Browsers */
-  -webkit-box-flex: 1;       /* Old Safari/iOS */
-  -webkit-flex-grow: 1;      /* Old Android */
-  flex-grow: 1;              /* Modern Browsers */
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
   flex-direction: column;
-  overflow-y: none;
-  width: 100vw;
-  height: 100vh;
+  overflow-y: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .left-column, .right-column, .middle-column {
@@ -43,6 +42,7 @@
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   background: white; /* To ensure it's above the shadow */
+  position: relative;
 }
 
 .inner-shadow {
@@ -61,10 +61,5 @@
 @media screen and (max-width: 767px) {
   .left-column, .right-column {
     display: none; /* Hide left and right columns */
-  }
-
-  .middle-column {
-    height: 100vh;
-    width: 100%;
   }
 }

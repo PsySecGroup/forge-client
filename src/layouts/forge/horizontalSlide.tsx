@@ -1,5 +1,5 @@
 import styles from './css/buttonTray.module.css'
-import { type ParentProps, createSignal, onMount, onCleanup } from 'solid-js'
+import { type ParentProps, createSignal, onMount, onCleanup, createEffect } from 'solid-js'
 
 type Props = {}
 
@@ -20,19 +20,13 @@ export function HorizontalSlide ({ children }: ParentProps<Props>) {
     if (!containerRef) {
       return
     }
-    
-    // Show left button if we're not at the start
-    // TODO get better math
+
     setShowLeftButton(
-      true
-      //containerRef.scrollLeft > 0
+      containerRef.scrollLeft !== 0
     )
     
-    // Show right button if we can scroll further right
-    // TODO get better math
     setShowRightButton(
-      true
-      // containerRef.scrollLeft < containerRef.scrollWidth - containerRef.clientWidth - 200
+      containerRef.scrollLeft !== containerRef.scrollWidth - containerRef.clientWidth
     )
   }
 
@@ -110,6 +104,7 @@ export function HorizontalSlide ({ children }: ParentProps<Props>) {
       containerRef.scrollLeft -= velocity * 50
       velocity *= friction
       requestAnimationFrame(animate)
+      checkScrollButtons()
     }
     requestAnimationFrame(animate)
   }
@@ -183,17 +178,19 @@ export function HorizontalSlide ({ children }: ParentProps<Props>) {
     })
   }
 
-  return (<div>
-    <button 
-      onClick={scrollLeft}
-      style={{ display: showLeftButton() ? 'flex' : 'none' }}
-    >
-      &lt;
-    </button>
-
+  return (<div class={styles['horizontalSlide']}>
+    <div class={styles['left']}>
+      <button
+        onClick={() => showLeftButton() && scrollLeft()}
+        disabled={!showLeftButton()}
+      >
+        &lt;
+      </button>
+      <div class={styles['fade-right']} />
+    </div>
     <div
       ref={el => (containerRef = el)}
-      class={styles['tray']}
+      class={styles['middle']}
       style={{
         cursor: isDragging
           ? 'grabbing'
@@ -204,12 +201,14 @@ export function HorizontalSlide ({ children }: ParentProps<Props>) {
     >
       { children }
     </div>
-
-    <button 
-      onClick={scrollRight}
-      style={{ display: showRightButton() ? 'flex' : 'none' }}
-    >
-      &gt;
-    </button>
+    <div class={styles['right']}>
+      <div class={styles['fade-left']} />
+      <button 
+        onClick={() => showRightButton() && scrollRight()}
+        disabled={!showRightButton()}
+      >
+        &gt;
+      </button>
+    </div>
   </div>)
 }

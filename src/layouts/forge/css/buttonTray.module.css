@@ -2,11 +2,67 @@
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   flex: 0 0 auto;
+  height: 100%;
+  align-content: center;
 }
 
-.tray {
+.horizontalSlide {
   display: flex;
-  overflow-x: hidden;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.left,
+.right {
+  display: flex;
+  height: 100%;
+  white-space: nowrap;
+}
+
+.middle {
+  display: flex;
+  height: 100%;
   user-select: none;
   touch-action: pan-x;
+  overflow: hidden;
+  align-items: center;
+
+}
+.left button,
+.right button,
+.middle button {
+  margin: 0;
+  line-height: normal;
+  vertical-align: middle;
+}
+
+.left button,
+.right button {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+  background: none;
+  border: none;
+  width: 1em;
+  align-items: center;
+}
+
+.fade-right {
+  width: 1em;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 1;
+  position: fixed;
+  left: 1em;
+}
+
+.fade-left {
+  width: 1em;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 1;
+  position: fixed;
+  right: 1em;
 }

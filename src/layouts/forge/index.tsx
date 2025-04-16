@@ -37,6 +37,7 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
   })
 
   return (<div class={styles['layout']}>
+    
     <Show when={appBar !== undefined}>
       <div class="pure-g">
         <div class={`${styles['app-bar']} pure-u-1`}>
@@ -63,7 +64,10 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
           {main}
         </div>
 
-        <div class={styles['options']}>
+        <div
+          style={{ top: appBar === undefined ? '0px' : '-32px' }}
+          class={styles['options']}
+        >
           <Show when={isMobile()}>
             <ButtonTray>
               <NavButton location={'beep'}>a</NavButton>
@@ -81,5 +85,7 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
         </div>
       </Show>
     </div>
+    <p>Unrelated content</p>
+   
   </div>)
 }
