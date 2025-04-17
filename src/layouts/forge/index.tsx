@@ -4,18 +4,19 @@ import styles from './css/index.module.css'
 import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
 import { detectMobile } from '../../core/state/device'
 import { ButtonTray } from './buttonTray'
-import { NavButton } from '../../components/NavButton'
 
 type Props = {
   appBar?: JSXElement
   left?: JSXElement
   main: JSXElement
   right?: JSXElement
+  desktopActions: JSXElement
+  mobileActions?: JSXElement[]
 }
 
 const mainStyle = `${styles['middle-column']} ${styles['inner-shadow']}`
 
-export function ForgeLayout ({ appBar, left, right, main }: Props) {
+export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobileActions = [] }: Props) {
   const { checkMobile, isMobileWidth } = detectMobile()
 
   const [isMobile, setIsMobile] = createSignal(isMobileWidth)
@@ -41,7 +42,7 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
     <Show when={appBar !== undefined}>
       <div class="pure-g">
         <div class={`${styles['app-bar']} pure-u-1`}>
-          <p>Top</p>
+          <p>Farad</p>
           {appBar}
         </div>
       </div>
@@ -50,17 +51,12 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
     <div class="pure-g">
       <Show when={left !== undefined}>
         <div class={`${styles['left-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
-          <p>Left Column</p>
           {left}
         </div>
       </Show>
       
       <div class={getMainClasses()}>
         <div class={styles['content']}>
-          <p>Content (80% height)</p>
-          <p>{isMobile()
-          ? "We're in mobile"
-          : "We're in desktop"}</p>
           {main}
         </div>
 
@@ -68,19 +64,17 @@ export function ForgeLayout ({ appBar, left, right, main }: Props) {
           style={{ top: appBar === undefined ? '0px' : '-32px' }}
           class={styles['options']}
         >
-          <Show when={isMobile()}>
-            <ButtonTray>
-              <NavButton location={'beep'}>a</NavButton>
-              <button style={{ width: '500px' }}>b</button>
-              <button style={{ width: '500px' }}>c</button>
-            </ButtonTray>
+          <Show when={isMobile() && mobileActions !== undefined}>
+            <ButtonTray buttons={mobileActions} />
+          </Show>
+          <Show when={isMobile() === false && desktopActions !== undefined}>
+            {desktopActions}
           </Show>
         </div>
       </div>
 
       <Show when={right !== undefined}>
         <div class={`${styles['right-column']} pure-u-md-1-5 pure-u-lg-1-8`}>
-          <p>Right Column</p>
           {right}
         </div>
       </Show>

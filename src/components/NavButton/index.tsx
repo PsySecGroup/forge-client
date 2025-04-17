@@ -20,7 +20,7 @@ export function NavButton ({ location, children }: ParentProps<Props>) {
 
   return (
     <button
-      class={getClasses()}
+      class={`${styles['nav-button']} ${getClasses()}`}
       onClick={() => goto(location)}
     >
       {children}

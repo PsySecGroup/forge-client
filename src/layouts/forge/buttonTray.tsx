@@ -10,15 +10,15 @@ import {
 import { HorizontalSlide } from './horizontalSlide'
 
 type Props = {
-  children: JSX.Element[]
+  buttons: JSX.Element[]
 }
 
-export function ButtonTray (props: Props) {
+export function ButtonTray ({ buttons }: Props) {
   const [clickCounts, setClickCounts] = createSignal<Record<string, number>>({})
   const [originalOrder, setOriginalOrder] = createSignal<string[]>([])
   
   // Use children() utility to properly resolve children
-  const resolvedChildren = resolveChildren(() => props.children)
+  const resolvedChildren = resolveChildren(() => buttons)
   const childrenArray = () => resolvedChildren.toArray();
 
   createEffect(() => {

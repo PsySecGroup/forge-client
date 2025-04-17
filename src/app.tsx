@@ -1,12 +1,13 @@
 import './app.module.css'
-import { NavButton } from './components/NavButton'
-
 import {
   type ConsoleCommandArgs,
   ForgeApp,
   getNavigationActions,
 } from './core'
 import { ForgeLayout } from './layouts/forge'
+import { LeftSide, LeftSideButtons } from './pages/leftSide'
+import { MainPage } from './pages/mainPage'
+import { Actions } from './pages/actions'
 
 export function App () {
   const { goto } = getNavigationActions()
@@ -31,16 +32,10 @@ export function App () {
     >
       <ForgeLayout
         appBar={<></>}
-        left={<>
-          <NavButton location='test'>
-            Test
-          </NavButton>
-          <NavButton location='next'>
-            Next
-          </NavButton>
-        </>}
-        main={<></>}
-        right={<></>}
+        left={<LeftSide />}
+        main={<MainPage />}
+        desktopActions={<Actions />}
+        mobileActions={LeftSideButtons}
       />
     </ForgeApp>
   )

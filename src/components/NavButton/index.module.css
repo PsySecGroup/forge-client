@@ -1,3 +1,34 @@
-.active {
-  border: 3px solid red;
+.nav-button {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  font-family: "Source Sans Pro", sans-serif;
+  color: #606060;
+  text-shadow: 0 1px #fff;
+  background-image: linear-gradient(to top, #D8D9DB 0%, #fff 80%, #FDFDFD 100%);
+  border: 1px solid #8F9092;
+
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.nav-button:hover {
+  box-shadow: inset 0 0 3px 3px #CECFD1;
+}
+
+.nav-button:active,
+.nav-button:focus,
+.nav-button.active {
+  box-shadow: inset 0 0 5px 3px #999, inset 0 0 30px #aaa;
 }

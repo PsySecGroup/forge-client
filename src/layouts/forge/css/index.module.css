@@ -19,6 +19,12 @@
 .left-column, .right-column {
   padding: 10px;
   box-sizing: border-box;
+  place-items: stretch;
+}
+
+.left-column button,
+.right-column button {
+  margin-bottom: 1em;
 }
 
 .middle-column {
@@ -33,11 +39,11 @@
 
 .content {
   margin-bottom: 0;
-  flex: 8;
+  flex: 9;
 }
 
 .options {
-  flex: 2;
+  flex: 1;
   border-top: 1px solid  #888;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -55,6 +61,10 @@
   color: white;
   background-color: black;
   padding: 0.5em;
+}
+
+.app-bar p {
+  font-weight: bold;
 }
 
 /* Mobile view */
