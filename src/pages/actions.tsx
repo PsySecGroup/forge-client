@@ -8,9 +8,6 @@ import { ReportsActions } from './reportsActions'
 
 export function Actions () {
   const [ navigation ] = useContext(NavigationContext)
-  createEffect(() => {
-    console.log(navigation.location, navigation.location === 'buy')
-  })
   return (
     <Switch>
       <Match when={navigation.location === 'buy'}>
