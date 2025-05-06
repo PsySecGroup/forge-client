@@ -7,7 +7,7 @@ import {
   Show,
   type JSX,
   type Accessor,
-  type Setter
+  batch,
 } from 'solid-js'
 
 export interface TableColumn<T> {
@@ -20,7 +20,8 @@ export interface TableColumn<T> {
 
 export interface BulkAction<T> {
   label: string
-  onClick: (rows: T[], setSelectedRows:  Setter<Set<number>>) => void
+  onClick: (rows: T[]) => void
+  clearAfter?: boolean
 }
 
 export type Flag<T> = {
@@ -52,7 +53,7 @@ function Table<T extends object>(props: TableProps<T>) {
     emptyState
   } = props
   const [searchText, setSearchText] = createSignal('')
-  const [selectedRows, setSelectedRows] = createSignal<Set<number>>(new Set())
+  const [selectedRows, setSelectedRows] = createSignal<T[]>([])
   const [currentPage, setCurrentPage] = createSignal(0)
   const [sortColumn, setSortColumn] = createSignal<keyof T | null>(null)
   const [sortAsc, setSortAsc] = createSignal(true)
@@ -123,14 +124,19 @@ function Table<T extends object>(props: TableProps<T>) {
     return filteredData().slice(start, start + pageSize)
   })
 
-  const toggleRowSelection = (index: number) => {
-    const newSet = new Set(selectedRows())
-    newSet.has(index) ? newSet.delete(index) : newSet.add(index)
-    setSelectedRows(newSet)
+  const toggleRowSelection = (row: T) => {
+    const toggled = [...selectedRows()]
+
+    const index = toggled.indexOf(row)
+
+    index === -1
+      ? toggled.push(row)
+      : delete toggled[index]
+
+    setSelectedRows(toggled)
   }
 
   createEffect(() => {
-    // console.log(data)
     setCurrentPage(0)
   })
 
@@ -171,17 +177,20 @@ function Table<T extends object>(props: TableProps<T>) {
           </For>
         </Show>
 
-        <Show when={bulkActions && selectedRows().size > 0}>
+        <Show when={bulkActions && selectedRows().length > 0}>
           <div class={style['bulkActions']}>
             <For each={Object.entries(bulkActions!)}>
               {([_, action]) => (
                 <button
                   class={style['bulkActionButton']}
                   onClick={() => {
-                    const selected = Array.from(selectedRows()).map(
-                      i => filteredData()[i]
-                    ) as T[]
-                    action.onClick(selected, setSelectedRows)
+                    batch(() => {
+                      action.onClick(selectedRows())
+
+                      if (action.clearAfter === true) {
+                        setSelectedRows([])
+                      }
+                    })
                   }}
                 >
                   {action.label}
@@ -240,8 +249,8 @@ function Table<T extends object>(props: TableProps<T>) {
             <tbody>
               <For each={paginatedData()}>
                 {(row, index) => {
-                  const globalIndex = currentPage() * pageSize + index()
-                  const isSelected = selectedRows().has(globalIndex)
+                  const isSelected = selectedRows().indexOf(row) > -1
+
                   return (
                     <tr
                       classList={{
@@ -254,7 +263,7 @@ function Table<T extends object>(props: TableProps<T>) {
                         <input
                           type="checkbox"
                           checked={isSelected}
-                          onChange={() => toggleRowSelection(globalIndex)}
+                          onChange={() => toggleRowSelection(row)}
                         />
                       </td>
                       <For each={columns}>

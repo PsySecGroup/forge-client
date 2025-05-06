@@ -22,12 +22,10 @@ export function BuyPage() {
     alert(`Viewing Order for ${order.buyerName}`)
   }
 
-  const handleDeleteOrders = (orders: Purchase[], setSelectedRows: Setter<Set<number>>) => {
-    // Update the purchase orders by removing the selected ones
+  const handleDeleteOrders = (orders: Purchase[]) => {
     setPurchaseOrders((prevOrders) => prevOrders.filter(
       order => !orders.some(selected => selected.id === order.id)
     ))
-    setSelectedRows(new Set([]))
   }
 
   const handleExportOrders = (orders: Purchase[]) => {
@@ -58,11 +56,12 @@ export function BuyPage() {
         bulkActions={{
           delete: {
             label: 'Delete Orders',
-            onClick: (rows, setSelectedRows) => handleDeleteOrders(rows, setSelectedRows),
+            onClick: handleDeleteOrders,
+            clearAfter: true
           },
           export: {
             label: 'Export Orders',
-            onClick: (rows) => handleExportOrders(rows),
+            onClick: handleExportOrders,
           },
         }}
         pageSize={3}
