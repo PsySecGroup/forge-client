@@ -23,13 +23,19 @@ export interface BulkAction<T> {
   onClick: (rows: T[], setSelectedRows:  Setter<Set<number>>) => void
 }
 
+export type Flag<T> = {
+  label: string
+  accessor: keyof T
+  value: string
+}
+
 export interface TableProps<T> {
   data: Accessor<T[]>
   columns: TableColumn<T>[]
   rowActions?: (row: T) => JSX.Element
   bulkActions?: Record<string, BulkAction<T>>
   searchCallback?: (text: string) => T[]
-  flagFilters?: { label: string; accessor: keyof T }[]
+  flagFilters?: Flag<T>[]
   pageSize?: number
   emptyState?: JSX.Element
 }
@@ -50,7 +56,7 @@ function Table<T extends object>(props: TableProps<T>) {
   const [currentPage, setCurrentPage] = createSignal(0)
   const [sortColumn, setSortColumn] = createSignal<keyof T | null>(null)
   const [sortAsc, setSortAsc] = createSignal(true)
-  const [flags, setFlags] = createSignal<Record<string, boolean>>({})
+  const [flags, setFlags] = createSignal<Record<string, Flag<T> | undefined>>({})
 
   const getValue = (
     row: T,
@@ -71,10 +77,27 @@ function Table<T extends object>(props: TableProps<T>) {
           )
     }
 
-    for (const key in flags()) {
-      if (flags()[key]) {
-        base = base.filter(row => !!row[key as keyof T])
+    const flagLabels = Object.keys(flags())
+
+    if (flagLabels.length > 0) {
+      const matches: typeof base = []
+
+      for (const flagLabel of flagLabels) {
+        const flag = flags()[flagLabel]
+
+        if (flag) {
+          base.forEach(row => {
+            const rowMatches = row[flag.accessor as keyof T] === flag.value
+            const isRowUnique = matches.indexOf(row) === -1
+
+            if (rowMatches && isRowUnique) {
+              matches.push(row)
+            }
+          })
+        }
       }
+
+      base = matches
     }
 
     if (sortColumn()) {
@@ -107,7 +130,7 @@ function Table<T extends object>(props: TableProps<T>) {
   }
 
   createEffect(() => {
-    console.log(data)
+    // console.log(data)
     setCurrentPage(0)
   })
 
@@ -127,13 +150,20 @@ function Table<T extends object>(props: TableProps<T>) {
               <label class={style['filterCheckbox']}>
                 <input
                   type="checkbox"
-                  checked={flags()[flag.accessor as string] || false}
-                  onChange={e =>
-                    setFlags(f => ({
-                      ...f,
-                      [flag.accessor]: e.currentTarget.checked
-                    }))
-                  }
+                  checked={flags()[flag.label as string] !== undefined || false}
+                  onChange={(e) => {
+                    const newFlags = {
+                      ...flags()
+                    }
+
+                    if (e.currentTarget.checked) {
+                      newFlags[flag.label] = flag
+                    } else {
+                      delete newFlags[flag.label]
+                    }
+
+                    setFlags(newFlags)
+                  }}
                 />
                 {flag.label}
               </label>

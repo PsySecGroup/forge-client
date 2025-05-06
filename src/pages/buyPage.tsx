@@ -52,8 +52,8 @@ export function BuyPage() {
           </button>
         )}
         flagFilters={[
-          { label: 'Completed Orders', accessor: 'status' },
-          { label: 'Pending Orders', accessor: 'status' },
+          { label: 'Completed Orders', accessor: 'status', value: 'Completed' },
+          { label: 'Pending Orders', accessor: 'status', value: 'Pending' },
         ]}
         bulkActions={{
           delete: {
