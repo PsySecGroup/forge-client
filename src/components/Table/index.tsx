@@ -201,6 +201,29 @@ function Table<T extends object>(props: TableProps<T>) {
         </Show>
       </div>
 
+      {/* Pagination */}
+      <div class={style['pagination']}>
+          <button
+            class={style['pageButton']}
+            onClick={() => setCurrentPage(p => Math.max(p - 1, 0))}
+            disabled={currentPage() === 0}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage() + 1} of {totalPages()}
+          </span>
+          <button
+            class={style['pageButton']}
+            onClick={() =>
+              setCurrentPage(p => Math.min(p + 1, totalPages() - 1))
+            }
+            disabled={currentPage() + 1 >= totalPages()}
+          >
+            Next
+          </button>
+        </div>
+
       {/* Table */}
       <Show
         when={filteredData().length > 0}
@@ -284,29 +307,6 @@ function Table<T extends object>(props: TableProps<T>) {
               </For>
             </tbody>
           </table>
-        </div>
-
-        {/* Pagination */}
-        <div class={style['pagination']}>
-          <button
-            class={style['pageButton']}
-            onClick={() => setCurrentPage(p => Math.max(p - 1, 0))}
-            disabled={currentPage() === 0}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage() + 1} of {totalPages()}
-          </span>
-          <button
-            class={style['pageButton']}
-            onClick={() =>
-              setCurrentPage(p => Math.min(p + 1, totalPages() - 1))
-            }
-            disabled={currentPage() + 1 >= totalPages()}
-          >
-            Next
-          </button>
         </div>
       </Show>
     </div>

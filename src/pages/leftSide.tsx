@@ -25,6 +25,8 @@ export const LeftSideButtons = () => [
 
 ]
 
+// TODO be navigation sentitive to determine what buttons to show
+
 export function LeftSide () {
   return (<>
     <NavButton location='buy'>

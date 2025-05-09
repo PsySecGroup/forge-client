@@ -11,7 +11,7 @@ type Props = {
   main: JSXElement
   right?: JSXElement
   desktopActions: JSXElement
-  mobileActions?: JSXElement[]
+  mobileActions?: () => JSXElement[]
 }
 
 const mainStyle = `${styles['middle-column']} ${styles['inner-shadow']}`

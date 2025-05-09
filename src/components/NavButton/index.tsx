@@ -3,7 +3,7 @@ import { ParentProps, useContext } from 'solid-js'
 import { getNavigationActions, NavigationContext } from '../../core'
 
 type Props = {
-  location: string
+  location?: string
 }
 
 /**
@@ -21,7 +21,7 @@ export function NavButton ({ location, children }: ParentProps<Props>) {
   return (
     <button
       class={`${styles['nav-button']} ${getClasses()}`}
-      onClick={() => goto(location)}
+      onClick={() => location !== undefined && goto(location)}
     >
       {children}
     </button>

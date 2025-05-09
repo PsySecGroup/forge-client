@@ -29,18 +29,18 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
      * The main location handler for Navigation
      */
     goto: (location: string, referenceIndex?: number) => {
-      const destinateion = location[0] === '#'
+      const destination = location[0] === '#'
         ? location.substring(1)
         : location
 
       const history = store[0].history
 
-      if (state.location !== destinateion) {
+      if (state.location !== destination) {
         // The location has changed, add it
 
-        const hash = !destinateion
+        const hash = !destination
           ? '#'
-          : '#' + destinateion
+          : '#' + destination
 
         window.history.pushState({
           hash
@@ -48,9 +48,9 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         // TODO learn more about pushstate to make sure back and forward buttons work
 
         batch(() => {
-          set('history', history.length, destinateion ?? '')
+          set('history', history.length, destination ?? '')
           set('referenceIndex', referenceIndex ?? history.length - 1)
-          set('location', destinateion ?? '')
+          set('location', destination ?? '')
         })        
       }
     },

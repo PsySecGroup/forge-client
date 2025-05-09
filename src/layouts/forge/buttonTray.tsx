@@ -8,18 +8,34 @@ import {
   children as resolveChildren
 } from 'solid-js'
 import { HorizontalSlide } from './horizontalSlide'
+import { NavButton } from '../../components/NavButton'
+import { Icon } from '../../components/Icon'
 
 type Props = {
-  buttons: JSX.Element[]
+  buttons: () => JSX.Element[],
+  favSort?: boolean,
+  canReturnHome?: boolean
 }
 
-export function ButtonTray ({ buttons }: Props) {
+export function ButtonTray ({ buttons, favSort = true, canReturnHome = true }: Props) {
   const [clickCounts, setClickCounts] = createSignal<Record<string, number>>({})
   const [originalOrder, setOriginalOrder] = createSignal<string[]>([])
   
   // Use children() utility to properly resolve children
-  const resolvedChildren = resolveChildren(() => buttons)
-  const childrenArray = () => resolvedChildren.toArray();
+  const resolvedChildren = resolveChildren(() => {
+    const result = buttons()
+
+    if (canReturnHome === true) {
+      result.unshift(<NavButton location=''>
+        <Icon name="skip-back" />
+          Back
+      </NavButton>)
+    }
+
+    return result
+  })
+
+  const childrenArray = () => resolvedChildren.toArray()
 
   createEffect(() => {
     // Get the resolved children array
@@ -48,7 +64,7 @@ export function ButtonTray ({ buttons }: Props) {
   const sortedIndices = createMemo(() => {
     const counts = clickCounts()
     const original = originalOrder();
-    const hasClicks = Object.values(counts).some(v => v > 0)
+    const hasClicks = favSort && Object.values(counts).some(v => v > 0)
     
     return hasClicks
       ? [...original].sort((a, b) => (counts[b] || 0) - (counts[a] || 0))

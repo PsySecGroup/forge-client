@@ -1,4 +1,4 @@
-import { createEffect, Switch, Match, useContext } from 'solid-js'
+import { Switch, Match, useContext } from 'solid-js'
 import { NavigationContext } from '../core'
 import { BuyActions } from './buyActions'
 import { SellActions } from './sellActions'
