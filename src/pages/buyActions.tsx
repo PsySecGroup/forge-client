@@ -3,7 +3,7 @@ import { Icon } from '../components/Icon'
 import { ButtonTray } from '../layouts/forge/buttonTray'
 
 type Prop = {
-  canReturnHome?: boolean
+  canReturnHome?: () => boolean
 }
 
 export const buyButtons = () => [
@@ -15,10 +15,9 @@ export const buyButtons = () => [
     <Icon name="bar-chart-2" />
     Reports
   </NavButton>
-
 ]
 
-export function BuyActions ({ canReturnHome = false }: Prop) {
+export function BuyActions ({ canReturnHome = () => false }: Prop) {
   return (<ButtonTray
     favSort={false}
     canReturnHome={canReturnHome}

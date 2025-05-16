@@ -1,4 +1,4 @@
-import { createSignal, type Setter } from 'solid-js'
+import { createSignal } from 'solid-js'
 import Table from '../components/Table'
 
 export type Purchase =  {

@@ -1,9 +1,10 @@
 import './css/pure-3.0.0.css'
 import './css/pure-grids-responsive-3.0..0.css'
 import styles from './css/index.module.css'
-import { createEffect, createSignal, JSXElement, Show } from 'solid-js'
+import { createEffect, createSignal, JSXElement, Show, useContext } from 'solid-js'
 import { detectMobile } from '../../core/state/device'
 import { ButtonTray } from './buttonTray'
+import { NavigationContext } from '../../core'
 
 type Props = {
   appBar?: JSXElement
@@ -16,10 +17,10 @@ type Props = {
 
 const mainStyle = `${styles['middle-column']} ${styles['inner-shadow']}`
 
-export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobileActions = [] }: Props) {
+export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobileActions = () => [] }: Props) {
   const { checkMobile, isMobileWidth } = detectMobile()
-
   const [isMobile, setIsMobile] = createSignal(isMobileWidth)
+  const [ navigation ] = useContext(NavigationContext)
 
   const getMainClasses = () => {
     if (left === undefined && right !== undefined) {
@@ -36,6 +37,11 @@ export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobile
   createEffect(() => {
     checkMobile(setIsMobile)
   })
+
+  const canReturnHome = (): boolean => {
+    console.log('checking')
+    return navigation.location !== ''
+  }
 
   return (<div class={styles['layout']}>
     
@@ -65,7 +71,10 @@ export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobile
           class={styles['options']}
         >
           <Show when={isMobile() && mobileActions !== undefined}>
-            <ButtonTray buttons={mobileActions} />
+            <ButtonTray
+              buttons={mobileActions}
+              canReturnHome={canReturnHome}
+            />
           </Show>
           <Show when={isMobile() === false && desktopActions !== undefined}>
             {desktopActions}

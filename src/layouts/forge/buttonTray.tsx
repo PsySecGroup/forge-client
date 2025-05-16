@@ -14,10 +14,10 @@ import { Icon } from '../../components/Icon'
 type Props = {
   buttons: () => JSX.Element[],
   favSort?: boolean,
-  canReturnHome?: boolean
+  canReturnHome?: () => boolean
 }
 
-export function ButtonTray ({ buttons, favSort = true, canReturnHome = true }: Props) {
+export function ButtonTray ({ buttons, favSort = true, canReturnHome = () => false }: Props) {
   const [clickCounts, setClickCounts] = createSignal<Record<string, number>>({})
   const [originalOrder, setOriginalOrder] = createSignal<string[]>([])
   
@@ -25,7 +25,7 @@ export function ButtonTray ({ buttons, favSort = true, canReturnHome = true }: P
   const resolvedChildren = resolveChildren(() => {
     const result = buttons()
 
-    if (canReturnHome === true) {
+    if (canReturnHome() === true) {
       result.unshift(<NavButton location=''>
         <Icon name="skip-back" />
           Back
