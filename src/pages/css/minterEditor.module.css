@@ -1,0 +1,78 @@
+.minter-form {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  margin: 2rem auto;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.minter-form h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.minter-form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.minter-form input,
+.minter-form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.form-actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  background-color: #2b5dab;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background-color: #1e417e;
+}
+
+button[type="reset"] {
+  background-color: #ddd;
+  color: #333;
+}
+
+button[type="reset"]:hover {
+  background-color: #bbb;
+}
+
+input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}

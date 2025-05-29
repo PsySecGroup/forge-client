@@ -1,0 +1,48 @@
+.credit-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.credit-card h2 {
+  margin-bottom: 1rem;
+  color: #2b5dab;
+}
+
+.credit-meta p {
+  margin: 0.4rem 0;
+  line-height: 1.4;
+  color: #444;
+}
+
+.credit-documents,
+.credit-notes {
+  margin-top: 1.5rem;
+}
+
+.credit-documents ul,
+.credit-notes ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.credit-documents a {
+  text-decoration: none;
+  color: #2b5dab;
+}
+
+.credit-documents a:hover {
+  text-decoration: underline;
+}
+
+.credit-notes p,
+.credit-notes li {
+  color: #444;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}

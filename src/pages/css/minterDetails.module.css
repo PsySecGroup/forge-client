@@ -1,0 +1,74 @@
+.minter-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  margin: 1rem auto;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.minter-card h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.minter-meta p {
+  margin: 0.4rem 0;
+  line-height: 1.4;
+}
+
+.tag {
+  background-color: #e0ecff;
+  color: #2b5dab;
+  padding: 0.2rem 0.5rem;
+  margin-right: 0.3rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.minter-actions {
+  margin-top: 1.5rem;
+}
+
+.minter-actions button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #2b5dab;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.minter-actions button:hover {
+  background-color: #1e417e;
+}
+
+.minter-documents,
+.minter-notes {
+  margin-top: 1.5rem;
+}
+
+.minter-documents ul,
+.minter-notes ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.minter-documents a {
+  text-decoration: none;
+  color: #2b5dab;
+}
+
+.minter-documents a:hover {
+  text-decoration: underline;
+}
+
+.minter-notes p,
+.minter-notes li {
+  color: #444;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
