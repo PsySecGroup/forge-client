@@ -6,7 +6,7 @@ type Prop = {
   canReturnHome?: () => boolean
 }
 
-export const reportsButtons = () => [
+export const minterButtons = () => [
   <NavButton>
     <Icon name="list" />
     List
@@ -17,10 +17,10 @@ export const reportsButtons = () => [
   </NavButton>
 ]
 
-export function ReportsActions ({ canReturnHome = () => false }: Prop) {
+export function MinterActions ({ canReturnHome = () => false }: Prop) {
   return (<ButtonTray
     favSort={false}
     canReturnHome={canReturnHome}
-    buttons={reportsButtons} />
+    buttons={minterButtons} />
   )
 }

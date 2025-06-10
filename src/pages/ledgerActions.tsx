@@ -6,21 +6,21 @@ type Prop = {
   canReturnHome?: () => boolean
 }
 
-export const buyButtons = () => [
+export const ledgerButtons = () => [
   <NavButton>
-    <Icon name="file-plus" />
-    Create
+    <Icon name="list" />
+    List
   </NavButton>,
   <NavButton>
-    <Icon name="bar-chart-2" />
-    Reports
+    <Icon name="file-plus" />
+    Add
   </NavButton>
 ]
 
-export function BuyActions ({ canReturnHome = () => false }: Prop) {
+export function LedgerActions ({ canReturnHome = () => false }: Prop) {
   return (<ButtonTray
     favSort={false}
     canReturnHome={canReturnHome}
-    buttons={buyButtons} />
+    buttons={ledgerButtons} />
   )
 }

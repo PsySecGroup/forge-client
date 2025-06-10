@@ -1,29 +1,25 @@
 import { Switch, Match, useContext } from 'solid-js'
 import { NavigationContext } from '../core'
-import { BuyActions } from './buyActions'
-import { SellActions } from './sellActions'
-import { InventoryActions } from './inventoryActions'
-import { NotesActions } from './notesActions'
 import { ReportsActions } from './reportsActions'
+import { AlertActions } from './alertActions'
+import { MinterActions } from './minterActions'
+import { LedgerActions } from './ledgerActions'
 
 export function Actions () {
   const [ navigation ] = useContext(NavigationContext)
   return (
     <Switch>
-      <Match when={navigation.location === 'buy'}>
-        <BuyActions />
-      </Match>
-      <Match when={navigation.location === 'sell'}>
-        <SellActions />
-      </Match>
-      <Match when={navigation.location === 'inventory'}>
-        <InventoryActions />
-      </Match>
-      <Match when={navigation.location === 'notes'}>
-        <NotesActions />
-      </Match>
       <Match when={navigation.location === 'reports'}>
         <ReportsActions />
+      </Match>
+      <Match when={navigation.location === 'alerts'}>
+        <AlertActions />
+      </Match>
+      <Match when={navigation.location === 'minters'}>
+        <MinterActions />
+      </Match>
+      <Match when={navigation.location === 'ledger'}>
+        <LedgerActions />
       </Match>
     </Switch>
   )

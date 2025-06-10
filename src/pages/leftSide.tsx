@@ -2,32 +2,27 @@ import { NavButton } from '../components/NavButton'
 import { Icon } from '../components/Icon'
 import { NavigationContext } from '../core'
 import { useContext } from 'solid-js'
-import { buyButtons } from './buyActions'
-import { sellButtons } from './sellActions'
-import { inventoryButtons } from './inventoryActions'
-import { notesButtons } from './notesActions'
 import { reportsButtons } from './reportsActions'
+import { alertButtons } from './alertActions'
+import { ledgerButtons } from './ledgerActions'
+import { minterButtons } from './minterActions'
 
 export const LeftSideButtons = () => [
-  <NavButton location='buy'>
-    <Icon name="dollar-sign" />
-    Buy
+  <NavButton location='ledger'>
+    <Icon name="book-open" />
+    Ledger
   </NavButton>,
-  <NavButton location='sell'>
-    <Icon name="x-circle" />
-    Sell
-  </NavButton>,
-  <NavButton location='inventory'>
-    <Icon name="package" />
-    Inventory
-  </NavButton>,
-  <NavButton location='notes'>
-    <Icon name="edit-3" />
-    Notes
+  <NavButton location='minters'>
+    <Icon name="cpu" />
+    Minters
   </NavButton>,
   <NavButton location='reports'>
-    <Icon name="bar-chart-2" />
+    <Icon name="pie-chart" />
     Reports
+  </NavButton>,
+    <NavButton location='alerts'>
+    <Icon name="alert-triangle" />
+    Alerts
   </NavButton>
 ]
 
@@ -35,21 +30,18 @@ export const NavigationTree = () => {
   const [ navigation ] = useContext(NavigationContext)
   
   switch (navigation.location) {
-    case 'buy':
-      return buyButtons()
-    case 'sell':
-      return sellButtons()
-    case 'inventory':
-      return inventoryButtons()
-    case 'notes':
-      return notesButtons()
-    case 'reports':
+    case 'ledger':
+      return ledgerButtons()
+    case 'minters':
+      return minterButtons()
+    case 'alerts':
+      return alertButtons()
+      case 'reports':
       return reportsButtons()
     default:
       return LeftSideButtons()
   }
 }
-
 
 export function LeftSide () {
   return LeftSideButtons()

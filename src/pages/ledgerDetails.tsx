@@ -1,6 +1,6 @@
-import './css/creditDetails.module.css'
+import './css/ledgerDetails.module.css'
 
-export function CreditDetailsPage () {
+export function LedgerDetailsPage () {
   return (<div class="credit-card">
   <h2>Credit: #CREDIT_ID</h2>
 

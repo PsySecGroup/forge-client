@@ -1,6 +1,6 @@
-import './css/creditEditor.module.css'
+import './css/ledgerEditor.module.css'
 
-export function CreditEditorPage () {
+export function LedgerEditorPage () {
   return (<div class="credit-form">
   <h2>Edit Credit</h2>
   <form id="editCreditForm" enctype="multipart/form-data">
