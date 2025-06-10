@@ -74,7 +74,7 @@ export function LedgerDetailsPage ({ id }: Props) {
 
   return (<div>
     <div class={style["credit-card"]}>
-      <h2>Credit: #{event.id}</h2>
+      <h2>Ledger Event #{event.id}</h2>
 
       <div class={style["credit-meta"]}>
         <p>
