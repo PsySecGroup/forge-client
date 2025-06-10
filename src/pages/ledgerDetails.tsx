@@ -83,7 +83,9 @@ export function LedgerDetailsPage ({ id }: Props) {
         </p>
         <p>
           <strong>Status:</strong>
-          <span class={style[getStatusClass(event)]}>{getLedgerEventStatusName(event)}</span>
+          <span class={style[getStatusClass(event)]}>
+            {getLedgerEventStatusName(event)}
+          </span>
         </p>
         <p>
           <strong>Type:</strong>
