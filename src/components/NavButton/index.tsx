@@ -4,19 +4,25 @@ import { getNavigationActions, NavigationContext } from '../../core'
 
 type Props = {
   location?: string
+  prefixHighlight?: boolean
 }
 
 /**
  * 
  */
-export function NavButton ({ location, children }: ParentProps<Props>) {
+export function NavButton ({ location, prefixHighlight, children }: ParentProps<Props>) {
   const [ navigation ] = useContext(NavigationContext)
   const { goto } = getNavigationActions()
 
   // TODO do styling
-  const getClasses = () => navigation.location === location
-    ? styles['active']
-    : ''
+  const getClasses = () => prefixHighlight === true
+    ? navigation.location.startsWith(location ?? '')
+        ? styles['active']
+        : ''
+    : navigation.location === location
+        ? styles['active']
+        : ''
+     
 
   return (
     <button

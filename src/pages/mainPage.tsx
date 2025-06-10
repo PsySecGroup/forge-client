@@ -5,6 +5,17 @@ import { ReportsPage } from './reportsPage'
 import { LedgerListPage } from './ledgerList'
 import { MinterListPage } from './minterList'
 import { AlertListPage } from './alertList'
+import { LedgerDetailsPage } from './ledgerDetails'
+
+/**
+ * 
+ * @param slug 
+ * @returns 
+ */
+function getId (slug: string) {
+  const index = slug.lastIndexOf('-')
+  return Number(slug.slice(index + 1))
+}
 
 export function MainPage () {
   const [ navigation ] = useContext(NavigationContext)
@@ -16,6 +27,11 @@ export function MainPage () {
       </Match>
       <Match when={navigation.location === 'ledger'}>
         <LedgerListPage />
+      </Match>
+      <Match when={navigation.location.startsWith('ledger-event-')}>
+        <LedgerDetailsPage
+          id={getId(navigation.location)}
+        />
       </Match>
       <Match when={navigation.location === 'minters'}>
         <MinterListPage />

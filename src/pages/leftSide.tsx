@@ -8,19 +8,19 @@ import { ledgerButtons } from './ledgerActions'
 import { minterButtons } from './minterActions'
 
 export const LeftSideButtons = () => [
-  <NavButton location='ledger'>
+  <NavButton location='ledger' prefixHighlight>
     <Icon name="book-open" />
     Ledger
   </NavButton>,
-  <NavButton location='minters'>
+  <NavButton location='minters' prefixHighlight>
     <Icon name="cpu" />
     Minters
   </NavButton>,
-  <NavButton location='reports'>
+  <NavButton location='reports' prefixHighlight>
     <Icon name="pie-chart" />
     Reports
   </NavButton>,
-    <NavButton location='alerts'>
+    <NavButton location='alerts' prefixHighlight>
     <Icon name="alert-triangle" />
     Alerts
   </NavButton>

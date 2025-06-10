@@ -9,16 +9,16 @@ export function Actions () {
   const [ navigation ] = useContext(NavigationContext)
   return (
     <Switch>
-      <Match when={navigation.location === 'reports'}>
+      <Match when={navigation.location.startsWith('reports')}>
         <ReportsActions />
       </Match>
-      <Match when={navigation.location === 'alerts'}>
+      <Match when={navigation.location.startsWith('alerts')}>
         <AlertActions />
       </Match>
-      <Match when={navigation.location === 'minters'}>
+      <Match when={navigation.location.startsWith('minters')}>
         <MinterActions />
       </Match>
-      <Match when={navigation.location === 'ledger'}>
+      <Match when={navigation.location.startsWith('ledger')}>
         <LedgerActions />
       </Match>
     </Switch>

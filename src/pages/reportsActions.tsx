@@ -7,11 +7,11 @@ type Prop = {
 }
 
 export const reportsButtons = () => [
-  <NavButton>
+  <NavButton location='reports'>
     <Icon name="list" />
     List
   </NavButton>,
-  <NavButton>
+  <NavButton location='reports-new'>
     <Icon name="file-plus" />
     Add
   </NavButton>

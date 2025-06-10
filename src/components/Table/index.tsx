@@ -27,7 +27,7 @@ export interface BulkAction<T> {
 export type Flag<T> = {
   label: string
   accessor: keyof T
-  value: string
+  value: string | number
 }
 
 export interface TableProps<T> {

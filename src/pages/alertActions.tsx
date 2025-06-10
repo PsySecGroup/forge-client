@@ -7,11 +7,11 @@ type Prop = {
 }
 
 export const alertButtons = () => [
-  <NavButton>
+  <NavButton location='alerts'>
     <Icon name="list" />
     List
   </NavButton>,
-  <NavButton>
+  <NavButton location='alerts-new'>
     <Icon name="file-plus" />
     Add
   </NavButton>
