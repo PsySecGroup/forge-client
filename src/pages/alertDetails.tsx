@@ -1,6 +1,10 @@
 import './css/alertDetails.module.css'
 
-export function AlertDetailsPage () {
+type Props = {
+  id: number
+}
+
+export function AlertDetailsPage ({ id }: Props) {
   return (<div class="alert-details">
   <h2>Alert Details</h2>
   <div class="alert-info">

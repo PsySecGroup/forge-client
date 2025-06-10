@@ -16,13 +16,13 @@ export const LeftSideButtons = () => [
     <Icon name="cpu" />
     Minters
   </NavButton>,
-  <NavButton location='reports' prefixHighlight>
-    <Icon name="pie-chart" />
-    Reports
-  </NavButton>,
     <NavButton location='alerts' prefixHighlight>
     <Icon name="alert-triangle" />
     Alerts
+  </NavButton>,
+  <NavButton location='reports' prefixHighlight>
+    <Icon name="pie-chart" />
+    Reports
   </NavButton>
 ]
 

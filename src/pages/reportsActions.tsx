@@ -10,10 +10,6 @@ export const reportsButtons = () => [
   <NavButton location='reports'>
     <Icon name="list" />
     List
-  </NavButton>,
-  <NavButton location='reports-new'>
-    <Icon name="file-plus" />
-    Add
   </NavButton>
 ]
 

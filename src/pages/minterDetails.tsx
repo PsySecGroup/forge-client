@@ -1,6 +1,10 @@
 import './css/minterDetails.module.css'
 
-export function MinterDetailsPage () {
+type Props = {
+  id: number
+}
+
+export function MinterDetailsPage ({ id }: Props) {
   return (
 <div class="minter-card">
   <h2>Minter: #MINTER_ID</h2>

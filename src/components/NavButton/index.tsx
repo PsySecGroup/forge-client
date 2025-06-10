@@ -22,7 +22,6 @@ export function NavButton ({ location, prefixHighlight, children }: ParentProps<
     : navigation.location === location
         ? styles['active']
         : ''
-     
 
   return (
     <button

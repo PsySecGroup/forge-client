@@ -49,7 +49,7 @@ export function LedgerListPage() {
           { header: 'Status', accessor: getLedgerEventStatusName, sortable: true },
         ]}
         rowActions={(row) => (
-          <NavButton location={'ledger-event-' + row.id}>
+          <NavButton location={'ledger-details-' + row.id}>
             View Event
           </NavButton>
         )}
