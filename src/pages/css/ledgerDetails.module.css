@@ -1,48 +1,128 @@
 .credit-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5rem;
-  max-width: 600px;
-  margin: 2rem auto;
-  background-color: #fdfdfd;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  font-family: 'Segoe UI', sans-serif;
+  flex: 0 1 700px;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  border: 1px solid #d0d7de;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: system-ui, sans-serif;
+  color: #333;
+}
+
+ul {
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
 }
 
 .credit-card h2 {
-  margin-bottom: 1rem;
-  color: #2b5dab;
+  font-size: 1.5rem;
+  color: #2b6cb0; /* blue heading */
+  margin-bottom: 0.5rem;
+}
+
+.credit-card h3 {
+  font-size: 1.25rem;
+  color: #2c5282; /* deeper blue */
+  margin-bottom: 0.5rem;
+}
+
+.credit-meta p strong {
+  display: inline-block;
+  min-width: 110px;
+  color: #4a5568;
+}
+
+.credit-meta p:nth-child(odd) {
+  background-color: #f7fafc; /* light gray */
+}
+
+.credit-meta p:nth-child(even) {
+  background-color: #edf2f7; /* slightly darker gray */
 }
 
 .credit-meta p {
-  margin: 0.4rem 0;
-  line-height: 1.4;
-  color: #444;
-}
-
-.credit-documents,
-.credit-notes {
-  margin-top: 1.5rem;
-}
-
-.credit-documents ul,
-.credit-notes ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
 .credit-documents a {
-  text-decoration: none;
-  color: #2b5dab;
-}
-
-.credit-documents a:hover {
+  color: #2a7ae4;
   text-decoration: underline;
 }
 
-.credit-notes p,
-.credit-notes li {
-  color: #444;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
+.credit-meta p {
+  margin: 0.25rem 0;
+}
+
+.status-valid {
+  color: green;
+  font-weight: bold;
+}
+
+.status-invalid {
+  color: red;
+}
+
+.credit-documents ul li,
+.credit-notes ul li {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  list-style-type: decimal;
+}
+
+.no-dot {
+  list-style-type: none !important;
+}
+
+.credit-documents ul li:nth-child(odd),
+.credit-notes ul li:nth-child(odd) {
+  background-color: #f7fafc; /* light gray */
+}
+
+.credit-documents ul li:nth-child(even),
+.credit-notes ul li:nth-child(even) {
+  background-color: #edf2f7; /* slightly darker gray */
+}
+
+.details {
+  align-items: center;
+  display: inline-flex;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.details > span {
+  margin-right: 0.4em;
+}
+
+.type-add-credit {
+  color: #38A169;
+  border-color: #38A169;
+  background-color: #E6F4EA;
+}
+
+.type-add-note {
+  color: #DD6B20;
+  border-color: #DD6B20;
+  background-color: #FFE9D6;
+}
+
+.type-remove-credit {
+  color: #E53E3E;
+  border-color: #E53E3E;
+  background-color: #FDE8E8;
+}
+
+.type-claim-credit {
+  color: #2B6CB0;
+  border-color: #2B6CB0;
+  background-color: #DCEEFF;
 }
