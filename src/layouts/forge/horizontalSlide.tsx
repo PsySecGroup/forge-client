@@ -1,5 +1,5 @@
 import styles from './css/buttonTray.module.css'
-import { type ParentProps, createSignal, onMount, onCleanup, createEffect } from 'solid-js'
+import { type ParentProps, createSignal, onMount, onCleanup } from 'solid-js'
 
 type Props = {}
 
