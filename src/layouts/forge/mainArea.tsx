@@ -23,7 +23,6 @@ export function MainArea ({
   const [ navigation ] = useContext(NavigationContext)
 
   const canReturnHome = (): boolean => {
-    console.log('checking')
     return navigation.location !== ''
   }
 

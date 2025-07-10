@@ -6,6 +6,7 @@ import { detectMobile } from '../../core/state/device'
 import { AppBar } from './appBar'
 import { LeftArea } from './leftArea'
 import { MainArea } from './mainArea'
+import { RightArea } from './rightArea'
 
 type Props = {
   appBar?: JSXElement
@@ -23,12 +24,14 @@ export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobile
   const [isMobile, setIsMobile] = createSignal(isMobileWidth)
 
   const getMainClasses = () => {
-    if (left === undefined && right !== undefined) {
+    if (isMobile()) {
+      return `${mainStyle} pure-u-1`
+    } else if (left === undefined && right !== undefined) {
       return `${mainStyle} pure-u-md-4-5 pure-u-lg-7-8`
     } else if (left !== undefined && right === undefined) {
       return `${mainStyle} pure-u-md-4-5 pure-u-lg-7-8`
     } else if (left === undefined && right === undefined) {
-      return `${mainStyle} pure-u-md-1 pure-u-lg-1`
+      return `${mainStyle} pure-u-1`
     } else {
       return `${mainStyle} pure-u-md-3-5 pure-u-lg-3-4`
     }
@@ -38,8 +41,7 @@ export function ForgeLayout ({ appBar, left, right, main, desktopActions, mobile
     checkMobile(setIsMobile)
   })
 
-return (<div class={styles['layout']}>
-    
+  return (<div class={styles['layout']}>   
     <AppBar
       styleId={styles['app-bar']}
       title='Farad'
@@ -67,11 +69,11 @@ return (<div class={styles['layout']}>
         </MainArea>
       </div>
 
-      <LeftArea
+      <RightArea
         styleId={styles['right-column']}
       >
         {right}
-      </LeftArea>
+      </RightArea>
 
     </div>
     <p>Unrelated content</p>

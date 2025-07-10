@@ -8,9 +8,10 @@ export function RightArea ({ children, styleId }: ParentProps<Props>) {
   return (
     <Show when={children !== undefined}>
       <div
-        id="left-area"
+        id="right-area"
         class={`${styleId} pure-u-md-1-5 pure-u-lg-1-8`}
       >
+        sup
         {children}
       </div>
     </Show>
