@@ -1,4 +1,4 @@
-import './css/minterDetails.module.css'
+import './minterDetails.module.css'
 
 type Props = {
   id: number

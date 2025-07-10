@@ -1,5 +1,5 @@
-import { NavButtonGenerator } from '../components/NavButton'
-import { ButtonTray } from '../layouts/forge/buttonTray'
+import { NavButtonGenerator } from '../../components/NavButton'
+import { ButtonTray } from '../../layouts/forge/buttonTray'
 
 type Prop = {
   canReturnHome?: () => boolean

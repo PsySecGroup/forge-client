@@ -40,12 +40,15 @@ export function NavButton ({ location, prefixHighlight, children }: ParentProps<
  * @param iconName
  * @param text
  */
-export function NavButtonGenerator (location: string, label: string, iconName?: IconProps['name']) {
+export function NavButtonGenerator (location: string, label: string, iconName?: IconProps['name'], prefixHighlight: boolean = false) {
   const icon = iconName === undefined
     ? <></>
     : <Icon name={iconName} />
 
-  return <NavButton location={location}>
+  return <NavButton
+    location={location}
+    prefixHighlight={prefixHighlight}
+  >
       {icon}
       {label}
     </NavButton>

@@ -1,4 +1,4 @@
-import style from './css/ledgerDetails.module.css'
+import style from './ledgerDetails.module.css'
 import { For } from 'solid-js'
 import {
   type LedgerEvent,
@@ -9,8 +9,8 @@ import {
   getLedgerEventTypeName,
   getLedgerUploadedDocuments,
   getLedgerNotes
-} from '../domains/ledger'
-import { Icon } from '../components/Icon'
+} from '../../domains/ledger'
+import { Icon } from '../../components/Icon'
 
 type Props = {
   id: LedgerEvent['id']

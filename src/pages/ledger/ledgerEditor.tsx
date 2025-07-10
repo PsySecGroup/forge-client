@@ -1,5 +1,5 @@
 import { Show, Switch, Match } from 'solid-js'
-import style from './css/ledgerEditor.module.css'
+import style from './ledgerEditor.module.css'
 
 type Props = {
   isNew: boolean

@@ -1,4 +1,4 @@
-import './css/alertDetails.module.css'
+import './alertDetails.module.css'
 
 type Props = {
   id: number

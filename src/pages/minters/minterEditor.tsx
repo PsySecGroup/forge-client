@@ -1,4 +1,4 @@
-import './css/minterEditor.module.css'
+import './minterEditor.module.css'
 
 export function MinterEditorPage () {
   return (<div class="minter-form">

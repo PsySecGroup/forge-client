@@ -1,4 +1,4 @@
-import './css/alertList.module.css'
+import './alertList.module.css'
 
 export function AlertListPage () {
   return (<>Coming soon!</>)

@@ -5,9 +5,10 @@ import {
   getNavigationActions,
 } from './core'
 import { ForgeLayout } from './layouts/forge'
-import { LeftSide, NavigationTree } from './pages/leftSide'
+import { LeftSide } from './pages/leftActions'
 import { MainPage } from './pages/mainPage'
 import { Actions } from './pages/actions'
+import { OptionsTray } from './pages/optionsTray'
 
 export function App () {
   const { goto } = getNavigationActions()
@@ -35,7 +36,7 @@ export function App () {
         left={<LeftSide />}
         main={<MainPage />}
         desktopActions={<Actions />}
-        mobileActions={NavigationTree}
+        mobileActions={OptionsTray}
       />
     </ForgeApp>
   )

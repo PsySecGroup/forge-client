@@ -1,4 +1,4 @@
-import './css/alertEditor.module.css'
+import './alertEditor.module.css'
 
 export function AlertEditorPage () {
   return (<div class="alert-form">
