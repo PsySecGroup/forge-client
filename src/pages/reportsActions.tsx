@@ -1,5 +1,4 @@
-import { NavButton } from '../components/NavButton'
-import { Icon } from '../components/Icon'
+import { NavButtonGenerator } from '../components/NavButton'
 import { ButtonTray } from '../layouts/forge/buttonTray'
 
 type Prop = {
@@ -7,10 +6,7 @@ type Prop = {
 }
 
 export const reportsButtons = () => [
-  <NavButton location='reports'>
-    <Icon name="list" />
-    List
-  </NavButton>
+  NavButtonGenerator('reports', 'List', 'list')
 ]
 
 export function ReportsActions ({ canReturnHome = () => false }: Prop) {

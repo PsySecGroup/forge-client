@@ -1,5 +1,4 @@
-import { NavButton } from '../components/NavButton'
-import { Icon } from '../components/Icon'
+import { NavButtonGenerator } from '../components/NavButton'
 import { ButtonTray } from '../layouts/forge/buttonTray'
 
 type Prop = {
@@ -7,14 +6,8 @@ type Prop = {
 }
 
 export const minterButtons = () => [
-  <NavButton location='minters'>
-    <Icon name="list" />
-    List
-  </NavButton>,
-  <NavButton location='minters-new'>
-    <Icon name="file-plus" />
-    Add
-  </NavButton>
+  NavButtonGenerator('minters', 'List', 'list'),
+  NavButtonGenerator('minters-new', 'Add', 'file-plus')
 ]
 
 export function MinterActions ({ canReturnHome = () => false }: Prop) {

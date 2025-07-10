@@ -1,6 +1,7 @@
 import styles from './index.module.css'
 import { ParentProps, useContext } from 'solid-js'
 import { getNavigationActions, NavigationContext } from '../../core'
+import { Icon, IconProps } from '../Icon'
 
 type Props = {
   location?: string
@@ -31,4 +32,21 @@ export function NavButton ({ location, prefixHighlight, children }: ParentProps<
       {children}
     </button>
   )
+}
+
+/**
+ * 
+ * @param location
+ * @param iconName
+ * @param text
+ */
+export function NavButtonGenerator (location: string, label: string, iconName?: IconProps['name']) {
+  const icon = iconName === undefined
+    ? <></>
+    : <Icon name={iconName} />
+
+  return <NavButton location={location}>
+      {icon}
+      {label}
+    </NavButton>
 }
