@@ -1,4 +1,4 @@
-import { NavButtonGenerator } from '../components/NavButton'
+import { NavButtonGenerator } from '../../components/NavButton'
 
 export const LeftSideButtons = () => [
   NavButtonGenerator('ledger', 'Ledger', 'book-open', true),

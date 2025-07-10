@@ -1,4 +1,4 @@
-import './css/dashboard.module.css'
+import './dashboard.module.css'
 
 export function DashboardPage () {
   return (<div class="dashboard-selector">

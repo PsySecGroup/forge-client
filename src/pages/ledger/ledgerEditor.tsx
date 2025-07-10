@@ -2,7 +2,7 @@ import { Show, Switch, Match } from 'solid-js'
 import style from './ledgerEditor.module.css'
 
 type Props = {
-  isNew: boolean
+  isNew?: boolean
 }
 
 export function LedgerEditorPage ({ isNew = true }: Props) {
