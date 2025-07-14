@@ -17,7 +17,7 @@ export type Console = {
   messages: string[]
 }
 
-const state: Console = {
+const definition: Console = {
   prompt: '',
   commands: [],
   messages: []
@@ -70,12 +70,13 @@ function parseCommand(str: string) {
   }
 }
 
-export const store = createStore(state)
-
-type SetState = typeof store[1]
+export const store = createStore(definition)
+const [ state, setState ] = store
+type SetState = typeof setState
 
 export const ConsoleContext = createContext(store)
 export const ConsoleStore = store
+
 export const getConsoleActions = defineActions(store, (set: SetState) => {
   const self =  {
     /**
@@ -88,7 +89,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
      */
     sendCommand: (message?: string, permissions: string[] = []) => {
       const prompt = message === undefined
-        ? store[0].prompt ?? ''
+        ? state.prompt ?? ''
         : message
 
       if (prompt.length === 0) {
@@ -127,7 +128,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
      * 
      */
     runCommand: async (commandName: string, args: ConsoleCommandArgs = [], permissions: string[] = []) => {
-      const command = store[0].commands.find(command => command.name === commandName)
+      const command = state.commands.find(command => command.name === commandName)
 
       if (command === undefined) {
         return false
@@ -149,7 +150,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
     /**
      * 
      */
-    addMessage: (message: string) => set('messages', store[0].messages.length, message),
+    addMessage: (message: string) => set('messages', state.messages.length, message),
 
     /**
      * 

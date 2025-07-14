@@ -9,7 +9,7 @@ export type Navigation = {
   location: string
 }
 
-const state: Navigation = {
+const definition: Navigation = {
   history: [],
   referenceIndex: -1,
   location: window.location.hash
@@ -17,12 +17,13 @@ const state: Navigation = {
     : ''
 }
 
-export const store = createStore(state)
-
-type SetState = typeof store[1]
+export const store = createStore(definition)
+const [ state, setState ] = store
+type SetState = typeof setState
 
 export const NavigationContext = createContext(store)
 export const NavigationStore = store
+
 export const getNavigationActions = defineActions(store, (set: SetState) => {
   const actions =  {
     /**
@@ -33,7 +34,7 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         ? location.substring(1)
         : location
 
-      const history = store[0].history
+      const history = state.history
 
       if (state.location !== destination) {
         // The location has changed, add it
@@ -63,7 +64,7 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         return
       }
 
-      const { history, referenceIndex } = store[0]
+      const { history, referenceIndex } = state
 
       const index = referenceIndex - stepsBack < -1
         ? -1
@@ -81,7 +82,7 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
         return
       }
       
-      const { history, referenceIndex } = store[0]
+      const { history, referenceIndex } = state
 
       const index = referenceIndex + stepsForward > history.length - 1
         ? history.length - 1

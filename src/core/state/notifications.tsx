@@ -13,27 +13,28 @@ export type Notification = UniqueRecord<{
   seenAt?: Date
 }>
 
-const state = {
+const definition = {
   lastChecked: new Date(),
   messages: [] as Notification[]
 }
 
-export const store = createStore(state)
-
-type SetState = typeof store[1]
+export const store = createStore(definition)
+const [ state, setState ] = store
+type SetState = typeof setState
 
 export const NotificationsContext = createContext(store)
 export const NotificationsStore = store
+
 export const getNotificationActions = defineActions(store, (set: SetState) => ({
-  updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime),
-  addNotification: (notification: Notification) => set('messages', store[0].messages.length, {
+  updateLastChecked: (datetime: Date = new Date()) => set('lastChecked', datetime ?? new Date()),
+  addNotification: (notification: Notification) => set('messages', state.messages.length, {
     createdAt: new Date(),
     isNew: true,
     ...notification,
   }),
   updateNotification: (notification: Partial<Notification>) => set(
     'messages',
-    store[0].messages.findIndex(record => record.id === notification.id),
+    state.messages.findIndex(record => record.id === notification.id),
     notification),
   removeNotification: (notification: Notification) => set('messages', (prevMessages) => {
     return prevMessages.filter(message => message.id !== notification.id)
