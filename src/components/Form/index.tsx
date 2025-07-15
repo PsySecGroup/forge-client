@@ -1,30 +1,96 @@
-import { useContext } from 'solid-js'
+import { onCleanup, onMount, useContext } from 'solid-js'
 import { JSX, ParentProps } from 'solid-js'
 import { FormsStore, FormsContext, getFormsActions } from '../../core/state/formStore'
 
+type HTMLFormEncType =
+  | 'application/x-www-form-urlencoded'
+  | 'multipart/form-data'
+  | 'text/plain'
+
 type Props = {
-  name: string
+  id?: string
+  name?: string
+  enctype?: HTMLFormEncType
   onSubmit: (formData: Record<string, any>) => void
 } & ParentProps
 
 /**
  * 
  */
-export function Form({ name, onSubmit, children }: Props): JSX.Element {
+export function Form({
+  id,
+  name,
+  enctype = 'application/x-www-form-urlencoded',
+  onSubmit,
+  children
+}: Props): JSX.Element {
   const [ state ] = FormsStore
   const { initializeForm } = getFormsActions()
 
   // Ensure the form exists in the store
-  initializeForm(name)
+  const formName = id ?? name
+
+  if (!formName) {
+    throw new RangeError("A form must have either an id or a name")
+  }
+
+  //initializeForm(formName)
+  let formRef: HTMLFormElement | undefined
+
+  onMount(() => {
+    const inputs = formRef?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+      'input[name], select[name], textarea[name]'
+    )
+
+    const defaultValues: Record<string, any> = {}
+
+    inputs?.forEach((input) => {
+      const name = input.name
+      if (!name) return
+
+      const { onInput, onChange, onBlur } = setField(formName, name)
+      input.addEventListener('input', onInput)
+      input.addEventListener('change', onChange)
+      input.addEventListener('blur', onBlur)
+
+      onCleanup(() => {
+        input.removeEventListener('input', onInput)
+        input.removeEventListener('change', onChange)
+        input.removeEventListener('blur', onBlur)
+      })
+
+      if (input instanceof HTMLInputElement) {
+        switch (input.type) {
+          case 'checkbox':
+            defaultValues[name] = input.checked
+            break
+          case 'radio':
+            if (input.checked) defaultValues[name] = input.value
+            break
+          case 'file':
+            // Skip file inputs — user must explicitly populate
+            break
+          default:
+            defaultValues[name] = input.value
+        }
+      } else if (input instanceof HTMLSelectElement && input.multiple) {
+        defaultValues[name] = Array.from(input.selectedOptions).map(opt => opt.value)
+      } else {
+        defaultValues[name] = input.value
+      }
+    })
+
+    initializeForm(formName, defaultValues)
+  })
 
   function handleSubmit(e: Event) {
     e.preventDefault()
-    onSubmit(state.forms[name] ?? {})
+    onSubmit(state.forms[formName as string]?.values ?? {})
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormsContext.Provider value={name}>
+    <form ref={formRef} onSubmit={handleSubmit} enctype={enctype}>
+      <FormsContext.Provider value={formName}>
         {children}
       </FormsContext.Provider>
     </form>
@@ -72,21 +138,18 @@ export function extractInputValue(target: EventTarget | null): any {
 /**
  * 
  */
-export function setField(fieldName: string) {
-  const formName = useContext(FormsContext)
+function setField(formName: string, fieldName: string) {
   const { updateField, markTouched } = getFormsActions()
-
-  if (!formName) {
-    throw new Error('useFormField must be used within a <Form> component')
-  }
 
   return {
     onInput: (e: Event) => {
+      console.log('input')
       const value = extractInputValue(e.target)
       updateField(formName, fieldName, value)
     },
 
     onChange: (e: Event) => {
+      console.log('change')
       const value = extractInputValue(e.target)
       updateField(formName, fieldName, value)
     },

@@ -1,4 +1,4 @@
-import { createContext } from 'solid-js'
+import { createContext, batch } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { defineActions } from './actions' // your custom helper
 
@@ -17,7 +17,7 @@ const definition: FormDefinition = {
 }
 
 export const store = createStore(definition)
-const [ state, setState ] = store
+const [_, setState ] = store
 type SetState = typeof setState
 
 // export const FormsContext = createContext(store)
@@ -25,16 +25,19 @@ export const FormsContext = createContext<string | null>(null)
 export const FormsStore = store
 
 export const getFormsActions = defineActions(store, (set: SetState) => ({
-  initializeForm: (formName: string) =>
+  initializeForm: (formName: string,  defaultValues: Record<string, any> = {}) =>
     set('forms', formName, (prev = {
-      values: {},
+      values: defaultValues,
       touched: {},
       dirty: {}
     }) => prev),
 
   updateField: (formName: string, field: string, value: any) => {
-    set('forms', formName, 'values', field, value)
-    set('forms', formName, 'dirty', field, true)
+    batch(() => {
+      set('forms', formName, 'values', field, value)
+      set('forms', formName, 'dirty', field, true)
+    })
+    console.log(_)
   },
 
   markTouched: (formName: string, field: string) => {

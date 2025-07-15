@@ -1,5 +1,6 @@
 import { Show, Switch, Match } from 'solid-js'
 import style from './ledgerEditor.module.css'
+import { Form, setField } from '../../components/Form'
 
 type Props = {
   isNew?: boolean
@@ -18,9 +19,10 @@ export function LedgerEditorPage ({ isNew = true }: Props) {
           </Match>
         </Switch>
         
-        <form
+        <Form
           id="ledgerEventForm"
           enctype="multipart/form-data"
+          onSubmit={console.log}
         >
           <Show when={isNew === false}>
             <label for="creditId">Credit ID</label>
@@ -34,6 +36,10 @@ export function LedgerEditorPage ({ isNew = true }: Props) {
             />
           </Show>
 
+          <label for="amount">Test Field</label>
+          <input type="text" id="testField" name="testField" value="100" min="0" step="0.01" />
+          <br /><br />
+
           <label for="amount">Amount (kWh)</label>
           <input type="number" id="amount" name="amount" value="100" min="0" step="0.01" />
           <br /><br />
@@ -41,7 +47,7 @@ export function LedgerEditorPage ({ isNew = true }: Props) {
           <label for="status">Status</label>
           <select id="status" name="status">
             <option value="valid" selected>Valid</option>
-            <option value="invalid">Invalud</option>
+            <option value="invalid">Invalid</option>
           </select>
           <br /><br />
 
@@ -76,7 +82,7 @@ export function LedgerEditorPage ({ isNew = true }: Props) {
             <button type="submit">Save Changes</button>
             <button type="reset">Cancel</button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   )
