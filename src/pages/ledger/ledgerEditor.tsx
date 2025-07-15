@@ -1,6 +1,6 @@
 import { Show, Switch, Match } from 'solid-js'
 import style from './ledgerEditor.module.css'
-import { Form, setField } from '../../components/Form'
+import { Form } from '../../components/Form'
 
 type Props = {
   isNew?: boolean
