@@ -17,7 +17,7 @@ const definition: FormDefinition = {
 }
 
 export const store = createStore(definition)
-const [_, setState ] = store
+const [, setState ] = store
 type SetState = typeof setState
 
 // export const FormsContext = createContext(store)
@@ -37,7 +37,6 @@ export const getFormsActions = defineActions(store, (set: SetState) => ({
       set('forms', formName, 'values', field, value)
       set('forms', formName, 'dirty', field, true)
     })
-    console.log(_)
   },
 
   markTouched: (formName: string, field: string) => {

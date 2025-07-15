@@ -143,13 +143,11 @@ function setField(formName: string, fieldName: string) {
 
   return {
     onInput: (e: Event) => {
-      console.log('input')
       const value = extractInputValue(e.target)
       updateField(formName, fieldName, value)
     },
 
     onChange: (e: Event) => {
-      console.log('change')
       const value = extractInputValue(e.target)
       updateField(formName, fieldName, value)
     },
