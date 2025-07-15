@@ -1,0 +1,79 @@
+.consoleWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30vh;
+  background: black;
+  color: orange;
+  font-family: 'Courier New', Courier, monospace;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.open {
+  transform: translateY(0%);
+  pointer-events: all;
+}
+
+.consoleContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.consoleHistory {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: orange black;
+}
+
+/* For Webkit browsers */
+.consoleHistory::-webkit-scrollbar {
+  width: 8px;
+}
+.consoleHistory::-webkit-scrollbar-track {
+  background: black;
+}
+.consoleHistory::-webkit-scrollbar-thumb {
+  background: orange;
+  border-radius: 4px;
+}
+.consoleHistory::-webkit-scrollbar-button {
+  background: black;
+}
+
+.consoleLine {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.inputPrefix {
+  color: gray;
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.consoleInput {
+  flex: 1;
+  background: black;
+  color: orange;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}

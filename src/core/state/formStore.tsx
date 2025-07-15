@@ -39,6 +39,16 @@ export const getFormsActions = defineActions(store, (set: SetState) => ({
     })
   },
 
+  updateAllFields: (formName: string, value: any) => {
+    batch(() => {
+      set('forms', formName, 'values', value)
+
+      for (const key of Object.keys(value)) {
+        set('forms', formName, 'dirty', key, true)
+      }
+    })
+  },
+
   markTouched: (formName: string, field: string) => {
     set('forms', formName, 'touched', field, true)
   },

@@ -1,29 +1,38 @@
-import { onCleanup, onMount, useContext } from 'solid-js'
+import { onCleanup, onError, onMount, useContext } from 'solid-js'
 import { JSX, ParentProps } from 'solid-js'
 import { FormsStore, FormsContext, getFormsActions } from '../../core/state/formStore'
+
+type FormValues = Record<string, any>
+type ValidationErrors = [string, string][]
 
 type HTMLFormEncType =
   | 'application/x-www-form-urlencoded'
   | 'multipart/form-data'
   | 'text/plain'
 
-type Props = {
+type Props<ResponseType> = {
   id?: string
   name?: string
   enctype?: HTMLFormEncType
-  onSubmit: (formData: Record<string, any>) => void
+  beforeSubmit?: (formData: FormValues) => FormValues | ValidationErrors
+  onSubmit?: (formData: FormValues) => Awaited<ResponseType>
+  afterSubmit?: (response: ResponseType, formData: FormValues) => FormValues
+  onError?: (errors: ValidationErrors, formData: FormValues) => void
 } & ParentProps
 
 /**
  * 
  */
-export function Form({
+export function Form<ResponseType = FormValues>({
   id,
   name,
   enctype = 'application/x-www-form-urlencoded',
+  beforeSubmit,
   onSubmit,
+  afterSubmit,
+  onError,
   children
-}: Props): JSX.Element {
+}: Props<ResponseType>): JSX.Element {
   const [ state ] = FormsStore
   const { initializeForm } = getFormsActions()
 
@@ -83,9 +92,48 @@ export function Form({
     initializeForm(formName, defaultValues)
   })
 
-  function handleSubmit(e: Event) {
+  /**
+   * 
+   */
+  async function handleSubmit(e: Event) {
     e.preventDefault()
-    onSubmit(state.forms[formName as string]?.values ?? {})
+
+    const name = formName as string
+    const values = state.forms[name]?.values ?? {}
+    let refinedValues: FormValues | [string, string][] = values
+
+    try {
+      if (beforeSubmit) {
+        refinedValues = await beforeSubmit(values)
+
+        if (Array.isArray(refinedValues) && refinedValues.length > 0) {
+          console.warn('Validation Error:', refinedValues)
+
+          if (onError) {
+            await onError(refinedValues, values)
+            return false
+          }
+        }
+      }
+
+    const response: ResponseType = onSubmit === undefined
+      ? refinedValues as ResponseType
+      : await onSubmit(refinedValues)
+
+      if (afterSubmit) {
+        await afterSubmit(response, refinedValues)
+      }
+    } catch (err: unknown) {
+      console.error('Form submission error:', err)
+
+      if (onError) {
+        const message = err instanceof Error ? err.message : String(err)
+        await onError([['*', message]], refinedValues)
+        return false
+      }
+    }
+
+    return true
   }
 
   return (

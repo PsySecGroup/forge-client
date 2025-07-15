@@ -5,6 +5,7 @@ import { ConsoleCommand, ConsoleProvider, getConsoleActions } from './state/cons
 import { NavigationProvider } from './state/navigation'
 import { NotificationsProvider } from './state/notifications'
 import { ThemeProvider } from './themes/index'
+import Console from '../components/Console'
 
 type Props = ParentProps<{
   consoleCommands?: ConsoleCommand[]
@@ -27,6 +28,7 @@ export const ForgeApp = ({
         <NotificationsProvider>
           <ThemeProvider>
             {children}
+            <Console />
           </ThemeProvider>
         </NotificationsProvider>
       </NavigationProvider>

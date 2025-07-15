@@ -17,6 +17,12 @@ export type Console = {
   messages: string[]
 }
 
+enum CommandResult {
+  NotFound = 'NOT_FOUND',
+  PermissionDenied = 'PERMISSION_DENIED',
+  Executed = 'EXECUTED'
+}
+
 const definition: Console = {
   prompt: '',
   commands: [],
@@ -87,7 +93,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
     /**
      * 
      */
-    sendCommand: (message?: string, permissions: string[] = []) => {
+    sendCommand: async (message?: string, permissions: string[] = []) => {
       const prompt = message === undefined
         ? state.prompt ?? ''
         : message
@@ -99,27 +105,25 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
       const promptParts = parseCommand(prompt)
       let result = ''
 
-      batch(async () => {
-        if (promptParts === false) {
-          // TODO do something with errors here
-          result = 'This command does not work'
+      if (promptParts === false) {
+        // TODO do something with errors here
+        result = 'This command does not work'
+      } else {
+        const output = await self.runCommand(promptParts.command, promptParts.arguments, permissions)
+
+        if (output === false) {
+          result = `Command "${promptParts.command}" not found`
         } else {
-          const output = await self.runCommand(promptParts.command, promptParts.arguments, permissions)
-
-          if (output === false) {
-            result = `Command "${promptParts.command}" not found`
-          } else {
-            if (output !== undefined) {
-              result = output
-            }
-            // When the command is successful, then we clear the prompt
-            self.addMessage(prompt)
-            self.updatePrompt('')
+          if (output !== undefined) {
+            result = output
           }
+          // When the command is successful, then we clear the prompt
+          self.addMessage(prompt)
+          self.updatePrompt('')
         }
+      }
 
-        self.addMessage(result)
-      })
+      self.addMessage(result)
 
       return result
     },
@@ -131,7 +135,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
       const command = state.commands.find(command => command.name === commandName)
 
       if (command === undefined) {
-        return false
+        return CommandResult.NotFound
       }
 
       if (permissions.length === 0) {
@@ -142,7 +146,7 @@ export const getConsoleActions = defineActions(store, (set: SetState) => {
         if (hasPermission) {
           return await command.onExecute(args)
         } else {
-          return false
+          return CommandResult.PermissionDenied
         }
       }
     },

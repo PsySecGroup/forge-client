@@ -16,6 +16,7 @@ export function App () {
     name: 'goto',
     onExecute: (args: ConsoleCommandArgs) => {
       const [ location ] = args as [string]
+
       if(location === '') {
         return false
       }
