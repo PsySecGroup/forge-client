@@ -3,6 +3,7 @@ import {
   type ConsoleCommandArgs,
   ForgeApp,
   getNavigationActions,
+  getNotificationActions,
 } from './core'
 import { ForgeLayout } from './layouts/forge'
 import { LeftSide } from './pages/main/actions'
@@ -11,6 +12,7 @@ import { DesktopTrayButtons, MobileTrayButtons } from './pages/router'
 
 export function App () {
   const { goto } = getNavigationActions()
+  const { addNotification } = getNotificationActions()
   
   const consoleCommands = [{
     name: 'goto',
@@ -24,6 +26,23 @@ export function App () {
       goto(location)
 
       return 'Going to ' + location
+    }
+  }, {
+    name: 'notify',
+    onExecute: (args: ConsoleCommandArgs) => {
+      const [ type, message ] = args as [string, string]
+
+      if(!type || !message) {
+        return false
+      }
+
+      addNotification({
+        id: Date.now(),
+        text: message,
+        type
+      })
+
+      return 'Added notification'
     }
   }]
 
