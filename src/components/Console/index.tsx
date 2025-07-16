@@ -116,7 +116,7 @@ export default function Console() {
             value={input()}
             onInput={(e) => setInput(e.currentTarget.value)}
             onKeyDown={onKeyDown}
-            placeholder="Type commands here"
+            placeholder="Type help to see all commands"
           />
         </div>
       </div>

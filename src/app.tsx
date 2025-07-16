@@ -10,11 +10,16 @@ import { LeftSide } from './pages/main/actions'
 import { MainPage } from './pages/main/mainPage'
 import { DesktopTrayButtons, MobileTrayButtons } from './pages/router'
 
+type ConsoleCommands = {
+  name: string
+  onExecute: (args: ConsoleCommandArgs) => string | false
+}[]
+
 export function App () {
   const { goto } = getNavigationActions()
   const { addNotification } = getNotificationActions()
   
-  const consoleCommands = [{
+  const consoleCommands: ConsoleCommands = [{
     name: 'goto',
     onExecute: (args: ConsoleCommandArgs) => {
       const [ location ] = args as [string]
@@ -43,6 +48,12 @@ export function App () {
       })
 
       return 'Added notification'
+    }
+  }, {
+    name: 'help',
+    onExecute: () => {
+      const result = consoleCommands.map(command => command.name).join(', ')
+      return `Commands: ${result}`
     }
   }]
 

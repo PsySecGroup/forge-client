@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   height: 30vh;
-  background: black;
+  background: #00000088;
   color: orange;
   font-family: 'Courier New', Courier, monospace;
   transform: translateY(100%);
@@ -62,14 +62,13 @@
 }
 
 .inputPrefix {
-  color: gray;
   margin-right: 0.5rem;
   font-weight: bold;
 }
 
 .consoleInput {
   flex: 1;
-  background: black;
+  background: #484848c8;
   color: orange;
   border: none;
   outline: none;
