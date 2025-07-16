@@ -1,6 +1,6 @@
 import { Notifications } from '../../components/Notifications'
-import './alertList.module.css'
+import './alertConfigure.module.css'
 
-export function AlertListPage () {
+export function AlertConfigurePage () {
   return (<Notifications />)
 }

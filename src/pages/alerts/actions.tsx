@@ -7,7 +7,8 @@ type Prop = {
 
 export const alertButtons = () => [
   NavButtonGenerator('alerts', 'List', 'list'),
-  NavButtonGenerator('alerts-new', 'Add', 'file-plus')
+  NavButtonGenerator('alerts-new', 'Add', 'file-plus'),
+  NavButtonGenerator('alerts-edit', 'Configure', 'settings'),
 ]
 
 export function AlertActions ({ canReturnHome = () => false }: Prop) {

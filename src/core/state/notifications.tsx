@@ -53,7 +53,11 @@ export const getNotificationActions = defineActions(store, (set: SetState) => ({
 
   removeNotificationById: (id: number) => set('messages', (prevMessages) => {
     return prevMessages.filter(message => message.id !== id)
-  })
+  }),
+
+  getUnseenCount: () => {
+    return state.messages.filter(message => message.seenAt === undefined).length
+  }
 }))
 
 export function NotificationsProvider (

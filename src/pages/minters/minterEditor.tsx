@@ -1,8 +1,12 @@
 import './minterEditor.module.css'
 
-export function MinterEditorPage () {
+type Props = {
+  id?: number
+}
+
+export function MinterEditorPage ({ id }: Props) {
   return (<div class="minter-form">
-  <h2>Edit Minter</h2>
+  <h2>Edit Minter {id}</h2>
   <form id="editMinterForm" enctype="multipart/form-data">
     <label for="minterId">Minter ID</label>
     <input type="text" id="minterId" name="minterId" readonly value="MINTER_ID" />

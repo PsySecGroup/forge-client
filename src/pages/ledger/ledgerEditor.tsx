@@ -3,12 +3,14 @@ import style from './ledgerEditor.module.css'
 import { Form } from '../../components/Form'
 
 type Props = {
+  id?: number
   isNew?: boolean
 }
 
-export function LedgerEditorPage ({ isNew = true }: Props) {
+export function LedgerEditorPage ({ id, isNew = true }: Props) {
   return (
     <div>
+      {id}
       <div class={style['credit-form']}>
         <Switch>
           <Match when={isNew === true}>

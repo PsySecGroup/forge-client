@@ -1,8 +1,12 @@
 import './alertEditor.module.css'
 
-export function AlertEditorPage () {
+type Props = {
+  id?: number
+}
+
+export function AlertEditorPage ({ id }: Props) {
   return (<div class="alert-form">
-  <h2>Create New Alert</h2>
+  <h2>Edit Alert {id}</h2>
   <form id="createAlertForm">
     <label for="alertName">Alert Name</label>
     <input type="text" id="alertName" name="alertName" placeholder="E.g. Minter Offline Alert" required />
