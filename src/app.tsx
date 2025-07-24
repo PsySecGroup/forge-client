@@ -24,8 +24,8 @@ export function App () {
     onExecute: (args: ConsoleCommandArgs) => {
       const [ location ] = args as [string]
 
-      if(location === '') {
-        return false
+      if(location === '' || location === undefined) {
+        return 'Unspecified location'
       }
 
       goto(location)

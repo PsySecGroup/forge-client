@@ -1,7 +1,7 @@
 import { icons } from 'feather-icons'
 import { For, createSignal, Show } from 'solid-js'
 import { useContext } from 'solid-js'
-import { NotificationsContext, getNotificationActions, Notification } from '../../core/state/notifications'
+import { NotificationsContext, getNotificationActions, Notification } from './store'
 
 function timeAgo(date: Date) {
   const now = new Date().getTime()

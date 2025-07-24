@@ -1,4 +1,4 @@
-import { getNavigationActions, NavigationProvider } from '../../state/navigation'
+import { getNavigationActions, NavigationProvider } from '../../../components/NavButton/store'
 
 export function NavigationCompoonent () {
   const { goto, goBack, goForward } = getNavigationActions()

@@ -1,6 +1,6 @@
-import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
-import { defineActions } from './actions'
-import { StoreProvider } from './provider'
+import { type ParentProps, type JSX, createContext } from 'solid-js'
+import { defineActions } from '../../core/state/actions'
+import { StoreProvider } from '../../core/state/provider'
 import { createStore } from 'solid-js/store'
 
 export type ConsoleCommandArgs = (string | number)[]

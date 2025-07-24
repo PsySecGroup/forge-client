@@ -1,7 +1,7 @@
 import { type ParentProps, type JSX, createContext } from 'solid-js'
-import { defineActions } from './actions'
-import { StoreProvider } from './provider'
-import { Dictionary, type UniqueRecord } from '../types/basic'
+import type { UniqueRecord } from '../../core/types/basic'
+import { defineActions } from '../../core/state/actions'
+import { StoreProvider } from '../../core/state/provider'
 import { createStore } from 'solid-js/store'
 
 export type Notification = UniqueRecord<{

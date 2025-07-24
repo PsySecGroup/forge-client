@@ -1,6 +1,6 @@
 import { createContext, batch } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { defineActions } from './actions' // your custom helper
+import { defineActions } from '../../core/state/actions' // your custom helper
 
 type FormData = {
   values: Record<string, string | number | boolean>

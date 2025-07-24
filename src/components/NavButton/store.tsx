@@ -1,6 +1,6 @@
 import { type ParentProps, type JSX, createContext, batch } from 'solid-js'
-import { defineActions } from './actions'
-import { StoreProvider } from './provider'
+import { defineActions } from '../../core/state/actions'
+import { StoreProvider } from '../../core/state/provider'
 import { createStore } from 'solid-js/store'
 
 export type Navigation = {
@@ -29,7 +29,11 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
     /**
      * The main location handler for Navigation
      */
-    goto: (location: string, referenceIndex?: number) => {
+    goto: (location: string = '', referenceIndex?: number) => {
+      if (location === '' || location === undefined) {
+        return false
+      }
+
       const destination = location[0] === '#'
         ? location.substring(1)
         : location
@@ -52,7 +56,11 @@ export const getNavigationActions = defineActions(store, (set: SetState) => {
           set('history', history.length, destination ?? '')
           set('referenceIndex', referenceIndex ?? history.length - 1)
           set('location', destination ?? '')
-        })        
+        })
+
+        return true
+      } else {
+        return false
       }
     },
 

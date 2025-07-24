@@ -1,6 +1,6 @@
 import styles from './index.module.css'
 import { ParentProps, useContext } from 'solid-js'
-import { getNavigationActions, NavigationContext } from '../../core'
+import { getNavigationActions, NavigationContext } from './store'
 import { Icon, IconProps } from '../Icon'
 
 type Props = {

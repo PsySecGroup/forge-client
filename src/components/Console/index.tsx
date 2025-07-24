@@ -1,6 +1,6 @@
 import style from './index.module.css'
 import { For, onMount, onCleanup, useContext, createEffect, createSignal } from 'solid-js'
-import { ConsoleContext, getConsoleActions } from '../../core/state/console'
+import { ConsoleContext, getConsoleActions } from './store'
 
 export default function Console() {
   const [isVisible, setIsVisible] = createSignal(false)
