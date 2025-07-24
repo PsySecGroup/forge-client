@@ -1,4 +1,4 @@
-import { Notifications } from '../../components/Notifications'
+import { Notifications } from '../../components/notifications'
 import './alertConfigure.module.css'
 
 export function AlertConfigurePage () {

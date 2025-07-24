@@ -10,7 +10,7 @@ import {
   getLedgerUploadedDocuments,
   getLedgerNotes
 } from '../../domains/ledger'
-import { Icon } from '../../components/Icon'
+import { Icon } from '../../components/icon'
 
 type Props = {
   id: LedgerEvent['id']

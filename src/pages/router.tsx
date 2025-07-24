@@ -1,6 +1,6 @@
 import { Switch, Match, useContext } from 'solid-js'
 import { NavigationContext } from '../core'
-import { Icon } from '../components/Icon'
+import { Icon } from '../components/icon'
 import { ReportsActions, reportsButtons } from './reports/actions'
 import { AlertActions, alertButtons } from './alerts/actions'
 import { MinterActions, minterButtons } from './minters/actions'

@@ -1,5 +1,5 @@
 import { getNotificationActions, NotificationsContext } from '../../core'
-import { NavButtonGenerator } from '../../components/NavButton'
+import { NavButtonGenerator } from '../../components/navButton'
 import { useContext } from 'solid-js'
 
 export const LeftSideButtons = () => {

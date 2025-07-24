@@ -9,7 +9,7 @@ export {
   ConsoleProvider,
   ConsoleContext,
   getConsoleActions
-} from '../components/Console/store'
+} from '../components/console/store'
 
 export {
   createLocalStore
@@ -20,14 +20,14 @@ export {
   NavigationProvider,
   NavigationContext,
   getNavigationActions
-} from '../components/NavButton/store'
+} from '../components/navButton/store'
 
 export {
   type Notification,
   NotificationsProvider,
   getNotificationActions,
   NotificationsContext,
-} from '../components/Notifications/store'
+} from '../components/notifications/store'
 
 export {
   StoreProvider,

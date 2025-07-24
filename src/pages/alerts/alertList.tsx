@@ -1,4 +1,4 @@
-import { Notifications } from '../../components/Notifications'
+import { Notifications } from '../../components/notifications'
 import './alertList.module.css'
 
 export function AlertListPage () {

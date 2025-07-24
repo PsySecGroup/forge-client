@@ -5,17 +5,17 @@ import './themes/reset.css'
 import { type ParentProps, type JSX, Component } from 'solid-js'
 
 // Console state and context utilities
-import { ConsoleCommand, ConsoleProvider, getConsoleActions } from '../components/Console/store'
+import { ConsoleCommand, ConsoleProvider, getConsoleActions } from '../components/console/store'
 
 // Other global state providers
-import { NavigationProvider } from '../components/NavButton/store'
-import { NotificationsProvider } from '../components/Notifications/store'
+import { NavigationProvider } from '../components/navButton/store'
+import { NotificationsProvider } from '../components/notifications/store'
 
 // Theme provider for styling and UI theming
 import { ThemeProvider } from './themes/index'
 
 // Global developer console UI component
-import Console from '../components/Console'
+import Console from '../components/console'
 
 /**
  * Type alias for a dynamic context provider component.

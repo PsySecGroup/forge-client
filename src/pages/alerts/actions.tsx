@@ -1,4 +1,4 @@
-import { NavButtonGenerator } from '../../components/NavButton'
+import { NavButtonGenerator } from '../../components/navButton'
 import { ButtonTray } from '../../layouts/forge/buttonTray'
 
 type Prop = {

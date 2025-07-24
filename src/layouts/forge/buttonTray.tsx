@@ -8,8 +8,8 @@ import {
   children as resolveChildren
 } from 'solid-js'
 import { HorizontalSlide } from './horizontalSlide'
-import { NavButton } from '../../components/NavButton'
-import { Icon } from '../../components/Icon'
+import { NavButton } from '../../components/navButton'
+import { Icon } from '../../components/icon'
 
 type Props = {
   buttons: () => JSX.Element[],

@@ -1,6 +1,6 @@
 import { Show, Switch, Match } from 'solid-js'
 import style from './ledgerEditor.module.css'
-import { Form } from '../../components/Form'
+import { Form } from '../../components/form'
 
 type Props = {
   id?: number

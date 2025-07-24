@@ -1,6 +1,6 @@
 import style from './ledgerList.module.css'
 import { createSignal } from 'solid-js'
-import Table from '../../components/Table'
+import Table from '../../components/table'
 import {
   type LedgerEvent, 
   getLedgerEventMintedAt, 
@@ -10,7 +10,7 @@ import {
   LedgerEventStatus,
   LedgerEventType
 } from '../../domains/ledger'
-import { NavButton } from '../../components/NavButton'
+import { NavButton } from '../../components/navButton'
 
 
 export function LedgerListPage() {
