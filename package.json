@@ -47,6 +47,7 @@
     "feather-icons": "^4.29.2",
     "lucide-solid": "^0.439.0",
     "luxon": "^3.5.0",
+    "nanoid": "^5.1.5",
     "solid-js": "^1.8.11",
     "yup": "^1.4.0"
   }
