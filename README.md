@@ -51,12 +51,11 @@ We have three `.env` files:
 
 | Variable Name | Description | Example |
 |---------------|-------------|---------|
-| `PROJECT_NAME` | The name of your project used in metadata (title, OG tags, etc.). | `My App` |
-| `PROJECT_DESCRIPTION` |	A brief description used in meta tags and page title. | `Fast and lightweight PWA` |
-| `PROJECT_TITLE` |	The final HTML <title> value. Falls back to PROJECT_NAME if empty. | `My App` |
+| `PROJECT_NAME` | The name of your project used in metadata.  This value will appear in the browser title/bookmark name. | `My App` |
+| `PROJECT_DESCRIPTION` |	A brief description used in meta tags and page title. If set, it will be appended to the browser title/bookmark name. | `Fast and lightweight PWA` |
 | `PROJECT_URL` |	The canonical URL of the deployed project, used in OG tags and CSP.	| `https://myapp.com` |
-| `ASSET_PATH` | Base path for static assets (e.g. favicons, images). Should end with /. | `/assets/` |
-| `PROJECT_CSP` |	Custom directives appended to the Content Security Policy header. Requires 'self' and trusted sources. | `img-src 'self' https://cdn.myapp.com;` |
+| `ASSET_PATH` | Base path for static assets (e.g. favicons, images). Should end with `/`. | `/assets/` |
+| `PROJECT_CSP` |	Custom directives appended to the Content Security Policy header. Requires `'self'` and trusted sources. | `img-src 'self' https://cdn.myapp.com;` |
 | `PROJECT_PRECONNECTS` |	Comma-separated list of external domains to preconnect for performance. | `https://fonts.googleapis.com,https://cdn.myapp.com` |
 | `PROJECT_SERVICE_WORKERS` |	Comma-separated list of service worker script paths to register in production. These scripts must have unique scopes. | `/sw-cache.js,/sw-sync.js` |
 
