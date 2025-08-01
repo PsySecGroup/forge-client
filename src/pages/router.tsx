@@ -75,14 +75,15 @@ export const MobileTrayButtons = () => {
 /**
  * 
  * @param location 
- * @param slug 
  * @returns 
  */
-function navIs(location: string, slug: string) {
-  if (slug[slug.length - 1] === '-') {
-    return location.startsWith(slug)
+function getLocationCheck(location: string) {
+  return (slug: string) => {
+    if (slug[slug.length - 1] === '*') {
+    return location.startsWith(slug.slice(0, slug.length - 1))
   } else {
     return location === slug
+  }
   }
 }
 
@@ -91,60 +92,61 @@ function navIs(location: string, slug: string) {
  */
 export const MainPageRouter = () => {
   const [ navigation ] = useContext(NavigationContext)
+  const navIs = getLocationCheck(navigation.location)
 
   return (<Switch fallback={<Icon name="clock" />}>
-    <Match when={navIs(navigation.location, 'reports')}>
+    <Match when={navIs('reports')}>
       <ReportsPage />
     </Match>
-    <Match when={navIs(navigation.location, 'ledger')}>
+    <Match when={navIs('ledger')}>
       <LedgerListPage />
     </Match>
-    <Match when={navIs(navigation.location, 'ledger-new')}>
+    <Match when={navIs('ledger-new')}>
       <LedgerEditorPage />
     </Match>
-    <Match when={navIs(navigation.location, 'ledger-details-')}>
+    <Match when={navIs('ledger-details-*')}>
       <LedgerDetailsPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'ledger-edit-')}>
+    <Match when={navIs('ledger-edit-*')}>
       <LedgerEditorPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'minters')}>
+    <Match when={navIs('minters')}>
       <MinterListPage />
     </Match>
-    <Match when={navIs(navigation.location, 'minters-new')}>
+    <Match when={navIs('minters-new')}>
       <MinterEditorPage />
     </Match>
-    <Match when={navIs(navigation.location, 'minters-details-')}>
+    <Match when={navIs('minters-details-*')}>
       <MinterDetailsPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'minters-edit-')}>
+    <Match when={navIs('minters-edit-*')}>
       <MinterEditorPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'alerts')}>
+    <Match when={navIs('alerts')}>
       <AlertListPage />
     </Match>
-    <Match when={navIs(navigation.location, 'alerts-new')}>
+    <Match when={navIs('alerts-new')}>
       <AlertEditorPage />
     </Match>
-    <Match when={navIs(navigation.location, 'alerts-details-')}>
+    <Match when={navIs('alerts-details-*')}>
       <AlertDetailsPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'alerts-edit-')}>
+    <Match when={navIs('alerts-edit-*')}>
       <AlertEditorPage
         id={getId(navigation.location)}
       />
     </Match>
-    <Match when={navIs(navigation.location, 'alerts-configure')}>
+    <Match when={navIs('alerts-configure')}>
       <AlertConfigurePage />
     </Match>
   </Switch>)

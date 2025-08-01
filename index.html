@@ -21,18 +21,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ASSET_PATH}}favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="{{ASSET_PATH}}favicon-16x16.png" />
 
-    <!-- Preconnects for better performance -->
-    <!--
-{{PROJECT_PRECONNECTS}}
--->
+{{HEADERS_PRECONNECTS}}
+    {{HEADERS_CSP}}
 
     <!-- SEO-friendly title -->
-    <title>{{PROJECT_NAME}} | {{PROJECT_DESCRIPTION}}</title>
-
-    <!-- CSP for security -->
-    <!--
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{PROJECT_URL}};{{PROJECT_CSP}}" />
-    -->
+    <title>{{PROJECT_TITLE}}</title>
   </head>
   <style>
     #viewport {
@@ -50,16 +43,24 @@
     <script src="/src/index.tsx" type="module" defer></script>
 
     <!-- Service worker registration for PWA features -->
-    <!--
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js').catch((error) => {
-            console.error('Service Worker registration failed:', error);
-          });
-        });
+        const onLoad = () => {
+          window.removeEventListener('load', onLoad)
+
+          const workers = `{{PROJECT_SERVICE_WORKERS}}`.split(',')
+          
+          workers.forEach(worker => {
+            if (worker) {
+              navigator.serviceWorker.register(worker).catch((error) => {
+                console.error('Service Worker registration failed:', error)
+              })
+            }
+          })
+        }
+
+        window.addEventListener('load', onLoad)
       }
     </script>
-  -->
   </body>
 </html>
