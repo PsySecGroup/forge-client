@@ -12,7 +12,7 @@ const NOOP = () => undefined
 const compressionFileFilter = /\.(js|mjs|json|css|html|svg)$/i
 const isProduction = process.env['NODE_ENV'] === 'production'
 const isLocal = process.env['IS_LOCAL_BUILD'] === 'true'
-
+const isMobile = process.env['IS_MOBILE_BUILD'] === 'true'
 const envFile = isProduction
   ? '.env.production'
   : '.env.development'
@@ -65,13 +65,13 @@ export default defineConfig({
     solidPlugin(),
     viteSingleFile(),
     svgr(),
-    compression({
+    isMobile ? NOOP() : compression({
       algorithm: 'gzip',
       ext: '.gz',
       threshold: 10240, // only files >10kb
       filter: compressionFileFilter
     }),
-    compression({
+    isMobile ? NOOP() : compression({
       algorithm: 'brotliCompress',
       ext: '.br',
       deleteOriginFile: false,
@@ -86,5 +86,14 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      input: isMobile === true
+      ? {
+          mobile: resolve(__dirname, 'mobile.html')
+        }
+      : {
+          web: resolve(__dirname, 'index.html')
+        }
+    }
   },
 })

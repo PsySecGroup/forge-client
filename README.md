@@ -64,14 +64,13 @@ We have three `.env` files:
 * Create an app generator as a separate repo
 * Architectural Designs
   * `dist`
-    * [ ] Use `vite preview` or a real server to test behavior before deploying.
-    * [ ] Figure out a way to export this app to Android
-    * [ ] Figure out a way to export this app to iPhone
+    * [ ] Confirm `android` builds work
+    * [ ] Confirm `ios` builds work
     * [ ] Figure out a way to export this app to Electron/Tauri/whatever we pick
+    * [ ] Figure out why `standalone.html` does not like the Navigation store
   * `src/assets`
-    * [ ] Consider [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy)
     * [ ] Consider [vite-plugin-imagemin](https://github.com/vbenjs/vite-plugin-imagemin)
-    * [ ] Consider  Subresource Integrity (SRI) hash generation for CDN
+    * [ ] Consider Subresource Integrity (SRI) hash generation for CDN
     * [ ] Consider stegosigning like this for ultradeep watermarking:
 
 ```bash
