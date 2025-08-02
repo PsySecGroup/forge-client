@@ -29,7 +29,15 @@ export default defineConfig({
     solidPlugin(),
     viteSingleFile(),
     svgr(),
-    compression(),
+    compression({
+      algorithm: 'gzip',
+      ext: '.gz'
+    }),
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      deleteOriginFile: false
+    }),
     {
       name: 'custom-html-replace',
       transformIndexHtml(html) {

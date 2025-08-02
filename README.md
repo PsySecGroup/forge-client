@@ -61,28 +61,132 @@ We have three `.env` files:
 
 ## Research
 
-* Make `core` an npm/git/importale module 
 * Create an app generator as a separate repo
-* Confirm the `fileUpload` component works
 * Architectural Designs
   * `dist`
-    * [ ] 
+    * [ ] Fix `registerSW.js`
+    * [ ] Confirm assets are moving over upon build
+      * [ ] Test standalone/`file:///` mode, too
+    * [ ] Use `vite preview` or a real server to test behavior before deploying.
+    * [ ] Figure out a way to export this app to Android
+    * [ ] Figure out a way to export this app to iPhone
+    * [ ] Figure out a way to export this app to Electron/Tauri/whatever we pick
   * `src/assets`
-    * [ ] 
+    * [ ] Consider [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy)
+    * [ ] Consider [vite-plugin-imagemin](https://github.com/vbenjs/vite-plugin-imagemin)
+    * [ ] Consider  Subresource Integrity (SRI) hash generation for CDN
+    * [ ] Consider stegosigning like this for ultradeep watermarking:
+
+```bash
+openssl enc -aes-256-cbc -salt -in cert.pem -out cert.enc -pass pass:SomePass
+rar a -hpYourStrongPassword secret.rar cert.pem
+convert original.jpg -strip -quality 85 compressed.jpg
+cat compressed.jpg secret.rar > fused.jpg
+```
+
   * `src/components`
-    * [ ] 
+    * [ ] Test `fileUpload`
+    * [ ] Continue to build examples until we land on a robust store pattern
+      * [ ] Then build it
+    * [ ] Find common patterns in `TSX` expression
   * `src/core`
-    * [ ] 
+    * [ ] Make `core` an npm/git/importale module
+    * [ ] Take the `tests` folder in here and bring it into the main project
+      * [ ] Utilize `vitest` instead of `uvu`
+    * [ ] Make a `forge-test` package that uses `vitest` and the contents in `src/core/tests/utils.ts` as fundamentals
   * `src/domains`
-    * [ ] 
+    * [ ] Figure out how best to populate, persist, and refresh a domainStore with from third-parties like APIs
+
+Diagram:
+```
+   ┌─────────────┐        ┌─────────────┐        ┌─────────────┐
+   │ API Fetcher │ ─────▶ │ domainStore │ ─────▶ │ UI/Form use │
+   └─────────────┘        └─────────────┘        └─────────────┘
+                                 ▲                      │
+                                 │                      ▼
+                      ┌────────────────────┐     ┌────────────┐
+                      │ formStore.set(...) │ ◀── │ initialize │
+                      └────────────────────┘     └────────────┘
+```
+
+Example store:
+```ts
+import { createStore } from 'solid-js/store'
+
+type Domain<T = any> = {
+  data: T
+  fetchedAt: number
+  stale: boolean
+}
+
+type DomainStoreType = {
+  users: Record<string, Domain>
+  products: Record<string, Domain>
+  posts: Record<string, Domain>
+}
+
+const [domainState, setDomainState] = createStore<DomainStoreType>({
+  users: {},
+  products: {},
+  posts: {}
+})
+
+function isStale(fetchedAt: number, ttl = 5 * 60 * 1000): boolean {
+  return Date.now() - fetchedAt > ttl
+}
+
+function markUserStale(userId: string) {
+  setDataState('users', userId, 'stale', true)
+}
+```
+
+Fetch example:
+```ts
+export async function fetchUser(userId: string, forceRefresh = false) {
+  const existing = dataState.users[userId]
+
+  if (existing && !forceRefresh && !isStale(existing.fetchedAt)) {
+    return existing.data
+  }
+
+  const res = await fetch(`/api/users/${userId}`)
+  const data = await res.json()
+
+  setDataState('users', userId, {
+    data,
+    fetchedAt: Date.now(),
+    stale: false
+  })
+
+  return data
+}
+```
+
+With component initialization:
+```tsx
+onMount(() => {
+  fetchUser(userId) // Will auto-refresh if stale
+    .then(data => {
+      initializeForm('userForm', data)
+    })
+})
+
+createEffect(() => {
+  const userMeta = dataState.users[userId]
+  if (!userMeta || isStale(userMeta.fetchedAt)) {
+    fetchUser(userId)
+  }
+})
+```
   * `src/layouts`
-    * [ ] 
+    * [ ] Standardize CSS and themes into something easier to reason about
+    * [ ] Standardize grid layouts for easily composition
+    * [ ] Make sure all layouts work in mobile AND desktop
   * `src/pages`
-    * [ ] 
-  * `.env`
-    * [ ] 
+    * [ ] Find a common pattern somehow
   * `index.html`
     * [ ] Move `#viewport` to a general CSS file
   * Development
+    * [ ] Make a TUI
     * `vite.config.ts`
-      * [ ] 
+      * [ ] Figure out multi-target building options
