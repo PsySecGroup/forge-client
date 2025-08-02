@@ -64,9 +64,6 @@ We have three `.env` files:
 * Create an app generator as a separate repo
 * Architectural Designs
   * `dist`
-    * [ ] Fix `registerSW.js`
-    * [ ] Confirm assets are moving over upon build
-      * [ ] Test standalone/`file:///` mode, too
     * [ ] Use `vite preview` or a real server to test behavior before deploying.
     * [ ] Figure out a way to export this app to Android
     * [ ] Figure out a way to export this app to iPhone
