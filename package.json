@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "vite",
+    "dev:standalone": "WEBKIT_DISABLE_COMPOSITING_MODE=1 SNAP='' LD_LIBRARY_PATH='' GTK_PATH='' npx neu run",
     "lint": "npx tsc --noEmit && npx eslint src/index.tsx",
     "test": "npx uvu -r esbuild-register tests/",
     "test:core": "npx vitest watch src/core/tests",
@@ -13,7 +14,8 @@
     "build:android": "IS_MOBILE_BUILD=true vite build && mv dist/mobile.html dist/index.html && npx cap copy android",
     "build:ios": "IS_MOBILE_BUILD=true vite build && mv dist/mobile.html dist/index.html && npx cap copy ios",
     "build:mobile": "npm run build:android && npm run build:ios",
-    "compile": "npm run lint && npm run test && npm run build"
+    "compile": "npm run lint && npm run test && npm run build",
+    "setup": "npx cap add android && npx neu update"
   },
   "type": "module",
   "author": "HyperCrowd",
@@ -23,6 +25,7 @@
     "@capacitor/cli": "^7.4.2",
     "@capacitor/ios": "^7.4.2",
     "@eslint/js": "^9.4.0",
+    "@neutralinojs/neu": "^11.5.0",
     "@testing-library/dom": "^10.4.0",
     "@types/feather-icons": "^4.29.4",
     "@types/node": "^22.13.10",

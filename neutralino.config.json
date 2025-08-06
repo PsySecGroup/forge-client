@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
+  "applicationId": "js.neutralino.sample",
+  "version": "1.0.0",
+  "defaultMode": "browser",
+  "port": 0,
+  "documentRoot": "./dist/",
+  "url": "/index.html",
+  "mappings": {
+    "/": "/index.html"
+  },
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": true
+  },
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+    "debug.log"
+  ],
+  "globalVariables": {
+    "TEST1": "Hello",
+    "TEST2": [2, 4, 5],
+    "TEST3": {
+      "value1": 10,
+      "value2": {}
+    }
+  },
+  "modes": {
+    "chrome": {
+      "width": 800,
+      "height": 500,
+      "args": "--disable-web-security --disable-features=VizDisplayCompositor"
+    },
+    "window": {
+      "title": "Test App",
+      "width": 800,
+      "height": 500,
+      "minWidth": 400,
+      "minHeight": 200,
+      "center": true,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "dist/apple-touch-icon.png",
+      "enableInspector": true,
+      "borderless": false,
+      "maximize": false,
+      "hidden": false,
+      "resizable": true,
+      "exitProcessOnClose": true
+    }
+  },
+  "cli": {
+    "binaryName": "myapp",
+    "resourcesPath": "./dist/",
+    "extensionsPath": "src/extensions/",
+    "clientLibrary": "lib/js/neutralino.js",
+    "binaryVersion": "6.2.0",
+    "clientVersion": "6.2.0"
+  }
+}
