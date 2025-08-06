@@ -66,6 +66,7 @@ ios
 
 # Neutralinojs client (minified)
 neutralino.js
+desktop
 
 # Neutralinojs related files
 .storage

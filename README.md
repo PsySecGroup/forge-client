@@ -66,13 +66,9 @@ We have three `.env` files:
   * `dist`
     * [ ] Confirm `android` builds work
     * [ ] Confirm `ios` builds work
-    * [ ] Keep poking at Neutralino.js
-      * [ ] Create an `app.html` that also ropes in `<script src="/js/neutralino.js"></script>`
-      * [ ] Move `/js/neutralino.js` to `/dist` within a custom `build:standalone` script that also runs `npx neu build`
-      * [ ] Linux does not like WebKit, so explore why `"defaultMode": "browser",` needs to be set in `neutralino.config.json`
+    * [ ] Confirm `desktop` builds work
     * [ ] Figure out why `standalone.html` does not like the Navigation store
   * `src/assets`
-    
     * [ ] Consider [vite-plugin-imagemin](https://github.com/vbenjs/vite-plugin-imagemin)
     * [ ] Consider Subresource Integrity (SRI) hash generation for CDN
     * [ ] Consider stegosigning like this for ultradeep watermarking:

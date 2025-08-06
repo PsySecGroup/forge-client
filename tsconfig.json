@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "vite/client", "./src/types"],
     "strict": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
@@ -30,8 +31,7 @@
     "moduleResolution": "node",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
     "outDir": "./dist",
     "baseUrl": "./"
-  },
+  }
 }
