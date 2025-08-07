@@ -64,32 +64,31 @@ We have three `.env` files:
 * Create an app generator as a separate repo
 * Architectural Designs
   * `dist`
-    * [ ] Confirm `android` builds work
-    * [ ] Confirm `ios` builds work
-    * [ ] Confirm `desktop` builds work
-    * [ ] Figure out why `standalone.html` does not like the Navigation store
+    * [?] Confirm `android` builds work
+    * [?] Confirm `ios` builds work
+    * [?] Confirm `desktop` builds work
+    * [?] Figure out why `standalone.html` does not like the Navigation store
   * `src/assets`
-    * [ ] Consider [vite-plugin-imagemin](https://github.com/vbenjs/vite-plugin-imagemin)
-    * [ ] Consider Subresource Integrity (SRI) hash generation for CDN
-    * [ ] Consider stegosigning like this for ultradeep watermarking:
-
-```bash
-openssl enc -aes-256-cbc -salt -in cert.pem -out cert.enc -pass pass:SomePass
-rar a -hpYourStrongPassword secret.rar cert.pem
-convert original.jpg -strip -quality 85 compressed.jpg
-cat compressed.jpg secret.rar > fused.jpg
-```
-
-  * `src/components`
-    * [ ] Test `fileUpload`
-    * [ ] Continue to build examples until we land on a robust store pattern
-      * [ ] Then build it
-    * [ ] Find common patterns in `TSX` expression
+    * [?] Fix Subresource Integrity (SRI) hash generation in `build/sri.ts`
+    * [?] Fix watermarking in `build/watermark.ts`
   * `src/core`
     * [ ] Make `core` an npm/git/importale module
     * [ ] Take the `tests` folder in here and bring it into the main project
       * [ ] Utilize `vitest` instead of `uvu`
     * [ ] Make a `forge-test` package that uses `vitest` and the contents in `src/core/tests/utils.ts` as fundamentals
+  * `index.html`
+    * [ ] Move `#viewport` to a general CSS file
+  * Development
+    * [ ] Make a TUI
+  * `src/layouts`
+    * [ ] Standardize CSS and themes into something easier to reason about
+    * [ ] Standardize grid layouts for easily composition
+    * [ ] Make sure all layouts work in mobile AND desktop
+  * `src/components`
+    * [ ] Test `fileUpload`
+    * [ ] Continue to build examples until we land on a robust store pattern
+      * [ ] Then build it
+    * [ ] Find common patterns in `TSX` expression
   * `src/domains`
     * [ ] Figure out how best to populate, persist, and refresh a domainStore with from third-parties like APIs
 
@@ -174,15 +173,5 @@ createEffect(() => {
   }
 })
 ```
-  * `src/layouts`
-    * [ ] Standardize CSS and themes into something easier to reason about
-    * [ ] Standardize grid layouts for easily composition
-    * [ ] Make sure all layouts work in mobile AND desktop
   * `src/pages`
     * [ ] Find a common pattern somehow
-  * `index.html`
-    * [ ] Move `#viewport` to a general CSS file
-  * Development
-    * [ ] Make a TUI
-    * `vite.config.ts`
-      * [ ] Figure out multi-target building options
