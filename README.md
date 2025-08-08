@@ -76,8 +76,6 @@ We have three `.env` files:
     * [x] Take the `tests` folder in here and bring it into the main project
       * [x] Utilize `vitest` instead of `uvu`
 tests/utils.ts` as fundamentals
-  * `index.html`
-    * [ ] Move `#viewport` to a general CSS file
   * Development
     * [ ] Make a TUI
   * `src/layouts`
