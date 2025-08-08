@@ -73,9 +73,9 @@ We have three `.env` files:
     * [?] Fix watermarking in `build/watermark.ts`
   * `src/core`
     * [ ] Make `core` an npm/git/importale module
-    * [ ] Take the `tests` folder in here and bring it into the main project
-      * [ ] Utilize `vitest` instead of `uvu`
-    * [ ] Make a `forge-test` package that uses `vitest` and the contents in `src/core/tests/utils.ts` as fundamentals
+    * [x] Take the `tests` folder in here and bring it into the main project
+      * [x] Utilize `vitest` instead of `uvu`
+tests/utils.ts` as fundamentals
   * `index.html`
     * [ ] Move `#viewport` to a general CSS file
   * Development
