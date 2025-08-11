@@ -40,6 +40,7 @@ You can check out file sizes and load times of individual files in dev by visiti
 * `npm run compile`: Performs a test, lint, and a build
 * `npm run lint`: Checks for sytnax errors
 * `npm run preview`: TBD
+* `npm run tui`: Runs the textual user interface for common development options
 
 ### .env Variables
 
@@ -73,11 +74,9 @@ We have three `.env` files:
     * [?] Fix watermarking in `build/watermark.ts`
   * `src/core`
     * [ ] Make `core` an npm/git/importale module
-    * [x] Take the `tests` folder in here and bring it into the main project
-      * [x] Utilize `vitest` instead of `uvu`
 tests/utils.ts` as fundamentals
   * Development
-    * [ ] Make a TUI
+    * [x] Make a TUI
   * `src/layouts`
     * [ ] Standardize CSS and themes into something easier to reason about
     * [ ] Standardize grid layouts for easily composition
