@@ -4,11 +4,9 @@ import { defineActions } from '../state/actions'
 import { getPalette } from './palette'
 
 const state = getPalette('#00AA00')
+const store = createStore(state)
 
 type State = typeof state
-
-export const store = createStore(state)
-
 type SetState = typeof store[1]
 
 export const ThemeContext = createContext(store)
